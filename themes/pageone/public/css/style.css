@@ -1,0 +1,738 @@
+ /* ----------------------------------------------
+	Template Name : PageOne
+	Template Code : S-0032
+	Version : 1.0
+	Author : Erwin Aligam
+	Author URI : http://www.styleshout.com/
+	Last Date Modified : November 28, 2011
+ ------------------------------------------------ */
+
+ /* ------------------------------------------------
+    CUSTOM WEB FONTS
+--------------------------------------------------*/
+@font-face {
+    font-family: 'MerriweatherRegular';
+    src: url('fonts/merriweather-regular-webfont.eot');
+    src: url('fonts/merriweather-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/merriweather-regular-webfont.woff') format('woff'),
+         url('fonts/merriweather-regular-webfont.ttf') format('truetype'),
+         url('fonts/merriweather-regular-webfont.svg#MerriweatherRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MerriweatherBold';
+    src: url('fonts/merriweather-bold-webfont.eot');
+    src: url('fonts/merriweather-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/merriweather-bold-webfont.woff') format('woff'),
+         url('fonts/merriweather-bold-webfont.ttf') format('truetype'),
+         url('fonts/merriweather-bold-webfont.svg#MerriweatherBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* --------------------------------------
+    RESET
+----------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* -------------------------------------------------------
+    GENERAL
+---------------------------------------------------------- */
+html { overflow-y: scroll; }
+body {
+    font-family: Georgia, Serif;
+    font-size: 16px;
+    line-height: 25px;
+    color: #3B3B3B;
+    background: /* url(../images/25-pixel-baseline.png) left top repeat, */ url(../images/bg.png) left top repeat ;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
+}
+
+p { margin-bottom: 25px; }
+p.intro { font-size: 18px; }
+
+/* links */
+a:link, a:visited {
+    color: #285935;
+    text-decoration: none;
+    outline: 0;
+}
+a:hover, a:focus, a:active {
+    color: #5E1F00;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'MerriweatherBold', Serif;
+}
+h1 {
+    font-size: 40px;
+    line-height: 50px;
+    letter-spacing: -0.9px;
+    color: #046416;
+    margin-left: -2px;
+}
+h2 {
+    font-size: 22px;
+    line-height: 25px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+h3 {
+    font-size: 18px;
+    line-height: 25px;
+}
+
+/* Lists */
+ul, ol {
+	margin-bottom: 25px;
+	padding: 0 20px;
+}
+ul { list-style: disc; }
+ol { list-style: decimal; }
+
+dl { margin-bottom: 25px; }
+dt {
+    font-weight: bold;
+    color: #046416;
+}
+dd {
+    padding-left: 20px;
+}
+
+blockquote {
+	margin: 25px 0;
+ 	padding-left: 40px;
+    padding-right: 30px;
+    background: url(../images/quote.png) no-repeat 3px 0;
+	font-weight: normal;
+	font-size: 18px;
+	font-style: italic;
+}
+input, select {
+    vertical-align: middle;
+}
+
+strong, b {
+    font-weight: bold; 
+}
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+abbr[title], dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+mark {
+    background-color: #FDD2B3;
+}
+
+/* Clearing and Alignment Classes */
+.align-left {
+    float: left;
+}
+.align-right {
+    float: right;
+}
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.ie7 .clearfix { zoom: 1; } /* IE7 */
+
+/* ------------------------------------------------------
+    STRUCTURE
+--------------------------------------------------------- */
+#header-wrap {
+    background: url(../images/header-bg.png);
+    width: 100%;
+    height: 70px;
+    z-index: 99999;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+header {
+    position: relative;
+    width: 940px;
+    height: 70px;
+    margin: 0 auto;
+}
+.content-wrap {
+    width: 940px;
+    margin: 0 auto;
+}
+.content-wrap section {
+    position: relative;
+    padding: 125px 0 25px 0;
+    background: url(../images/section-sep.png) repeat-x left 25px;
+}
+.content-wrap section section {
+    background: none;
+    margin: 0;
+}
+.content-wrap section .row {
+    clear: both;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+.content-wrap section .row .col {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 290px;
+}
+.content-wrap section .row .mid  {
+    margin-left: 35px;
+    margin-right: 35px;
+}
+.content-wrap section .no-bottom-margin{
+    margin-bottom: 0;
+}
+.content-wrap section .primary {
+    float: left;
+    width: 620px;
+}
+.content-wrap section .primary p.intro {
+    /* margin: 15px 0 10px 0; */
+    margin: 15px 0 25px 0;
+}
+.content-wrap section aside {
+    float: right;
+    width: 285px;
+}
+.content-wrap section aside h2 {
+    margin: 12.5px 0 12.5px 0;
+}
+
+.content-wrap section aside ul.link-list {
+    font-size: 16px;
+    margin: 0 0 25px 0;
+    padding: 0;
+    list-style: none;
+    background: url(../images/section-sep.png) repeat-x left top;
+}
+.content-wrap section aside ul.link-list li {
+    background: url(../images/section-sep.png) repeat-x left bottom;
+    padding-left: 3px;
+}
+.content-wrap section aside ul.link-list li a {
+    display: block;
+    color: #3B3B3B;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+.content-wrap section aside ul.link-list li a:hover,
+.content-wrap section aside ul.link-list li a:focus,
+.content-wrap section aside ul.link-list li a:active {
+    color: #285935;
+}
+.content-wrap section aside .testimonials {
+    margin: 0 0 25px 0;
+}
+.content-wrap section aside .testimonials blockquote {
+    font-style: italic;
+    font-size: 16px;
+    padding-left: 27px;
+    background: url(../images/quote-open.png) no-repeat left 5px;
+    margin: 12.5px 0;
+}
+.content-wrap section aside .testimonials blockquote p {
+    margin-bottom: 0;
+}
+.content-wrap section aside .testimonials blockquote cite {
+    font-style: normal;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.content-wrap section .back-to-top {
+    display: block;
+    position: absolute;
+    bottom: -65px;
+    right: 10px;
+    height: 43px;
+    width: 43px;
+    background: url(../images/back-to-top.png);
+    text-indent: -9999px;
+    z-index: 9999;
+}
+.ie7 .content-wrap section .back-to-top {
+    bottom: -70px;
+}
+
+footer {
+    position: relative;
+    background: url(../images/section-sep.png) repeat-x left 25px;
+    width: 940px;
+    margin: 0 auto;
+    padding-top: 125px;
+}
+
+/* -------------------------------------------
+    Header
+-------------------------------------------- */
+
+/* Logo */
+header hgroup {
+    position: absolute;
+    background: url(../images/logo.png) no-repeat;
+    height: 31px;
+    width: 312px;
+    display: block;
+    top: 25px;
+    left: 0;
+}
+header hgroup h1 a {
+    text-indent: -9999em;
+    display: block;
+    height: 31px;
+    width: 130px;
+}
+header hgroup h3  {
+    text-indent: -9999em;
+    height: 0;
+}
+
+/* Main Navigation */
+header nav {
+    float: right;
+    margin-top: 25px;
+}
+header nav ul {
+    font: bold 12px/25px  Helvetica, Arial, Sans-serif;
+    margin-right: -5px;
+    padding: 0;
+    list-style: none;
+}
+header nav ul li {
+    float: left;
+}
+header nav ul a:link, header nav ul a:visited {
+    color: #c5c4c4;
+    margin-right: 20px;
+    text-shadow: 0 -1px 0 rgba(10, 10, 10, 1);
+}
+header nav ul a:hover,
+header nav ul a:active {
+    color: #17a231
+}
+
+/* -----------------------------------------
+    Main Section
+------------------------------------------ */
+section#main {
+    width: 940px;
+    background: none;
+}
+section#main h1 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+section#main .intro-box {
+    float:left;
+    width:460px;
+    min-height: 300px;
+}
+section#main .row .col h2 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Slider */
+.slider-wrapper {
+    float: right;
+    position: relative;
+    background: url(../images/slider.png) no-repeat;
+    margin-top: 30px;
+    margin-bottom: 13px;
+    width: 420px;
+    height: 234px;
+}
+.slider-wrapper #slider {
+    position: absolute;
+    top: 18px;
+    left: 18.5px;
+    width: 383px; /* Make sure your images are the same size */
+    height: 198px; /* Make sure your images are the same size *//
+}
+.slider-wrapper .nivoSlider {
+	position: relative;
+	background: #fff url(../images/loading.gif) no-repeat 50% 50%;
+}
+.slider-wrapper .nivoSlider img {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+.slider-wrapper .nivoSlider a {
+	border: 0;
+	display: block;
+}
+.slider-wrapper .nivo-controlNav {
+	position: absolute;
+	left: 50%;
+	bottom: -45px;
+    margin-left: -30px ; /* Tweak this to center bullets */
+}
+.slider-wrapper .nivo-controlNav a {
+	display: block;
+	width: 13px;
+	height: 14px;
+	background: url(../images/bullets.png) no-repeat;
+	text-indent: -9999px;
+	border: 0;
+	margin-right: 10px;
+	float: left;
+}
+.slider-wrapper .nivo-controlNav a.active {
+	background-position: 0 -14px;
+}
+.slider-wrapper .nivo-directionNav a {
+	display: block;
+	width: 33px;
+	height: 52px;
+	background: url(../images/arrows.png) no-repeat;
+	text-indent: -9999px;
+	border: 0;
+}
+.slider-wrapper a.nivo-nextNav {
+	background-position: -33px 0;
+	right: -50px;
+    top: 70px;
+}
+.slider-wrapper a.nivo-prevNav {
+	left: -48.5px;
+    top: 70px;
+}
+.slider-wrapper .nivo-caption {
+    /* font-family: Helvetica, Arial, sans-serif; */
+    padding: 5px 10px;
+    width: 363px;
+    font-size: 12px;
+    text-shadow: none;
+    text-align: center;
+}
+.slider-wrapper .nivo-caption p {
+    text-shadow: none;
+    color: #CBCBCB;
+}
+.slider-wrapper .nivo-caption a {
+    color: #66CC33;
+    /* border-bottom: 1px dotted #fff; */
+}
+.slider-wrapper .nivo-caption a:hover {
+    color:#fff;
+}
+
+/* -----------------------------------------
+   Services
+------------------------------------------- */
+section#services h1 {
+   margin: 0 0 25px 0;
+}
+section#services .row .col img.align-left {
+    margin-top: 13px;
+    margin-right: 12px;
+}
+
+/* ---------------------------------------
+    Portfolio
+----------------------------------------- */
+section#portfolio ul.folio-list {
+    margin: 25px 0;
+    padding: 0;
+    width: 970px;
+    list-style: none;
+}
+section#portfolio ul.folio-list li {
+    float: left;
+    margin-right: 29px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 294px;
+    height: 230px;
+    max-height: 250px;
+}
+section#portfolio ul.folio-list li .thumb {
+    margin: 0 0 5px 0;
+    padding: 0;
+    background: url(../images/thumb-frame.png) no-repeat;
+    width: 294px;
+    height: 205px;
+}
+section#portfolio ul.folio-list li .thumb img {
+    margin-top: 18px;
+    margin-left: 18px;
+}
+section#portfolio ul.folio-list li h3.entry-title {
+    font-size: 14px;
+    line-height: 25px;
+    margin-left: 16px;
+}
+
+/* ------------------------------------------------
+    About
+------------------------------------------------ */
+section#about-us .primary .row .first {
+    margin-right: 35px;
+}
+section#about-us .primary ul.the-team {
+    margin: 25px 0 25px 0;
+    padding: 0;
+    list-style: none;
+}
+section#about-us .primary ul.the-team li {
+    float: left;
+    width: 290px;
+    height: 150px;
+}
+section#about-us .primary ul.the-team li a {
+    color: #3B3B3B;
+}
+section#about-us .primary ul.the-team li a:hover,
+section#about-us .primary ul.the-team li a:focus,
+section#about-us .primary ul.the-team li a:active {
+    color: #285935;
+}
+
+section#about-us .primary ul.the-team li .thumbnail {
+    position: relative;
+    float: left;
+    background: url(../images/thumb-bg.png) no-repeat;
+    width: 120px;
+    height: 150px;
+    margin-right: 12px;
+}
+section#about-us .primary ul.the-team li .thumbnail img {
+    position: absolute;
+    top: 19px;
+    left: 18px;
+}
+section#about-us .primary ul.the-team li p {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 5px 0 0 0;
+}
+section#about-us .primary ul.the-team li p.mname {
+    font-family: "MerriweatherBold", Serif;
+    margin: 10px 0 0 0;
+}
+section#about-us .primary ul.the-team li.odd {
+    margin-right: 35px;
+}
+
+section#about-us aside .download-btn {
+    background: url(../images/btn-bg.png);
+    display: block;
+    width: 250px;
+    height: 53px;
+    border: 1px solid #066a19;
+    margin: 0 0 20px 0;
+    text-align: center;
+    line-height: 55px;
+
+    font-family: "MerriweatherBold", Georgia, Serif;
+    font-size: 20px;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+
+    box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+    -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+    -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+}
+
+/* ---------------------------------------------------
+    Contact
+----------------------------------------------------- */
+section#contact .primary form {
+    width: 500px;
+    background: url(../images/form-bg.png);
+    margin: 35px 0 25px 0;
+    padding: 50px 40px 50px 40px;
+}
+section#contact .primary form p {
+	font-family: "MerriweatherBold", Serif;
+    font-size: 14.5px;
+	color: #046416;
+}
+section#contact .primary form label {
+    display: block;
+    font-family: "MerriweatherBold", Serif;
+    font-size: 14px;
+    line-height: 25px;
+    margin: 0 0 5px 0;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
+}
+section#contact .primary form label span {
+    color: #046416;
+}
+section#contact .primary form input,
+section#contact .primary form select,
+section#contact .primary form textarea {
+    margin-bottom: 20px;
+	padding: 9px 10px;
+    color: #6A6969;
+    background: #cbcbcb;
+	border-width: 1px;
+	border-style: solid;
+  	border-color: #b8b8b8 #EBEBEB #EBEBEB #b8b8b8;
+	font: 15px Helvetica, Arial, Sans-serif;
+
+    -moz-box-shadow:inset 0 3px 1px rgba(0, 0, 0, .1);
+    -webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, .1);
+    box-shadow:inset 0 1px 3px rgba(0, 0, 0, .1);
+}
+section#contact .primary form textarea {
+    height: 325px;
+    margin-bottom: 0;
+}
+section#contact .primary form input:focus,
+section#contact .primary form select:focus,
+section#contact .primary form textarea:focus {
+	background: #F0F0F0;
+}
+section#contact .primary form input.button {
+   	height: 38px;
+	margin: 5px 0;
+	background: #1F8532 url(../images/btn-bg.png);
+    border: 1px solid #066a19;
+    font-family: "MerriweatherBold", Georgia, Serif;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+
+    box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+    -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+    -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.4), inset 0 1px 0 #28a441;
+}
+.ie7 section#contact .primary form input.button {
+    padding: 0 2px;
+}
+#name, #email, #message, #subject, #website {
+	width: 475px;
+}
+
+section#contact aside .social li a {
+    padding-left: 35px;
+}
+section#contact aside .social li.facebook a {
+    background: url(../images/social/facebook.png) no-repeat left 11px;
+}
+section#contact aside .social li.googleplus a {
+    background: url(../images/social/googleplus.png) no-repeat left 11px;
+}
+section#contact aside .social li.twitter a {
+    background: url(../images/social/twitter.png) no-repeat left 11px;
+}
+section#contact aside .social li.dribble a {
+    background: url(../images/social/dribble.png) no-repeat left 11px;
+}
+section#contact aside .social li.linkedin a {
+    background: url(../images/social/linkedin.png) no-repeat left 11px;
+}
+section#contact aside .social li.delicious a {
+    background: url(../images/social/delicious.png) no-repeat left 11px;
+}
+section#contact aside .social li.flickr a {
+    background: url(../images/social/flickr.png) no-repeat left 11px;
+}
+
+/* ----------------------------------------------------
+    Footer
+----------------------------------------------------- */
+footer p.footer-text {
+    font-family: "MerriweatherRegular", Serif;
+    font-size: .75em;
+    padding: 0 10px;
+    margin-bottom: 0;
+    clear: both;
+}
+footer .footer-content {
+    position: relative;
+    width: 900px;
+    top: -105px;
+}
+footer ul.footer-menu {
+    float: left;
+    margin: 20px 0 5px -3px;
+    padding: 0;
+    list-style: none;
+}
+footer  ul.footer-menu li {
+    float: left;
+}
+footer  ul.footer-menu li a {
+    display: block;
+    font-family: "MerriweatherBold", Serif;
+    font-size: .75em;
+    line-height: 1em;
+    color: #3B3B3B;
+    padding: 1px 12px;
+    border-left:  1px  solid #ADADAD;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
+}
+footer  ul.footer-menu li a:hover,
+footer  ul.footer-menu li a:focus,
+footer  ul.footer-menu li a:active {
+    color: #285935;
+}
+footer  ul.footer-menu li.rss-feed a {
+    background: url(../images/rss.png) no-repeat right 0;
+    padding-right: 20px;
+}
+footer  ul.footer-menu li:first-child a {
+    border: none;
+}
+

@@ -1,0 +1,25 @@
+<!-- portfolio -->
+      <section id="portfolio">
+            
+            <h1><%= @page.title %></h1>
+
+            <ul class="folio-list clearfix">
+                <%= @ion_articles => %>
+                    <li class="folio-thumb">
+                        <div class="thumb">
+                            <% title = @article.title # Saving title as @article value will continue to change while we are in @ion_medias (nodejs async fun !) %>
+                            <%= @ion_medias first:2, => %>
+                                <a class="lightbox" href="<%= @media.path %>" title="<%= title %>" >
+                            <% end %>
+                            <%= @ion_medias last:1, => %>
+                            <img src="<%= @media.path %>" alt="" /> </a>
+                            <% end %>
+                        </div>
+                        <h3 class="entry-title"><%= @article.title %></h3>
+                    </li>
+                <% end %>
+            </ul>
+
+            <a class="back-to-top" href="#portfolio">Back to Top</a>
+
+      </section>

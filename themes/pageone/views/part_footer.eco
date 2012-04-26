@@ -1,0 +1,13 @@
+<!-- footer -->
+<footer>
+    <div class="footer-content">
+        <ul class="footer-menu">
+            <%= @ion_navigation => %>
+                <li><a href="<%= @navigation.url %>"><%= @navigation.title %></a></li>
+            <% end %>                       
+        </ul>
+
+        <p class="footer-text">Copyright 2011 PageOne. &nbsp;&nbsp;&nbsp; Designed by <a href="http://www.styleshout.com/">Styleshout</a></p>
+    </div>
+
+</footer>

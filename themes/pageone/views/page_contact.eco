@@ -1,0 +1,17 @@
+<%- @partial "part_head" %>
+
+<body>
+
+<%- @partial "part_header" %>
+
+<!-- content-wrap -->
+<div class="content-wrap">
+
+    <%- @partial "part_contact" %>           
+
+</div>
+
+<%- @partial "part_footer" %>
+
+</body>
+</html>
