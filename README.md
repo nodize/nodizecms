@@ -3,6 +3,8 @@ nodizecms
 
 A Node.js CMS written in CoffeeScript, with a user friendly backend
 
+![Screenshot](https://github.com/nodize/nodizecms/raw/master/docs/screenshots/media_manager.jpg)
+
 status
 ------
 
