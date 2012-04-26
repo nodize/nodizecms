@@ -1,0 +1,120 @@
+/*
+ * Ionize IE7 CSS corrections
+ *
+ */
+
+ul {
+	list-style: none;
+}
+
+#maincolumn {
+	width: auto;
+	padding-right:0px;
+	overflow: hidden;
+}
+#maincolumn.sidecolumn {
+	margin-right:310px;
+}
+#mainPanel_pad {
+	overflow-x: hidden;
+}
+
+#sidecolumn {
+	height:auto;
+	overflow: auto;
+	width:295px;
+	margin-left:20px;
+	padding:0 0 0 15px;
+/*	position:static;*/
+}
+#sidecolumn #options{
+	width:auto;
+}
+#sidecolumn .tabcontent{
+	position:relative;
+}
+#sidecolumn .tabcontent textarea{
+	position:relative;
+	display: block;
+}
+#sidecolumn.close {
+	display:none;
+	z-index: -1;
+}
+
+/* Tree Correction */
+.tree li {
+	overflow: visible;
+}
+
+.tree li span.title {
+	overflow: hidden;
+	position: relative;
+}
+.tree li a.title {
+	overflow: hidden;
+	position:relative;
+}
+.tree li a.title span{
+	position: absolute;
+	top:0;
+	left:0;
+}
+.tree li .action{
+	width:46px;
+	z-index:10;
+}
+
+/* Picture List */
+.picture {
+	width: 120px;
+	height: 140px;
+}
+
+/* Tooltip */
+.tooltip {
+	background: #000;
+}
+
+
+
+
+/* Panel Header, Light buttons */
+.toolbar-button,
+.light-button {
+	display:inline;
+	overflow: visible;
+	height: 22px;
+}
+div.toolbox.divider { /* Have to specify div here for IE6's sake */
+	display:inline;
+}
+#mainPanel_headerToolbox {
+	float:right;
+	width:80%;
+}
+
+/* Form & Buttons */
+.panel dt, .mocha dt {
+  width: 150px;
+}
+.panel dd, .mocha dd {
+  width: auto;
+  margin-left: 200px;
+}
+.mocha .buttons {
+	bottom:20px;
+}
+
+.submit,
+.button {
+	overflow: visible;
+	display:inline;
+	border: 1px transparent solid !important;
+}
+
+
+/* Others */
+label.flag {
+  padding: 0 6px 6px 0;
+}
