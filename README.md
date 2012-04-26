@@ -81,7 +81,7 @@ Let's load some data :
 ```
 mysql pageone < themes/pageone/sql/pages.sql
 ```
-or (if you have some access rights defined in the MySQL) :
+or (if you have some access rights defined in MySQL) :
 ```
 mysql pageone -u root -p < themes/pageone/sql/pages.sql
 ```
