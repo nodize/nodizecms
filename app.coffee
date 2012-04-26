@@ -38,7 +38,6 @@ nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 #
 require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
 
-everyauth = require "everyauth"
 nodize = require('zappa').app ->
     
   @use bodyParser:{ uploadDir: __dirname+'/uploads' } # Needed to get POST params & handle uploads
