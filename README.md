@@ -42,7 +42,6 @@ Install dependencies
 cd nodizecms
 
 npm install
-cake setup
 ```
 
 Create a MySQL database and modify the file "/themes/pageone/settings/database.json"
