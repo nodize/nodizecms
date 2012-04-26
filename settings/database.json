@@ -1,0 +1,8 @@
+{
+  "host"		  : "127.0.0.1",
+  "database"	: "pageone",
+  "user"		  : "root",
+  "password"	: "",
+  "logging"		: false,
+  "dialect"   : "mysql"
+}
