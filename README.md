@@ -1,18 +1,18 @@
-nodizecms
+Nodizecms
 =========
 
 A Node.js CMS written in CoffeeScript, with a user friendly backend
 
 ![Screenshot](https://github.com/nodize/nodizecms/raw/master/docs/screenshots/media_manager.jpg)
 
-status
+Status
 ------
 
 NodizeCMS is still under heavy development, there's a ton of unimplemented features and even more bugs.
 
 It's not ready for production yet, but you still can start to play with it and have plenty of fun !
 
-application stack
+Application stack
 -----------------
 nodejs >0.6.x
 
@@ -24,7 +24,7 @@ sequelize
 
 mysql
 
-installation 
+Installation 
 ------------
 
 Installation has been tested under Linux, it should work on MacOS, probably not on Windows.
@@ -74,7 +74,7 @@ Default lang created
 Default menu created
 ```
 
-Now you can access to the admistration module, open you browser on "http://127.0.0.1:3000/admin" (replace 127.0.0.1 by your server IP/URL if it's not runny on the localhost).
+Now you can access to the admistration module, open you browser on "http://127.0.0.1:3000/admin" (replace 127.0.0.1 by your server IP/URL if it's not running on the localhost).
 
 If you're still there and that everything went fine, you should have a nice but empty backend.
 
