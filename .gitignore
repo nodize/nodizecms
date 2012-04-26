@@ -1,0 +1,13 @@
+# Don't publish Sublime Text project files
+*.sublime-*
+# Node modules are installed using "npm link"
+node_modules/
+.bin/cake/
+.bin/coffee/
+.bin/nave/
+uploads/*
+public/files/
+uploads/
+themes/nodize/public/files/
+nodize.local.json
+
