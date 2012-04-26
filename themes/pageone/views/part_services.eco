@@ -1,0 +1,36 @@
+<!-- services -->
+      <section id="services" >
+
+             <h1><%= @page.title %></h1>
+
+             <div class="row no-bottom-margin">
+                <% count=0 %>
+                <%= @ion_articles => %>
+                    <% count++ %>                                        
+                    <% classMid = if count is 2 then "mid" else "" %>
+                    
+                    <section class="col <%=classMid%>">
+
+                        <h2><%= @article.title %></h2>
+
+                        <p>
+                        <%= @ion_medias => %>
+                            <img class="align-left" alt="" src="<%= @media.path %>" />
+                        <% end %>
+                        <%- @article.content %>
+                        </p>
+                    </section>
+
+                    <% if count is 3: %>
+                        </div>
+
+                        <div class="row"> 
+                        <% count=0 %>           
+                    <% end %>
+                    
+                <% end %>                         
+            </div>
+            
+            <a class="back-to-top" href="#services">Back to Top</a>
+
+      </section>

@@ -1,0 +1,42 @@
+<%- @partial "part_head" %>
+
+<body>
+
+<%- @partial "part_header" %>
+
+<!-- content-wrap -->
+<div class="content-wrap">
+
+    <%- @partial "part_welcome" %>    
+
+    <%- @partial "part_services" %> 
+
+    <%- @partial "part_portfolio" %> 
+
+    <%- @partial "part_about" %> 
+
+    <%- @partial "part_styles" %> 
+
+    <%- @partial "part_contact" %>           
+
+</div>
+
+<!-- footer -->
+<footer>
+    <div class="footer-content">
+        <ul class="footer-menu">
+            <li><a href="#main">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#about-us">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <!-- <li class="rss-feed"><a href="#">RSS Feed</a></li> -->
+        </ul>
+
+        <p class="footer-text">Copyright 2011 PageOne. &nbsp;&nbsp;&nbsp; Designed by <a href="http://www.styleshout.com/">Styleshout</a></p>
+    </div>
+
+</footer>
+
+</body>
+</html>

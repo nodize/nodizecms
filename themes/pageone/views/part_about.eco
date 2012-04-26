@@ -1,0 +1,83 @@
+<!-- about us -->
+      <section id="about-us" class="clearfix">
+
+            <h1><%= @page.title %></h1>
+
+            <div class="primary">
+                <%= @ion_articles => %>                    
+                    <%- "<h2>"+@article.title+"</h2>" if @article.title isnt "" %>
+                    <%-@article.content %>
+                <% end %>
+                
+                
+
+                <div class="row no-bottom-margin">
+                    <%= @ion_articles from:"more-about-us", => %>                        
+                        <section class="col <%="first" if @article.index %2 is 1 %>">
+
+                            <h2><%= @article.title %></h2>
+
+                            <%- @article.content %>
+                        </section>
+                    <% end %>                    
+                </div>
+
+                <h2>Our Team</h2>
+
+                <ul class="the-team">
+                    <%= @ion_articles from:"our-team", => %>
+                        <li class="<%= "odd" if @article.index % 2 is 0 %>">
+                            <div class="thumbnail">
+                                <%= @ion_medias => %>
+                                    <a href="#"><img alt="thumbnail" src="<%=@media.path%>" width="83" height="78"></a>
+                                <% end %>
+                            </div>
+                            <p class="mname"><a href="#"><%= @article.title %></a></p>
+                            <p><%- @article.content %></p>
+                        </li>
+                    <% end %>                    
+                </ul>
+
+            </div>
+
+            <aside>
+                    <%= @ion_articles type:'right_column', => %>
+                        <h2><%= @article.title %></h2>
+                        <%- @article.content %>        
+                    <% end %>
+                    
+                    <a href="#" class="download-btn">Download PDF</a>
+
+
+                    <h2>Links</h2>
+
+
+                    <ul class="link-list">
+                        <%= @ion_articles from:'links', => %>                            
+                            <li><%- @article.content.replace( '<p>', '').replace( '</p>', '') %></li>
+                        <% end %>                       
+                    </ul>
+
+
+                    <h2>Testimonials</h2>
+
+                    <div class="testimonials">
+                        <%= @ion_articles from:'testimonials', => %>
+                            <blockquote>
+                                <%- @article.content %>        
+
+                                <cite>&mdash; <%= @article.title %></cite>
+                            </blockquote>
+
+                                
+                        <% end %>
+                                                
+                    </div>
+
+            </aside>
+
+
+
+            <a class="back-to-top" href="#about-us">Back to Top</a>
+
+      </section>

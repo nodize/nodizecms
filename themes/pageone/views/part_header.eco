@@ -1,0 +1,19 @@
+<!-- header-wrap -->
+<div id="header-wrap">
+    <header>
+
+        <hgroup>
+            <h1><a href="index.html">PageOne</a></h1>
+            <h3>Just Another Styleshout Template</h3>
+        </hgroup>
+
+        <nav>
+            <ul>
+                <%= @ion_navigation => %>
+                <li><a href="<%= @navigation.url %>"><%= @navigation.title %></a></li>
+                <% end %>                
+            </ul>
+        </nav>
+
+    </header>
+</div>

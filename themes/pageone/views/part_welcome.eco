@@ -1,0 +1,45 @@
+<!-- main -->
+    <section id="main">
+
+        <div class="intro-box">            
+            <%= @ion_articles type:'welcome_top', live:true, => %>                        
+               <h1><%= @article.title %></h1>            
+               <p class="intro"><%- @article.content %></p>
+            <% end %>
+        </div>
+
+        <div class="slider-wrapper">
+
+            <div id="slider" class="nivoSlider">
+                <%= @ion_articles type:'welcome_slider', => %>   
+                    <%= @ion_medias => %>                        
+                        <img src="<%= @media.path%>" width="383" height="198" alt="" title="#htmlcaption"/>
+                    <% end %>
+                <% end %>
+            </div>
+            <div id="htmlcaption" class="nivo-html-caption">
+                <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
+            </div>
+        </div>
+
+        <div class="row no-bottom-margin">
+            <% count = 0 %>
+            <%= @ion_articles live:true, => %>                                
+                <% count++ %>
+                <% midclass = if count is 2 then "mid" else "" %>
+                
+                <section class="col <%= midclass %>">
+                    <h2><%= @article.title %></h2>
+
+                    <%- @article.content %>
+                </section>
+            <% end %>
+            <!-- <section class="col mid"> -->
+                
+        </div>
+
+        <a class="back-to-top" href="#main">Back to Top</a>
+
+      </section>
+
+      

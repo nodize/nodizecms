@@ -1,0 +1,11 @@
+{
+    "pages": {
+        "page_about.eco": "Page About",
+        "page_default.eco": "Page Home",
+        "page_portfolio.eco": "Page Portfolio",
+        "page_services.eco": "Page Services",
+        "page_styles.eco": "Page Styles",
+        "page_contact.eco": "Page Contact"
+    },
+    "blocks": {}
+}
