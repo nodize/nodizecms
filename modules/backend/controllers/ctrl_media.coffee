@@ -193,7 +193,7 @@
           console.log "error in get session"        
         else
           socket.handshake.session = session
-          console.log "On connection session : ",socket.handshake.session
+          # console.log "On connection session : ",socket.handshake.session
         
       
 
