@@ -25,7 +25,7 @@ mysql
 installation (not tested yet)
 ============
 
-Node.js and NPM need to be installed
+MySQL, Node.js and NPM have to be installed
 
 npm install -g coffee-script
 
@@ -35,5 +35,6 @@ cd nodizecms
 
 npm install
 cake setup
+
 
 
