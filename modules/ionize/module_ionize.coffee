@@ -390,7 +390,7 @@ initDatabase = ->
   #
   # Start process
   #
-  createAdmin()
+  createGroup()
 
 
 
