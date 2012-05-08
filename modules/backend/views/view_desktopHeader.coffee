@@ -39,36 +39,37 @@
 									a class: 'navlink', href: 'page\/\/create/0', title:@ion_lang.ionize_title_new_page, -> @ion_lang.ionize_menu_page
 								li ->
 									a class: 'navlink', href: 'article\/\/list_articles', title: @ion_lang.ionize_title_articles, -> @ion_lang.ionize_menu_articles
-								li ->
-									a class: 'navlink', href: 'translation', title: @ion_lang.ionize_title_translation, -> @ion_lang.ionize_menu_translation
+								
+								# li ->
+								# 	a class: 'navlink', href: 'translation', title: @ion_lang.ionize_title_translation, -> @ion_lang.ionize_menu_translation
 								li '.divider', ->
 									a id: 'mediamanagerlink', href: 'media\/\/get_media_manager', title:  @ion_lang.ionize_menu_media_manager, -> @ion_lang.ionize_menu_media_manager
-								li '.divider', ->
-									a class: 'navlink', href: 'element_definition\/\/index', title:  @ion_lang.ionize_menu_content_elements, -> @ion_lang.ionize_menu_content_elements
-								li ->
-									a class: 'navlink', href: 'extend_field\/\/index', title:  @ion_lang.ionize_menu_extend_fields, -> @ion_lang.ionize_menu_extend_fields
-						li ->
-							a class: 'returnFalse', -> @ion_lang.ionize_menu_tools
-							ul ->
-								li ->
-									a href: 'https://www.google.com/analytics/reporting/login', target: '_blank', 'Google Analytics'
-								li ->
-									a class: 'navlink', href: 'system_check', -> @ion_lang.ionize_menu_system_check
+								# li '.divider', ->
+								# 	a class: 'navlink', href: 'element_definition\/\/index', title:  @ion_lang.ionize_menu_content_elements, -> @ion_lang.ionize_menu_content_elements
+								# li ->
+								# 	a class: 'navlink', href: 'extend_field\/\/index', title:  @ion_lang.ionize_menu_extend_fields, -> @ion_lang.ionize_menu_extend_fields
+						# li ->
+						# 	a class: 'returnFalse', -> @ion_lang.ionize_menu_tools
+						# 	ul ->
+						# 		li ->
+						# 			a href: 'https://www.google.com/analytics/reporting/login', target: '_blank', 'Google Analytics'
+						# 		li ->
+						# 			a class: 'navlink', href: 'system_check', -> @ion_lang.ionize_menu_system_check
 						li ->
 							a class: 'returnFalse', -> @ion_lang.ionize_menu_settings
 							ul ->
-								li ->
-									a class: 'navlink', href: 'setting\/\/ionize', title: @ion_lang.ionize_menu_ionize_settings, -> @ion_lang.ionize_menu_ionize_settings
+								# li ->
+								# 	a class: 'navlink', href: 'setting\/\/ionize', title: @ion_lang.ionize_menu_ionize_settings, -> @ion_lang.ionize_menu_ionize_settings
 								li ->
 									a id:"menuItem_lang", class: 'navlink', href: 'lang', title: @ion_lang.ionize_menu_languages, -> @ion_lang.ionize_menu_languages
 								li ->
 									a class: 'navlink', href: 'users', title:  @ion_lang.ionize_menu_users, -> @ion_lang.ionize_menu_users
 								li ->
 									a class: 'navlink', href: 'setting\/\/themes', title:  @ion_lang.ionize_title_theme, -> @ion_lang.ionize_menu_theme
-								li '.divider', ->
-									a class: 'navlink', href: 'setting', title:  @ion_lang.ionize_menu_site_settings, -> @ion_lang.ionize_menu_site_settings
-								li ->
-									a class: 'navlink', href: 'setting\/\/technical', title:  @ion_lang.ionize_menu_site_settings_technical, -> @ion_lang.ionize_menu_site_settings_technical
+								# li '.divider', ->
+								# 	a class: 'navlink', href: 'setting', title:  @ion_lang.ionize_menu_site_settings, -> @ion_lang.ionize_menu_site_settings
+								# li ->
+								# 	a class: 'navlink', href: 'setting\/\/technical', title:  @ion_lang.ionize_menu_site_settings_technical, -> @ion_lang.ionize_menu_site_settings_technical
 				div id:'desktopNavToolbar_spinner', class:'spinner'
 				
 				div class:'toolbox', ->
