@@ -1,6 +1,6 @@
 {
     "# theme": "Sets the theme to use",
-    "theme": "nodize",
+    "theme": "pageone",
     "# session_secret": "Used to encrypt sessions and passwords, change it !",
     "session_secret": "changeMeRightNow!",
     "# admin_password": "Can be temporarily set if you lose the admin password",

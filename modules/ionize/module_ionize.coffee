@@ -327,7 +327,7 @@ initDatabase = ->
     user_group.save()
       .on "success", (user_group)->
         console.log "SuperAdmin group created"
-        createAdmin( group )
+        createAdmin( user_group )
       .on "failure", (err) ->
         console.log "Error on group creation", err
 
@@ -390,7 +390,7 @@ initDatabase = ->
   #
   # Start process
   #
-  createAdmin()
+  createGroup()
 
 
 
