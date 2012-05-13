@@ -9,7 +9,7 @@
         input '#element', type: 'hidden', name: 'element', value: 'page'
         input '#action', type: 'hidden', name: 'action', value: 'save'
 
-        input type: 'hidden', name: 'id_menu', value: @page.id_menu
+        #input type: 'hidden', name: 'id_menu', value: @page.id_menu
         input type: 'hidden', name: 'created', value: '0000-00-00 00:00:00'
         input '#id_page', type: 'hidden', name: 'id_page', value: @page.id_page
         input '#rel', type: 'hidden', name: 'rel', value: @page.id_page
@@ -17,7 +17,7 @@
         input '#origin_id_parent', type: 'hidden', value: @page.id_parent
         console.log @page.id_parent
         input '#origin_id_subnav', type: 'hidden', value: '0'
-        input '.online2', type: 'hidden', name: 'online', value: '1'
+        #input '.online2', type: 'hidden', name: 'online', value: '1'
         div '#sidecolumn.close', ->
           
           div '.info', ->
@@ -102,6 +102,7 @@
                         option selected: ('selected' if view==@page.article_view), value: view, -> @views["block"][view]
                     
             # 'Parent'
+
             if @page.id_page
               h3 '.toggler', 'Parent'
               div '.element', ->
