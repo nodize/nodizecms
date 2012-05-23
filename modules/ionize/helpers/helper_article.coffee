@@ -148,8 +148,14 @@
   #* Basically calling the partial defined as "block"
   #* 
   #**
-  @helpers['ion_article'] = (args...) -> 
-    partial @article.view if @article.view
+  @helpers['ion_article'] = (args...) ->
+    # Using "partial" for .coffee templates
+    if partial?
+      partial @article.view if @article.view
+    # Using "@partial" for .eco templates
+    else if @partial?
+      @partial @article.view if @article.view
+
 
   #*****
   #* Displaying articles, @articles array has to be sent with @render
