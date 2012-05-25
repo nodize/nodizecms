@@ -14,8 +14,7 @@
         input '#id_page', type: 'hidden', name: 'id_page', value: @page.id_page
         input '#rel', type: 'hidden', name: 'rel', value: @page.id_page
         input '#name', type: 'hidden', name: 'name', value: 'welcome-url'
-        input '#origin_id_parent', type: 'hidden', value: @page.id_parent
-        console.log @page.id_parent
+        input '#origin_id_parent', type: 'hidden', value: @page.id_parent        
         input '#origin_id_subnav', type: 'hidden', value: '0'
         #input '.online2', type: 'hidden', name: 'online', value: '1'
         div '#sidecolumn.close', ->
@@ -112,8 +111,8 @@
                     label for: 'id_menu', 'Menu'
                   dd ->                    
                     select '#id_menu.select', name :'id_menu', ->
-                      for menu in @menus                       
-                        option value:menu.id_menu, selected:"#{'selected' if menu.id_menu is @page.id_menu}", -> menu.title
+                      for menu in @menus                        
+                        option value:menu.id_menu, selected:"#{if menu.id_menu is @page.id_menu then 'selected' else ''}", -> menu.title
                 # 'Parent'
                 dl '.small.last', ->
                   dt ->
@@ -500,8 +499,7 @@
       #      
       script ->
         """        
-        id_page = #{@page.id_page}
-        console.log( id_page )
+        id_page = #{@page.id_page}        
         langs = #{JSON.stringify( Static_langs)}        
         """
 
@@ -554,7 +552,7 @@
         #
         # Parent select list
         #
-        $("id_menu").addEvent "change", ->          
+        $("id_menu").addEvent "change", -> 
           # Current page ID
           id_current = (if ($("id_page").value) then $("id_page").value else "0")
           
@@ -563,7 +561,7 @@
           xhr = new Request.HTML(
             url: admin_url + "page/get_parents_select/" + $("id_menu").value + "/" + id_current + "/" + id_parent
             method: "post"
-            onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->              
+            onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->                
               $("id_parent").empty()
               if Browser.ie or (Browser.firefox and Browser.version < 4)
                 $("id_parent").set "html", responseHTML
