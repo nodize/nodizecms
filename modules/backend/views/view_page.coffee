@@ -138,7 +138,7 @@
                   label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
                 dd ->
                   input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: ''
-            # # Subnavigation
+            # Subnavigation
             # if @page.id_page isnt ''
             #   h3 '.toggler', 'Sub Navigation'
             #   div '.element', ->
@@ -170,7 +170,7 @@
             #         div '#subnavTitleTabContent.w160', ->
             #           div '.tabcontent', ->
             #             textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
-            # # 'Advanced Options'
+            # 'Advanced Options'
             # h3 '.toggler', 'Advanced options'
             # div '.element', ->
             #   # 'Pagination'
@@ -187,7 +187,7 @@
             #     dd ->
             #       homeChecked = if @page.home then 'checked' else ''
             #       input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
-            # # 'SEO'
+            # 'SEO'
             # h3 '.toggler', 'SEO'
             # div '.element', ->
             #   # 'Meta_Description'
@@ -235,7 +235,7 @@
             #         option value: '8', '8'
             #         option value: '9', '9'
             #         option value: '10', '10'
-            # # 'Access authorization'
+            # 'Access authorization'
             # h3 '.toggler', 'Access authorizations'
             # div '.element', ->
             #   dl '.small.last', ->
@@ -253,45 +253,46 @@
             #           option value: '6', 'Guests'
             #           option value: '7', 'Banned'
             #           option value: '8', 'Deactivated'
-            # # 'Operations on Page'
-            # h3 '.toggler', 'Operations'
-            # div '.element', ->
-            #   # 'Copy Content'
-            #   dl '.small', ->
-            #     dt ->
-            #       label for: 'lang_copy_from', title: 'Copy the element content from one language to another. Copy of all content (titles, subtitle, content, etc.)', 'Copy content'
-            #     dd ->
-            #       div '.w100.left', ->
-            #         select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
-            #           option value: 'en', 'English'
-            #         br()
-            #         select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
-            #           option value: 'en', 'English'
-            #       div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
-            #   # 'Include article content'
-            #   dl '.small', ->
-            #     dt ->
-            #       label for: 'copy_article', title: 'Also copy content for linked articles', 'Include articles'
-            #     dd ->
-            #       input '#copy_article', type: 'checkbox', name: 'copy_article', value: '1'
-            #   # 'Submit button'
-            #   dl '.small.last', ->
-            #     dt '&#160;'
-            #     dd ->
-            #       input '#copy_lang.submit', type: 'submit', value: 'Copy content'
-            #   hr '.ml10'
-            #   dl '.small.compact mt10', ->
-            #     dt ->
-            #       label for: 'reorder_direction', title: 'Reorder articles by date. Date calculation : Logical or Publish On or Creation.', 'Reorder Articles'
-            #     dd ->
-            #       select '#reorder_direction.w140.select', name: 'reorder_direction', ->
-            #         option value: 'DESC', 'Date Descendant'
-            #         option value: 'ASC', 'Date Ascendant'
-            #   # 'Submit button'
-            #   dl '.small.last', ->
-            #     dt '&#160;'
-            #     dd ->
-            #       input '#button_reorder_articles.submit.mt10', type: 'submit', value: 'Reorder'
+            
+            'Operations on Page'
+            h3 '.toggler', 'Operations'
+            div '.element', ->
+              # 'Copy Content'
+              dl '.small', ->
+                dt ->
+                  label for: 'lang_copy_from', title: 'Copy the element content from one language to another. Copy of all content (titles, subtitle, content, etc.)', 'Copy content'
+                dd ->
+                  div '.w100.left', ->
+                    select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
+                      option value: 'en', 'English'
+                    br()
+                    select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+                      option value: 'en', 'English'
+                  div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
+              # 'Include article content'
+              dl '.small', ->
+                dt ->
+                  label for: 'copy_article', title: 'Also copy content for linked articles', 'Include articles'
+                dd ->
+                  input '#copy_article', type: 'checkbox', name: 'copy_article', value: '1'
+              # 'Submit button'
+              dl '.small.last', ->
+                dt '&#160;'
+                dd ->
+                  input '#copy_lang.submit', type: 'submit', value: 'Copy content'
+              hr '.ml10'
+              dl '.small.compact mt10', ->
+                dt ->
+                  label for: 'reorder_direction', title: 'Reorder articles by date. Date calculation : Logical or Publish On or Creation.', 'Reorder Articles'
+                dd ->
+                  select '#reorder_direction.w140.select', name: 'reorder_direction', ->
+                    option value: 'DESC', 'Date Descendant'
+                    option value: 'ASC', 'Date Ascendant'
+              # 'Submit button'
+              dl '.small.last', ->
+                dt '&#160;'
+                dd ->
+                  input '#button_reorder_articles.submit.mt10', type: 'submit', value: 'Reorder'
             
             # # 'Other info : Permanent URL, etc.'
             # h3 '.toggler', 'Information'
@@ -468,7 +469,7 @@
               #     button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
               #   div '#pictureContainer.sortable-container', ->
               #     span 'No linked image'
-          #
+          
           # 'Articles'
           #
           if @page.id_page
@@ -660,36 +661,36 @@
           #
           ION.initRequestEvent $("iconPageStatus"), admin_url + "page\/\/switch_online/" + $("id_page").value
           
-          $("id_subnav_menu").addEvent "change", ->
-            xhr = new Request.HTML(
-              url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
-              method: "post"
-              onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
-                $("id_subnav").empty()
-                if Browser.ie or (Browser.firefox and Browser.version < 4)
-                  $("id_subnav").set "html", responseHTML
-                  selected = $("id_subnav").getElement("option[selected=selected]")
-                  selected.setProperty "selected", "selected"
-                else
-                  $("id_subnav").adopt responseTree
-                (new Element("option",
-                  value: "-1"
-                )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
-            ).send()
+          # $("id_subnav_menu").addEvent "change", ->
+          #   xhr = new Request.HTML(
+          #     url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
+          #     method: "post"
+          #     onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
+          #       $("id_subnav").empty()
+          #       if Browser.ie or (Browser.firefox and Browser.version < 4)
+          #         $("id_subnav").set "html", responseHTML
+          #         selected = $("id_subnav").getElement("option[selected=selected]")
+          #         selected.setProperty "selected", "selected"
+          #       else
+          #         $("id_subnav").adopt responseTree
+          #       (new Element("option",
+          #         value: "-1"
+          #       )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
+          #   ).send()
   
-          $("id_subnav_menu").fireEvent "change"
+          # $("id_subnav_menu").fireEvent "change"
           
           #
           # Reorder articles
           #
-          $("button_reorder_articles").addEvent "click", (e) ->
-            e.stop()
-            url = admin_url + "page/reorder_articles"
-            data =
-              id_page: $("id_page").value
-              direction: $("reorder_direction").value
+          # $("button_reorder_articles").addEvent "click", (e) ->
+          #   e.stop()
+          #   url = admin_url + "page/reorder_articles"
+          #   data =
+          #     id_page: $("id_page").value
+          #     direction: $("reorder_direction").value
   
-            ION.sendData url, data
+          #   ION.sendData url, data
   
           #
           # Link to page or article
@@ -719,9 +720,9 @@
           #
           # Loads media only when clicking on the tab
           #
-          mediaManager.initParent "page", $("id_page").value          
-          mediaManager.loadMediaList "file"
-          mediaManager.loadMediaList "music"
-          mediaManager.loadMediaList "video"
-          mediaManager.loadMediaList "picture"
+          # mediaManager.initParent "page", $("id_page").value          
+          # mediaManager.loadMediaList "file"
+          # mediaManager.loadMediaList "music"
+          # mediaManager.loadMediaList "video"
+          # mediaManager.loadMediaList "picture"
 
