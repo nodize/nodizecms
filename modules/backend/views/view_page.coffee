@@ -49,7 +49,7 @@
                   dt ->
                     label for: 'appears', title:@ion_lang.ionize_help_appears, -> @ion_lang.ionize_label_appears
                   dd ->
-                    input '#appears.inputcheckbox', name: 'appears', type: 'checkbox', checked: 'checked', value: '1'
+                    input '#appears.inputcheckbox', name: 'appears', type: 'checkbox', checked: "#{if @page.appears then 'checked' else ''}", value: '1'
               # 'Has one URL ? Means is reachable through its URL'
               dl '.small', ->
                 dt ->
@@ -70,35 +70,35 @@
                         option selected: ('selected' if view==@page.view), value: view, -> @views["pages"][view]
                       
                       
-                # 'Single Article Page view'
-                dl '.small', ->
-                  dt ->
-                    label for: 'view', title: 'Page view used to display one Article', 'Single View'
-                  dd ->
-                    select '.customselect.select.w160', name: 'view_single', ->
-                      option value: '', selected: 'selected', '-- Default view --'
-                      for view of @views["pages"]
-                        option selected: ('selected' if view==@page.view_single), value: view, -> @views["pages"][view]
+              #   # 'Single Article Page view'
+              #   dl '.small', ->
+              #     dt ->
+              #       label for: 'view', title: 'Page view used to display one Article', 'Single View'
+              #     dd ->
+              #       select '.customselect.select.w160', name: 'view_single', ->
+              #         option value: '', selected: 'selected', '-- Default view --'
+              #         for view of @views["pages"]
+              #           option selected: ('selected' if view==@page.view_single), value: view, -> @views["pages"][view]
                       
-              # 'Article List Template'
-              dl '.small', ->
-                dt ->
-                  label for: 'article_list_view', title: 'Article view : If more than 1 article on the page, use this view by default for each article', 'List view'
-                dd ->
-                  select '.customselect.select.w160', name: 'article_list_view', ->
-                    option value: '', selected: 'selected', '-- Default view --'
-                    for view of @views["pages"]
-                        option selected: ('selected' if view==@page.article_list_view), value: view, -> @views["pages"][view]
+              # # 'Article List Template'
+              # dl '.small', ->
+              #   dt ->
+              #     label for: 'article_list_view', title: 'Article view : If more than 1 article on the page, use this view by default for each article', 'List view'
+              #   dd ->
+              #     select '.customselect.select.w160', name: 'article_list_view', ->
+              #       option value: '', selected: 'selected', '-- Default view --'
+              #       for view of @views["pages"]
+              #           option selected: ('selected' if view==@page.article_list_view), value: view, -> @views["pages"][view]
                       
-              # 'Article Template'
-              dl '.small', ->
-                dt ->
-                  label for: 'article_view', title: 'Article view : Use this view for each article displayed in standalone mode OR if just one article in this page', 'Article view'
-                dd ->
-                  select '.customselect.select.w160', name: 'article_view', ->
-                    option value: '', selected: 'selected', '-- Default view --'
-                    for view of @views["block"]
-                        option selected: ('selected' if view==@page.article_view), value: view, -> @views["block"][view]
+              # # 'Article Template'
+              # dl '.small', ->
+              #   dt ->
+              #     label for: 'article_view', title: 'Article view : Use this view for each article displayed in standalone mode OR if just one article in this page', 'Article view'
+              #   dd ->
+              #     select '.customselect.select.w160', name: 'article_view', ->
+              #       option value: '', selected: 'selected', '-- Default view --'
+              #       for view of @views["block"]
+              #           option selected: ('selected' if view==@page.article_view), value: view, -> @views["block"][view]
                     
             # 'Parent'
 
@@ -138,177 +138,177 @@
                   label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
                 dd ->
                   input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: ''
-            # Subnavigation
-            if @page.id_page isnt ''
-              h3 '.toggler', 'Sub Navigation'
-              div '.element', ->
-                comment 'Subnav Menu'
-                dl '.small', ->
-                  dt ->
-                    label for: 'id_subnav_menu', 'Menu'
-                  dd ->
-                    select '#id_subnav_menu.select', name: 'id_subnav_menu', ->
-                      option value: '1', 'Main menu'
-                      option value: '2', 'System menu'
-                # ID sub navigation Page
-                dl '.small.last', ->
-                  dt ->
-                    label for: 'id_subnav', 'Page'
-                  dd ->
-                    select '#id_subnav.select.w150', name: 'id_subnav'
-                # Title
-                dl '.small', ->
-                  dt ->
-                    label title: '', 'Title'
-                  dd ->
-                    # Tabs
-                    div '#subnavTitleTab.mainTabs.small gray', ->
-                      ul '.tab-menu', ->
-                        li ->
-                          a 'En'
-                      div class:'clear'
-                    div '#subnavTitleTabContent.w160', ->
-                      div '.tabcontent', ->
-                        textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
-            # 'Advanced Options'
-            h3 '.toggler', 'Advanced options'
-            div '.element', ->
-              # 'Pagination'
-              dl '.small', ->
-                dt ->
-                  label for: 'pagination', title: 'If>0, activates the pagination of article.', ->            
-                    text 'Articles / page'
-                dd ->
-                  input '#pagination.inputtext.w40', name: 'pagination', type: 'text', value: '0'
-              # 'Home page'
-              dl '.small.last', ->
-                dt ->
-                  label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
-                dd ->
-                  homeChecked = if @page.home then 'checked' else ''
-                  input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
-            # 'SEO'
-            h3 '.toggler', 'SEO'
-            div '.element', ->
-              # 'Meta_Description'
-              dl '.small', ->
-                dt ->
-                  label title: 'Replace the global website META when not empty', 'Description'
-                dd ->
-                  # 'Tabs'
-                  div '#metaDescriptionTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#metaDescriptionTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#meta_description_en.h80', name: 'meta_description_en', style: 'border-top:none;width:142px;'
-              # 'Meta_Keywords'
-              dl '.small.last', ->
-                dt ->
-                  label title: 'Replace the global website META when not empty', 'Keywords'
-                dd ->
-                  # 'Tabs'
-                  div '#metaKeywordsTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#metaKeywordsTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#meta_keywords_en.h40', name: 'meta_keywords_en', style: 'border-top:none;width:142px;'
-              # 'Priority'
-              dl '.small', ->
-                dt ->
-                  label for: 'priority', title: 'Page priority, between 0 and 10', 'Sitemap priority'
-                dd ->
-                  select '#priority.inputtext.w40', name: 'priority', ->
-                    option value: '0', '0'
-                    option value: '1', '1'
-                    option value: '2', '2'
-                    option value: '3', '3'
-                    option value: '4', '4'
-                    option value: '5', selected: 'selected', '5'
-                    option value: '6', '6'
-                    option value: '7', '7'
-                    option value: '8', '8'
-                    option value: '9', '9'
-                    option value: '10', '10'
-            # 'Access authorization'
-            h3 '.toggler', 'Access authorizations'
-            div '.element', ->
-              dl '.small.last', ->
-                dt ->
-                  label for: 'template', 'Groups'
-                dd ->
-                  div '#groups', ->
-                    select '.select', name: 'id_group', ->
-                      option value: '0', selected: 'selected', '-- Everyone --'
-                      option value: '1', 'Super Admins'
-                      option value: '2', 'Admins'
-                      option value: '3', 'Editors'
-                      option value: '4', 'Users'
-                      option value: '5', 'Pending'
-                      option value: '6', 'Guests'
-                      option value: '7', 'Banned'
-                      option value: '8', 'Deactivated'
-            # 'Operations on Page'
-            h3 '.toggler', 'Operations'
-            div '.element', ->
-              # 'Copy Content'
-              dl '.small', ->
-                dt ->
-                  label for: 'lang_copy_from', title: 'Copy the element content from one language to another. Copy of all content (titles, subtitle, content, etc.)', 'Copy content'
-                dd ->
-                  div '.w100.left', ->
-                    select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
-                      option value: 'en', 'English'
-                    br()
-                    select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
-                      option value: 'en', 'English'
-                  div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
-              # 'Include article content'
-              dl '.small', ->
-                dt ->
-                  label for: 'copy_article', title: 'Also copy content for linked articles', 'Include articles'
-                dd ->
-                  input '#copy_article', type: 'checkbox', name: 'copy_article', value: '1'
-              # 'Submit button'
-              dl '.small.last', ->
-                dt '&#160;'
-                dd ->
-                  input '#copy_lang.submit', type: 'submit', value: 'Copy content'
-              hr '.ml10'
-              dl '.small.compact mt10', ->
-                dt ->
-                  label for: 'reorder_direction', title: 'Reorder articles by date. Date calculation : Logical or Publish On or Creation.', 'Reorder Articles'
-                dd ->
-                  select '#reorder_direction.w140.select', name: 'reorder_direction', ->
-                    option value: 'DESC', 'Date Descendant'
-                    option value: 'ASC', 'Date Ascendant'
-              # 'Submit button'
-              dl '.small.last', ->
-                dt '&#160;'
-                dd ->
-                  input '#button_reorder_articles.submit.mt10', type: 'submit', value: 'Reorder'
+            # # Subnavigation
+            # if @page.id_page isnt ''
+            #   h3 '.toggler', 'Sub Navigation'
+            #   div '.element', ->
+            #     comment 'Subnav Menu'
+            #     dl '.small', ->
+            #       dt ->
+            #         label for: 'id_subnav_menu', 'Menu'
+            #       dd ->
+            #         select '#id_subnav_menu.select', name: 'id_subnav_menu', ->
+            #           option value: '1', 'Main menu'
+            #           option value: '2', 'System menu'
+            #     # ID sub navigation Page
+            #     dl '.small.last', ->
+            #       dt ->
+            #         label for: 'id_subnav', 'Page'
+            #       dd ->
+            #         select '#id_subnav.select.w150', name: 'id_subnav'
+            #     # Title
+            #     dl '.small', ->
+            #       dt ->
+            #         label title: '', 'Title'
+            #       dd ->
+            #         # Tabs
+            #         div '#subnavTitleTab.mainTabs.small gray', ->
+            #           ul '.tab-menu', ->
+            #             li ->
+            #               a 'En'
+            #           div class:'clear'
+            #         div '#subnavTitleTabContent.w160', ->
+            #           div '.tabcontent', ->
+            #             textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
+            # # 'Advanced Options'
+            # h3 '.toggler', 'Advanced options'
+            # div '.element', ->
+            #   # 'Pagination'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'pagination', title: 'If>0, activates the pagination of article.', ->            
+            #         text 'Articles / page'
+            #     dd ->
+            #       input '#pagination.inputtext.w40', name: 'pagination', type: 'text', value: '0'
+            #   # 'Home page'
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
+            #     dd ->
+            #       homeChecked = if @page.home then 'checked' else ''
+            #       input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
+            # # 'SEO'
+            # h3 '.toggler', 'SEO'
+            # div '.element', ->
+            #   # 'Meta_Description'
+            #   dl '.small', ->
+            #     dt ->
+            #       label title: 'Replace the global website META when not empty', 'Description'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#metaDescriptionTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#metaDescriptionTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#meta_description_en.h80', name: 'meta_description_en', style: 'border-top:none;width:142px;'
+            #   # 'Meta_Keywords'
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label title: 'Replace the global website META when not empty', 'Keywords'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#metaKeywordsTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#metaKeywordsTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#meta_keywords_en.h40', name: 'meta_keywords_en', style: 'border-top:none;width:142px;'
+            #   # 'Priority'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'priority', title: 'Page priority, between 0 and 10', 'Sitemap priority'
+            #     dd ->
+            #       select '#priority.inputtext.w40', name: 'priority', ->
+            #         option value: '0', '0'
+            #         option value: '1', '1'
+            #         option value: '2', '2'
+            #         option value: '3', '3'
+            #         option value: '4', '4'
+            #         option value: '5', selected: 'selected', '5'
+            #         option value: '6', '6'
+            #         option value: '7', '7'
+            #         option value: '8', '8'
+            #         option value: '9', '9'
+            #         option value: '10', '10'
+            # # 'Access authorization'
+            # h3 '.toggler', 'Access authorizations'
+            # div '.element', ->
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label for: 'template', 'Groups'
+            #     dd ->
+            #       div '#groups', ->
+            #         select '.select', name: 'id_group', ->
+            #           option value: '0', selected: 'selected', '-- Everyone --'
+            #           option value: '1', 'Super Admins'
+            #           option value: '2', 'Admins'
+            #           option value: '3', 'Editors'
+            #           option value: '4', 'Users'
+            #           option value: '5', 'Pending'
+            #           option value: '6', 'Guests'
+            #           option value: '7', 'Banned'
+            #           option value: '8', 'Deactivated'
+            # # 'Operations on Page'
+            # h3 '.toggler', 'Operations'
+            # div '.element', ->
+            #   # 'Copy Content'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'lang_copy_from', title: 'Copy the element content from one language to another. Copy of all content (titles, subtitle, content, etc.)', 'Copy content'
+            #     dd ->
+            #       div '.w100.left', ->
+            #         select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
+            #           option value: 'en', 'English'
+            #         br()
+            #         select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+            #           option value: 'en', 'English'
+            #       div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
+            #   # 'Include article content'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'copy_article', title: 'Also copy content for linked articles', 'Include articles'
+            #     dd ->
+            #       input '#copy_article', type: 'checkbox', name: 'copy_article', value: '1'
+            #   # 'Submit button'
+            #   dl '.small.last', ->
+            #     dt '&#160;'
+            #     dd ->
+            #       input '#copy_lang.submit', type: 'submit', value: 'Copy content'
+            #   hr '.ml10'
+            #   dl '.small.compact mt10', ->
+            #     dt ->
+            #       label for: 'reorder_direction', title: 'Reorder articles by date. Date calculation : Logical or Publish On or Creation.', 'Reorder Articles'
+            #     dd ->
+            #       select '#reorder_direction.w140.select', name: 'reorder_direction', ->
+            #         option value: 'DESC', 'Date Descendant'
+            #         option value: 'ASC', 'Date Ascendant'
+            #   # 'Submit button'
+            #   dl '.small.last', ->
+            #     dt '&#160;'
+            #     dd ->
+            #       input '#button_reorder_articles.submit.mt10', type: 'submit', value: 'Reorder'
             
-            # 'Other info : Permanent URL, etc.'
-            h3 '.toggler', 'Information'
-            div '.element', ->
-              dl '.small.compact', ->
-                dt ->
-                  label for: 'permanent_url', 'Permanent URL'
-                dd ->
-                  # 'Tabs'
-                  div '#permanentUrlTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#permanentUrlTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#permanent_url_en.h40', name: 'permanent_url_en', style: 'border-top:none;width:142px;', onclick: 'javascript:this.select();', readonly: 'readonly', -> @page.url
+            # # 'Other info : Permanent URL, etc.'
+            # h3 '.toggler', 'Information'
+            # div '.element', ->
+            #   dl '.small.compact', ->
+            #     dt ->
+            #       label for: 'permanent_url', 'Permanent URL'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#permanentUrlTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#permanentUrlTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#permanent_url_en.h40', name: 'permanent_url_en', style: 'border-top:none;width:142px;', onclick: 'javascript:this.select();', readonly: 'readonly', -> @page.url
               
             # 'Modules PlaceHolder'
           # '/options'
@@ -384,14 +384,15 @@
                 for lang in Static_langs_records
                   li "#{".dl" if lang.def is 1}", rel: lang.lang, ->
                     a lang.name
-                li '#fileTab.right', ->
-                  a 'Files'
-                li '#musicTab.right', ->
-                  a 'Music'
-                li '#videoTab.right', ->
-                  a 'Videos'
-                li '#pictureTab.right', ->
-                  a 'Images'
+                    
+                # li '#fileTab.right', ->
+                #   a 'Files'
+                # li '#musicTab.right', ->
+                #   a 'Music'
+                # li '#videoTab.right', ->
+                #   a 'Videos'
+                # li '#pictureTab.right', ->
+                #   a 'Images'
               div class:'clear'
             div '#pageTabContent', ->
               # 'Text block'
@@ -434,39 +435,39 @@
                   # 'Online'
                   input "#online_#{lang}", name: "online_#{lang}", type: 'hidden', value: @page_by_lang[lang].online
                   # 'extend fields goes here...'
-              # 'Files'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
-                ul '#fileContainer.sortable-container', ->
-                  span 'No linked file'
-              # 'Music'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
-                ul '#musicContainer.sortable-container', ->
-                  span 'No linked musice'
-              # 'Videos'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
-                ul '#videoContainer.sortable-container', ->
-                  span 'No linked video'
-              # 'Pictures'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
-                  button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
-                div '#pictureContainer.sortable-container', ->
-                  span 'No linked image'
+              # # 'Files'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
+              #   ul '#fileContainer.sortable-container', ->
+              #     span 'No linked file'
+              # # 'Music'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
+              #   ul '#musicContainer.sortable-container', ->
+              #     span 'No linked musice'
+              # # 'Videos'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
+              #   ul '#videoContainer.sortable-container', ->
+              #     span 'No linked video'
+              # # 'Pictures'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
+              #     button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
+              #   div '#pictureContainer.sortable-container', ->
+              #     span 'No linked image'
           #
           # 'Articles'
           #

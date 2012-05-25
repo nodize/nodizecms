@@ -25,9 +25,9 @@
   @client '/nodize.js': ->       
    	@connect()
    
-    @on live_articleUpdate: (params) ->
-      console.log "Live update"
+    @on live_articleUpdate: (params) ->      
       $ = jQuery
+      
       #
       # Live update of article content
       #      

@@ -70,6 +70,8 @@
     finished = (response) =>
       @requestCompleted requestId, response
 
+    displayedInNav = "page.appears = 1 AND "
+
     #
     #
     # Retrieve pages
@@ -79,6 +81,7 @@
               "WHERE page_lang.id_page = page.id_page AND "+
               "page_lang.lang = '#{@lang}' AND "+
               "page.id_menu = #{menu_id} AND "+
+               displayedInNav +
               "page.level = #{page_level}", Page)
       .on 'success', (pages) =>
 
@@ -324,7 +327,8 @@
           page.id_menu,
           page.id_page,
           page.home,
-          page.online
+          page.online,
+          page.appears
         FROM
           page_lang, page, menu
         WHERE
@@ -359,8 +363,8 @@
               currentResponse["home"]       = page.home;
               currentResponse["id_page"]    = page.id_page;
               currentResponse["online"]     = page.online;
-
-              if page.online or @req.session.usergroup_level >= 1000              
+              
+              if (page.appears is 1) and (page.online or @req.session.usergroup_level >= 1000 )
                 responses.push( currentResponse )
 
               #

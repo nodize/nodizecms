@@ -313,7 +313,7 @@
               page_lang.online = values['online_'+lang]
               page_lang.meta_title = values['meta_title_'+lang]
               page_lang.nav_title = values['nav_title_'+lang]
-              page_lang.home = values['home']
+              page_lang.home = values['home']              
               
               page_lang.save()
                 .on 'success', (page_lang) =>
@@ -379,6 +379,7 @@
           page.home = if values.home then values.home else 0
           page.view = values.view
           page.id_parent = values.id_parent
+          page.appears = values.appears
 
           if values.id_parent == "0"
             page.level = 0        
@@ -415,6 +416,7 @@
       page.id_group = values.id_group
       page.priority = values.priority
       page.view = values.view
+      page.appears = values.appears
 
       
       if values.id_parent == "0"
