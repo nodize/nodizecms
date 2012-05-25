@@ -26,6 +26,8 @@
    	@connect()
    
     @on live_articleUpdate: (params) ->
+      console.log "Live update"
+      $ = jQuery
       #
       # Live update of article content
       #      
