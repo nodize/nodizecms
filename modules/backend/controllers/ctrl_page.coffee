@@ -450,13 +450,13 @@
     #
     # Retrieve pages in menu 
     #    
-
-    responses = []
+    @responses = []
+    
     #
     # Request counter is used to define when all async requests are finished
     # (+1 when launching a request, -1 once finishing, 0 everything is done)         
     #
-    request_counter = 1
+    @request_counter = 1
     
     #
     # Building the response path 
@@ -466,106 +466,27 @@
     #
     # Send response once async requests are done
     #
-    displayResponse = =>
-      request_counter--
+    displayResponse = (responses) =>
+      @request_counter--
       
       #
       # Requests are finished, building & sending the response
       #
-      if request_counter==0        
-        
+      if @request_counter==0        
         #
-        # Sorting responses, using the path value
+        # Building the <select> tag
         #
-        responses.sort( (a,b) ->          
-          return 1 if a.path > b.path
-          return -1 if a.path < b.path
-          return 0
-        )
-        
-        #
-        # Building the response message
-        #
-        response = "<option value='0'"+(if @params.id_current is '0' then " selected='selected'" else "")+">/</option>"
-      
-        for line in responses                    
-            response += "<option value='#{line.value}'"+(if @params.id_parent is line.value.toString() then " selected='selected'" else "")+">"          
-            response += "&#160;&#187;&#160;" for level in [1..line.level] unless line.level<1
-            response += "#{line.title}</option>"
-
+        response = buildMenuSelect( responses, @params.id_current, @params.id_parent )
         #
         # Send response
         #
-        req.send response
-
-    
-    #
-    # Recursive function to retrieve pages
-    #
-    getParents = (path, id_menu, id_parent, callback) =>
-      #
-      # Launch query
-      # Not using Sequelize yet there, but should be used for compatibility with all supported DB engines  
-      #
-      DB.query( """
-        SELECT 
-          page_lang.title,
-          page.level,
-          page.id_menu,
-          page.id_page
-        FROM
-          page_lang, page, menu
-        WHERE
-          page_lang.lang = '#{req.params.lang}' AND 
-          menu.id_menu = #{id_menu} AND 
-          page.id_parent = #{id_parent} AND
-          page_lang.id_page = page.id_page AND
-          page.id_menu = menu.id_menu 
-        ORDER BY 
-          page.ordering
-      """, 
-      Page )
-        #
-        # On success, store results + launch additional recursive queries
-        #
-        .on 'success', (results) =>
-                          
-          index = 0
-          for page in results
-              index++
-              newPath = path + index + "/"
-                              
-              #
-              # Storing results in the responses array
-              #
-              currentResponse = {}
-              currentResponse["path"] = newPath;
-              currentResponse["value"] = page.id_page;
-              currentResponse["title"] = page.title;
-              currentResponse["level"] = page.level;
-                            
-              responses.push( currentResponse ) if page.id_page.toString() isnt @params.id_current
-
-              #
-              # Use to watch async queries termination
-              #
-              request_counter++
-              
-              #
-              # Search for child pages of the current page
-              #
-              getParents( newPath, id_menu, page.id_page, callback )
-              
-          callback()
-
-        .on 'failure', (err) ->
-            console.log "GetParents error ", err
+        req.send response    
     
     #
     # Launch the first request
+    # Callback is "displayResponse"
     #    
-    #getParents( path, req.params.id_menu, req.params.id_parent, displayResponse )
-    getParents( path, req.params.id_menu, 0, displayResponse )
+    getParentPages( @, path, req.params.id_menu, 0, req.params.lang, @params.id_current, displayResponse )
 
   #
   # PAGE ORDERING
@@ -734,3 +655,87 @@
         req.send message
 
 
+  #
+  # Recursive function to retrieve pages
+  #
+  getParentPages = (context, path, id_menu, id_parent, lang, currentPageId, callback) =>    
+    #
+    # Launch query
+    # Not using Sequelize yet there, but should be used for compatibility with all supported DB engines  
+    #
+    DB.query( """
+      SELECT 
+        page_lang.title,
+        page.level,
+        page.id_menu,
+        page.id_page
+      FROM
+        page_lang, page, menu
+      WHERE
+        page_lang.lang = '#{lang}' AND 
+        menu.id_menu = #{id_menu} AND 
+        page.id_parent = #{id_parent} AND
+        page_lang.id_page = page.id_page AND
+        page.id_menu = menu.id_menu 
+      ORDER BY 
+        page.ordering
+    """, 
+    Page )
+      #
+      # On success, store results + launch additional recursive queries
+      #
+      .on 'success', (results) =>
+                        
+        index = 0        
+
+        for page in results
+            index++
+            newPath = path + index + "/"
+                            
+            #
+            # Storing results in the responses array
+            #
+            currentResponse = {}
+            currentResponse["path"] = newPath;
+            currentResponse["value"] = page.id_page;
+            currentResponse["title"] = page.title;
+            currentResponse["level"] = page.level;
+                          
+            context.responses.push( currentResponse ) if page.id_page.toString() isnt currentPageId
+
+            #
+            # Use to watch async queries termination
+            #
+            context.request_counter++
+            
+            #
+            # Search for child pages of the current page
+            #
+            getParentPages( context, newPath, id_menu, page.id_page, lang, currentPageId, callback )
+            
+        callback( context.responses )
+
+      .on 'failure', (err) ->
+          console.log "GetParents error ", err
+
+  buildMenuSelect = (responses, id_current, id_parent ) =>
+    #
+    # Sorting responses, using the path value
+    #
+    responses.sort( (a,b) ->          
+      return 1 if a.path > b.path
+      return -1 if a.path < b.path
+      return 0
+    )
+    
+    #
+    # Building the response message
+    #
+    response = "<option value='0'"+(if id_current is '0' then " selected='selected'" else "")+">/</option>"
+  
+    for line in responses                    
+        response += "<option value='#{line.value}'"+(if id_parent is line.value.toString() then " selected='selected'" else "")+">"          
+        response += "&#160;&#187;&#160;" for level in [1..line.level] unless line.level<1
+        response += "#{line.title}</option>"
+
+    return response
