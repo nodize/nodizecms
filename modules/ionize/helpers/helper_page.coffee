@@ -61,10 +61,10 @@
                   "WHERE page_lang.id_page = page.id_page AND "+
                   "page_lang.lang = '"+@lang+"' AND "+
                   isOnline+
-                  "page.id_parent = #{@page.id_page} "
+                  "page.id_parent = #{@page.id_page} "+
                   "ORDER BY page.ordering"
 
-
+    
     DB.query(  page_search
               , Page)
       .on 'success', (pages) =>
@@ -73,7 +73,7 @@
         #
         htmlResponse = ""
         
-        pageCount = 0
+        pageCount = 0        
 
         for page in pages
           pageCount++
