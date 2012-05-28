@@ -23,9 +23,10 @@
     #
     # Parameters
     #
-    from = ''
-    type = ''
+    from = '' 
+    type = '' 
     live = false
+    refresh = false
 
     #
     # Parsing attributes if they do exist
@@ -48,6 +49,11 @@
       # "Live" parameter, will allow to refresh article without reloading the page
       #      
       live = if attrs?.live then attrs.live else ""
+
+      #
+      # "Refresh" parameter, will allow to reload page when article is updated
+      #      
+      refresh = if attrs?.refresh then attrs.refresh else ""
 
     #
     # We are launching an asynchronous request,
@@ -127,11 +133,14 @@
           if live
             @article.content = "<div class='ion_live_content'>" + @article.content + "</div>"
 
+          
           # Render nested tags
           if args.length>=1
-            htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
+            htmlResponse += "<span id='ion_liveXArticle_#{@article.id_article}'>" if live
+            htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh
+
             htmlResponse += yield args[args.length-1] # Compile the nested content to html            
-            htmlResponse += "</span>" if live
+            htmlResponse += "</span>" if live or refresh
 
         finished( htmlResponse )
       
