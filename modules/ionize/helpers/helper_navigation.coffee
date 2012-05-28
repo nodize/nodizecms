@@ -82,7 +82,8 @@
               "page_lang.lang = '#{@lang}' AND "+
               "page.id_menu = #{menu_id} AND "+
                displayedInNav +
-              "page.level = #{page_level}", Page)
+              "page.level = #{page_level} "+
+              "ORDER BY page.ordering", Page)
       .on 'success', (pages) =>
 
         #
@@ -254,8 +255,7 @@
         htmlResponse  = ""
         currentLevel  = 0
         firstResult   = true
-       
-      
+
         for line in responses
             #
             # For home page, url becomes / (we hide the real url)
@@ -278,7 +278,8 @@
               levelChanged = true
 
             else if @navigation.level < currentLevel
-              htmlResponse += level_close
+              for index in [1..currentLevel-@navigation.level]
+                htmlResponse += level_close
               currentLevel = @navigation.level
               levelChanged = true
 
