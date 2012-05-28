@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes)->
     pagination        : DataTypes.INTEGER
     pagination_nb     : DataTypes.INTEGER
     id_group          : DataTypes.INTEGER
-    priority          : DataTypes.INTEGER    
+    priority          : DataTypes.INTEGER
+    appears           : DataTypes.INTEGER   
   ,
   
     classMethods:             

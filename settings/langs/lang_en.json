@@ -586,7 +586,7 @@
 		"ionize_label_article_reorder" : "Reorder Articles",
 		"ionize_label_date_asc" : "Date Ascendant",
 		"ionize_label_date_desc" : "Date Descendant",
-		"ionize_label_no_sub_navigation" : "-- No one --",
+		"ionize_label_no_sub_navigation" : "-- None --",
 
 		"ionize_button_reorder" : "Reorder",
 

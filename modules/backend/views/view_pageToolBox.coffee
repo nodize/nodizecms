@@ -11,8 +11,8 @@
         input '#pageDeleteButton.button.no', type: 'button', value:@ion_lang.ionize_button_delete
       div '.toolbox.divider', ->
         input '#sidecolumnSwitcher.toolbar-button', type: 'button', value:@ion_lang.ionize_label_hide_options
-      div '#tPageAddContentElement.toolbox.divider', ->
-        input '#addContentElement.toolbar-button.element', type: 'button', value:@ion_lang.ionize_label_add_content_element
+      # div '#tPageAddContentElement.toolbox.divider', ->
+      #   input '#addContentElement.toolbar-button.element', type: 'button', value:@ion_lang.ionize_label_add_content_element
       div '#tPageMediaButton.toolbox.divider', ->
         input '#addMedia.fmButton.toolbar-button pictures', type: 'button', value:@ion_lang.ionize_label_attach_media
       div '#tPageAddArticle.toolbox', ->
@@ -43,13 +43,13 @@
           confirm: true
           message: Lang.get("ionize_confirm_element_delete")
       
-        $("addContentElement").addEvent "click", (e) ->
-          ION.dataWindow "contentElement", "ionize_title_add_content_element", "element/add_element",
-            width: 500
-            height: 350
-          ,
-            parent: "page"
-            id_parent: id
+        # $("addContentElement").addEvent "click", (e) ->
+        #   ION.dataWindow "contentElement", "ionize_title_add_content_element", "element/add_element",
+        #     width: 500
+        #     height: 350
+        #   ,
+        #     parent: "page"
+        #     id_parent: id
       
         $("addMedia").addEvent "click", (e) ->
           e.stop()

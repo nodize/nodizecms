@@ -11,7 +11,7 @@
 #
 
 @include = ->
-  # Defining helpers (tags like, available in CoffeKup for views)
+  # Defining helpers (like ionize tags, available in CoffeKup for views)
   
   #*****
   #* Displaying pages, @pages array has to be sent with @render
