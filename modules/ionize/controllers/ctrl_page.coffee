@@ -121,63 +121,76 @@
     #* Step 1 retrieve page_lang using the page name
     #*
     #**
-    Page_lang.find( {where: condition } )
-    #Page.findAll( )
-      .on 'success', (page)->
-        if page?
-          findPage( page )
-        else
-          req.send "page #{name} not found", 404
+    findPageLang = (condition) =>
+      Page_lang.find( {where: condition } )
+        .on 'success', (page)->
+          if page?
+            findPage( page )
+          else
+            req.send "page #{name} not found", 404
 
-    findPage = (page_lang) ->
+    #*****
+    #* Step 2 retrieve page
+    #*
+    #**
+    findPage = (page_lang) =>
       Page.find({where:{id_page:page_lang.id_page}})
-        .on 'success', (page) ->
+        .on 'success', (page) =>      
           #
-          # Rendering /views/page.coffee          
+          # If a link is set we use it
           #
-          registerRequest "main"
-          
-          page.view = "page_default" if page.view is null
+          if page.link?            
+            condition = {id_page : page.link_id, lang:lang }
+            findPageLang( condition )
+          #
+          # Else we render the page
+          #
+          else
+            #
+            # Rendering /views/page.coffee          
+            #
+            registerRequest "main"
+            
+            page.view = "page_default" if page.view is null
 
-          page.title = page_lang.title          
-          
-          data =
-            hardcode  : helpers              
-            page      : page
-            page_lang : page_lang
-            lang      : lang             
-            layout    : no
-            req       : req
-            registerRequest : registerRequest
-            requestCompleted : requestCompleted
-          
+            page.title = page_lang.title          
+            
+            data =
+              hardcode  : helpers              
+              page      : page
+              page_lang : page_lang
+              lang      : lang             
+              layout    : no
+              req       : req
+              registerRequest : registerRequest
+              requestCompleted : requestCompleted            
 
-          #
-          # Making CoffeeKup helpers available to .eco pages 
-          #
-          # in .coffee views : 
-          #   @ion_articles => p @article.content  
-          #
-          # in .eco views will become :
-          #   <% @ion_articles => %>
-          #   <p> <%- @article.content %> </p>
-          #         
-          for helper of helpers
-            do (helper) ->
-              data[helper] = (args...) -> @hardcode[helper].apply(this, args)
+            #
+            # Making CoffeeKup helpers available to .eco pages 
+            #
+            # in .coffee views : 
+            #   @ion_articles => p @article.content  
+            #
+            # in .eco views will become :
+            #   <% @ion_articles => %>
+            #   <p> <%- @article.content %> </p>
+            #         
+            for helper of helpers
+              do (helper) ->
+                data[helper] = (args...) -> @hardcode[helper].apply(this, args)
 
-          #
-          # Render the page
-          #
-          req.render page.view,
-            data
-          ,
-            (err,list) ->
-              renderCompleted err, list 
+            #
+            # Render the page
+            #
+            req.render page.view,
+              data
+            ,
+              (err,list) ->
+                renderCompleted err, list 
                   
         .on 'failure', ->            
           #
-          # No article found, rendering the empty page  
+          # No page found, rendering an empty page  
           #
           registerRequest "main"
 
@@ -191,3 +204,8 @@
           ,
             (err,list) ->
               renderCompleted err, list 
+
+    #
+    # Start process
+    #
+    findPageLang( condition )
