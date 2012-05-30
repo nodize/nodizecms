@@ -50,7 +50,7 @@
                   span '.lite', '16:40:45'
 
                 # 'Link ?'
-                div id:'linkContainer'
+                # div id:'linkContainer'
 
                 # 'Modules PlaceHolder'
 
@@ -494,13 +494,13 @@
             id_article: $("id_article").value
 
 
-        # Link to page or article or what else...
-        if $("linkContainer")
-          ION.HTML admin_url + "article/get_link",
-            id_page: "4"
-            id_article: "9"
-          ,
-            update: "linkContainer"
+        # # Link to page or article or what else...
+        # if $("linkContainer")
+        #   ION.HTML admin_url + "article/get_link",
+        #     id_page: "4"
+        #     id_article: "9"
+        #   ,
+        #     update: "linkContainer"
 
 
         # Get Content Elements Tabs & Elements

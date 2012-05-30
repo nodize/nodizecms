@@ -21,6 +21,7 @@
   @helpers['ion_pages'] = (args...) ->
     tagName = 'ion_pages'
     live = false
+    scope = ''
 
     #
     # Parsing attributes if they do exist
@@ -33,6 +34,11 @@
       # "Live" parameter, will allow to refresh article without reloading the page
       #      
       live = if attrs?.live then attrs.live else ""
+
+      #
+      # "Scope" parameter, allow to retrieve parent pages
+      #      
+      scope = if attrs?.scope then attrs.scope else ""
 
     #
     # We are launching an asynchronous request,
@@ -57,14 +63,16 @@
     else
        isOnline = "page_lang.online = 1 AND "
 
+    scopeClause = if scope is 'parent' then "page.id_parent = #{@page.id_parent} " else "page.id_parent = #{@page.id_page} "
+
     page_search = "SELECT * FROM page, page_lang  "+
                   "WHERE page_lang.id_page = page.id_page AND "+
                   "page_lang.lang = '"+@lang+"' AND "+
                   isOnline+
-                  "page.id_parent = #{@page.id_page} "
+                  scopeClause+
                   "ORDER BY page.ordering"
 
-
+    
     DB.query(  page_search
               , Page)
       .on 'success', (pages) =>
@@ -73,7 +81,7 @@
         #
         htmlResponse = ""
         
-        pageCount = 0
+        pageCount = 0        
 
         for page in pages
           pageCount++

@@ -123,6 +123,74 @@ module.exports = (sequelize, DataTypes)->
           .on 'failure', (err) ->
             console.log "Page deletion error,", err
             callback( err )
+
+      #
+      # Creating a link for a page
+      #
+      # @param data.link_rel = destination
+      # @param data.receiver_rel  
+      # @param data.link_type = "page" | ... 
+      addLink : (data, callback) ->        
+        
+        findDestinationPage = =>
+          @find({where:{id_page:data.link_rel}})
+            .on 'success', (page) =>
+              createLink( page )
+            
+            .on 'failure', (err) ->
+              callback( err, null )
+
+        createLink = (pageLink) =>
+          @find({where:{id_page:data.receiver_rel}})
+            .on 'success', (page) =>
+              page.link_type = data.link_type
+              page.link = pageLink.name
+              page.link_id = pageLink.id_page
+
+              page.save()
+                .on 'success', (page) =>
+                  callback( null, page )
+                .on 'failure', (err) ->
+                  callback( err, null )
+                      
+          .on 'failure', (err) ->
+            callback( err, null )
+
+        #
+        # Start process
+        #
+        findDestinationPage()
+
+      #
+      # Removing a link for a page
+      #
+      # @param data.rel = page
+      removeLink : (data, callback) ->                
+        
+        findPage = =>
+          @find({where:{id_page:data.rel}})
+            .on 'success', (page) =>
+              deleteLink( page )
+            
+            .on 'failure', (err) ->
+              callback( err, null )
+
+        deleteLink = (page) =>
+          page.link_type = null
+          page.link = null
+          page.link_id = null
+
+          page.save()
+            .on 'success', (page) =>
+              callback( null, page )
+            .on 'failure', (err) ->
+              callback( err, null )
+                      
+          
+        #
+        # Start process
+        #
+        findPage()
     
     instanceMethods: 
       #

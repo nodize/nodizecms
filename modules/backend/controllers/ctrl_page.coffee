@@ -15,35 +15,102 @@
   #
   # PAGE LINKS
   #
-  @post '/:lang/admin/page/get_link' : (req) =>
-    req.send "Links..."
-
-    """
-    <dl class="small dropArticleAsLink dropPageAsLink">
-    <dt>
-      <label for="link" title="Internal or External HTTP link. Replace the default page link">Link</label>
-      <br/>
-    </dt>
-    <dd>
-      <textarea id="link" class="inputtext w140 h40 droppable" alt="drop a link here..."></textarea>
-      <br />
-      <a id="add_link">Add link</a>
-    </dd>
-  </dl>
-
-  <script type="text/javascript">
+  @post '/:lang/admin/page/get_link' : (req) =>    
+    values = req.body
     
+    # Retrieve page_id from parameter in URL
+    findPage = ->      
+      Page.find( {where: {id_page:values.id_page} } )
+        .on 'success', (page) ->
+          if page
+            renderView( page )
+          else
+            req.send "page #{page_id} not found"
     
-    ION.initDroppable();
+    renderView = (page) ->
+      #
+      # Display the page edition view 
+      #
+      req.render "backend_getLink", 
+        layout        : no        
+        page          : page
+        hardcode      : @helpers 
+        lang          : req.params.lang
+        ion_lang      : ion_lang[ req.params.lang ] 
+        settings      : Settings
+        parent        : 'page'        
+    #
+    # Start process
+    #
+    findPage()
 
-    $('add_link').addEvent('click', function()
-    {
-      ION.JSON('article/add_link', {'receiver_rel': $('rel').value, 'link_type': 'external', 'url': $('link').value});
-    })
+  #
+  # Adding a link
+  #
+  # @param post.link_rel = destination
+  # @param post.receiver_rel  
+  # @param post.link_type = "page" | ... 
+  @post '/:lang/admin/page/add_link' : (req) =>    
+    values = req.body
+
+    callback = (err, page) =>
+      message = 
+      message_type:""
+      message:""
+      update:[]
+      callback:[
+        fn:"ION.HTML"
+        args:[
+          "page\/\/get_link"
+        ,
+          id_page:page.id_page
+        ,
+          update:"linkContainer"
+        ]
+      ,
+        fn:"ION.notification"
+        args:[
+          "success"
+          "Link added"
+        ]
+      ]
+
+      req.send message  
+
+    #
+    # Start link addition
+    #
+    Page.addLink( values, callback )
     
+  #
+  # Removing a link
+  #
+  # @param post.rel = id_page
+  @post '/:lang/admin/page/remove_link' : (req) =>    
+    values = req.body
 
-  </script>
-  """
+    callback = (err, page) =>
+      message = 
+      message_type:""
+      message:""
+      update:[]
+      callback:[
+        fn:"ION.HTML"
+        args:[
+          "page\/\/get_link"
+        ,
+          id_page:page.id_page
+        ,
+          update:"linkContainer"
+        ]      
+      ]
+
+      req.send message  
+
+    #
+    # Start link deletion
+    #
+    Page.removeLink( values, callback )
 
   #
   # EDITING a page

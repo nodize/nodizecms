@@ -136,7 +136,7 @@
           
           # Render nested tags
           if args.length>=1
-            htmlResponse += "<span id='ion_liveXArticle_#{@article.id_article}'>" if live
+            htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
             htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh
 
             htmlResponse += yield args[args.length-1] # Compile the nested content to html            
