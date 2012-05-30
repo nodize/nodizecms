@@ -171,8 +171,8 @@
             #           div '.tabcontent', ->
             #             textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
             # 'Advanced Options'
-            # h3 '.toggler', 'Advanced options'
-            # div '.element', ->
+             h3 '.toggler', 'Advanced options'
+             div '.element', ->
             #   # 'Pagination'
             #   dl '.small', ->
             #     dt ->
@@ -180,13 +180,13 @@
             #         text 'Articles / page'
             #     dd ->
             #       input '#pagination.inputtext.w40', name: 'pagination', type: 'text', value: '0'
-            #   # 'Home page'
-            #   dl '.small.last', ->
-            #     dt ->
-            #       label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
-            #     dd ->
-            #       homeChecked = if @page.home then 'checked' else ''
-            #       input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
+               # 'Home page'
+               dl '.small.last', ->
+                 dt ->
+                   label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
+                 dd ->
+                   homeChecked = if @page.home then 'checked' else ''
+                   input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
             # 'SEO'
             # h3 '.toggler', 'SEO'
             # div '.element', ->
