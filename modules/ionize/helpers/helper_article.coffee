@@ -27,6 +27,7 @@
     type = '' 
     live = false
     refresh = false
+    params = {}
 
     #
     # Parsing attributes if they do exist
@@ -54,6 +55,11 @@
       # "Refresh" parameter, will allow to reload page when article is updated
       #      
       refresh = if attrs?.refresh then attrs.refresh else ""
+
+      #
+      # "Params" parameter, allows to send parameters for article rendering
+      #      
+      params = if attrs?.params then attrs.params else {}
 
     #
     # We are launching an asynchronous request,
@@ -120,6 +126,8 @@
         htmlResponse = ""
         
         articleCount = 0
+
+        @params = params
 
         for article in articles          
           articleCount++
