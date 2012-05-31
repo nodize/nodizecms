@@ -221,6 +221,7 @@ CREATE TABLE `page` (
   `pagination_nb` int(11) DEFAULT NULL,
   `id_group` int(11) DEFAULT NULL,
   `priority` int(11) DEFAULT NULL,
+  `appears` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_page`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -231,7 +232,16 @@ CREATE TABLE `page` (
 
 LOCK TABLES `page` WRITE;
 /*!40000 ALTER TABLE `page` DISABLE KEYS */;
-INSERT INTO `page` VALUES (1,0,1,0,'home-page',0,0,1,1,NULL,'page_default.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(2,0,1,0,'services',1,0,1,0,NULL,'page_services.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(3,0,1,0,'our-work',2,0,1,0,NULL,'page_portfolio.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(5,0,1,0,'about-us',3,0,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(6,5,1,0,'more-about-us',2,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(7,5,1,0,'our-team',0,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(8,5,1,0,'links',1,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5),(9,5,1,0,'testimonials',3,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5);
+INSERT INTO `page` (`id_page`,`id_parent`,`id_menu`,`id_subnav`,`name`,`ordering`,`level`,`online`,`home`,`author`,`view`,`view_single`,`article_list_view`,`article_view`,`article_order`,`article_order_direction`,`link`,`link_type`,`link_id`,`pagination`,`pagination_nb`,`id_group`,`priority`,`appears`)
+VALUES
+  (1,0,1,0,'home-page',0,0,1,1,NULL,'page_default.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (2,0,1,0,'services',1,0,1,0,NULL,'page_services.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (3,0,1,0,'our-work',2,0,1,0,NULL,'page_portfolio.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (5,0,1,0,'about-us',3,0,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (6,5,1,0,'more-about-us',2,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (7,5,1,0,'our-team',0,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (8,5,1,0,'links',1,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1),
+  (9,5,1,0,'testimonials',3,1,1,0,NULL,'page_about.eco',NULL,NULL,NULL,'0','0',NULL,NULL,'0',0,0,0,5,1);
 /*!40000 ALTER TABLE `page` ENABLE KEYS */;
 UNLOCK TABLES;
 
