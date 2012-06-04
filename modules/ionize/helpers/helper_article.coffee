@@ -127,7 +127,7 @@
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html            
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html            
             htmlResponse += "</span>" if live
 
         finished( htmlResponse )
@@ -209,7 +209,7 @@
       
           # Render nested tags
           if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html
             args[args.length-1]() 
 
         finished( htmlResponse )

@@ -4,7 +4,7 @@
   # Needed for CoffeKup's helpers compatibility with Eco template engine
   #
   global.text = (value) -> value
-  global.yield = (content) -> content()
+  global.cede = (content) -> content()
 
   #*****
   #* DEFAULT HANDLER, DISPLAYING PAGE FROM DATABASE

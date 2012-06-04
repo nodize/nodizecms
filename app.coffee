@@ -38,7 +38,7 @@ nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 #
 require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
 
-nodize = require('zappa').app ->
+application = ->
     
   @use bodyParser:{ uploadDir: __dirname+'/uploads' } # Needed to get POST params & handle uploads
   
@@ -97,6 +97,8 @@ nodize = require('zappa').app ->
   helpers = @helpers
 
   
+
+nodize = require('zappajs').app( application, {disable_io: false, require_css: []} )
 
 #
 # Desactivating socket.io console debug messages

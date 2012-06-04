@@ -45,7 +45,7 @@
       
           # Render nested tags
           if args.length>=1
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html
             args[args.length-1]() 
 
         finished( htmlResponse )
