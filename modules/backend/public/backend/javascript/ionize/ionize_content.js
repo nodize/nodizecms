@@ -1268,7 +1268,7 @@ ION.append({
 			data['copy'] = true;
 		}
 		
-		ION.JSON('article/link_to_page', data);
+		ION.JSON('article\/\/link_to_page', data);
 	},
 	
 	
@@ -1550,7 +1550,7 @@ ION.append({
 		else
 		{
 			ION.JSON(
-				admin_url + receiver_type + '/add_link',
+				admin_url + receiver_type + '\/\/add_link',
 				{
 					'link_rel': link_rel,
 					'receiver_rel': $('rel').value,

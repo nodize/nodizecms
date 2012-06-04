@@ -50,7 +50,7 @@
                   span '.lite', '16:40:45'
 
                 # 'Link ?'
-                div id:'linkContainer'
+                # div id:'linkContainer'
 
                 # 'Modules PlaceHolder'
 
@@ -201,12 +201,12 @@
                 for lang in Static_langs_records
                   li ".tab_article #{".dl" if lang.def is 1}", rel: lang.lang, ->
                     a lang.name
-                li "#fileTab.right#{inactiveClass}", ->
-                  a 'Files'
-                li "#musicTab.right#{inactiveClass}", ->
-                  a 'Music'
-                li "#videoTab.right#{inactiveClass}", ->
-                  a 'Videos'
+                # li "#fileTab.right#{inactiveClass}", ->
+                #   a 'Files'
+                # li "#musicTab.right#{inactiveClass}", ->
+                #   a 'Music'
+                # li "#videoTab.right#{inactiveClass}", ->
+                #   a 'Videos'
                 li "#pictureTab.right#{inactiveClass}", ->
                   a 'Images'
               div class:'clear'
@@ -278,32 +278,32 @@
                         button "#wysiwyg_summary_#{lang}.light-button.left", type: 'button', onclick: "tinymce.execCommand(\'mceToggleEditor\',false,\'summary_#{lang}\');return false;", 'toggle editor'
 
 
-              # 'Files'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
-                  #form '#fileup', name: 'fileupform', ->
-                  #  input '#fileupload', type:"file", name:"myfiles", 'multiple'
-                ul '#fileContainer.sortable-container', ''
-              # 'Music'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
-                ul '#musicContainer.sortable-container', ''
-              # 'Videos'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
-                dl '.first', ->
-                  dt ->
-                    label for: 'add_video', 'Add Video URL'
-                  dd ->
-                    input '#addVideo.inputtext.w300 left mr5', name: 'addVideo', type: 'text', value: ''
-                    button '#btnAddVideo.left.light-button plus', 'Add'
-                ul '#videoContainer.sortable-container', ''
+              # # 'Files'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
+              #     #form '#fileup', name: 'fileupform', ->
+              #     #  input '#fileupload', type:"file", name:"myfiles", 'multiple'
+              #   ul '#fileContainer.sortable-container', ''
+              # # 'Music'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
+              #   ul '#musicContainer.sortable-container', ''
+              # # 'Videos'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
+              #   dl '.first', ->
+              #     dt ->
+              #       label for: 'add_video', 'Add Video URL'
+              #     dd ->
+              #       input '#addVideo.inputtext.w300 left mr5', name: 'addVideo', type: 'text', value: ''
+              #       button '#btnAddVideo.left.light-button plus', 'Add'
+              #   ul '#videoContainer.sortable-container', ''
               # 'Pictures'
               div '.tabcontent', ->
                 p '.h20', ->
@@ -494,13 +494,13 @@
             id_article: $("id_article").value
 
 
-        # Link to page or article or what else...
-        if $("linkContainer")
-          ION.HTML admin_url + "article/get_link",
-            id_page: "4"
-            id_article: "9"
-          ,
-            update: "linkContainer"
+        # # Link to page or article or what else...
+        # if $("linkContainer")
+        #   ION.HTML admin_url + "article/get_link",
+        #     id_page: "4"
+        #     id_article: "9"
+        #   ,
+        #     update: "linkContainer"
 
 
         # Get Content Elements Tabs & Elements
@@ -513,15 +513,15 @@
 
         
 
-        # Add Video button
-        $("btnAddVideo").addEvent "click", ->
-          unless $("addVideo").value is ""
-            ION.JSON "media/add_external_media",
-              type: "video"
-              parent: "article"
-              id_parent: @article.id_article
-              path: $("addVideo").value
-          false
+        # # Add Video button
+        # $("btnAddVideo").addEvent "click", ->
+        #   unless $("addVideo").value is ""
+        #     ION.JSON "media/add_external_media",
+        #       type: "video"
+        #       parent: "article"
+        #       id_parent: @article.id_article
+        #       path: $("addVideo").value
+        #   false
         
         # Media Manager & tabs events
         #

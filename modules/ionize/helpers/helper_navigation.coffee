@@ -70,6 +70,8 @@
     finished = (response) =>
       @requestCompleted requestId, response
 
+    displayedInNav = "page.appears = 1 AND "
+
     #
     #
     # Retrieve pages
@@ -79,7 +81,9 @@
               "WHERE page_lang.id_page = page.id_page AND "+
               "page_lang.lang = '#{@lang}' AND "+
               "page.id_menu = #{menu_id} AND "+
-              "page.level = #{page_level}", Page)
+               displayedInNav +
+              "page.level = #{page_level} "+
+              "ORDER BY page.ordering", Page)
       .on 'success', (pages) =>
 
         #
@@ -111,7 +115,7 @@
           # last args is the nested content to render
           #
           if args.length>=1              
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html 
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html 
             args[args.length-1]() 
 
         finished( htmlResponse )
@@ -251,8 +255,7 @@
         htmlResponse  = ""
         currentLevel  = 0
         firstResult   = true
-       
-      
+
         for line in responses
             #
             # For home page, url becomes / (we hide the real url)
@@ -275,7 +278,8 @@
               levelChanged = true
 
             else if @navigation.level < currentLevel
-              htmlResponse += level_close
+              for index in [1..currentLevel-@navigation.level]
+                htmlResponse += level_close
               currentLevel = @navigation.level
               levelChanged = true
 
@@ -292,7 +296,7 @@
               
               htmlResponse += item_open
 
-              htmlResponse += yield args[args.length-1] # Compile the nested content to html 
+              htmlResponse += cede args[args.length-1] # Compile the nested content to html 
               args[args.length-1]() 
 
               
@@ -324,7 +328,8 @@
           page.id_menu,
           page.id_page,
           page.home,
-          page.online
+          page.online,
+          page.appears
         FROM
           page_lang, page, menu
         WHERE
@@ -359,8 +364,8 @@
               currentResponse["home"]       = page.home;
               currentResponse["id_page"]    = page.id_page;
               currentResponse["online"]     = page.online;
-
-              if page.online or @req.session.usergroup_level >= 1000              
+              
+              if (page.appears is 1) and (page.online or @req.session.usergroup_level >= 1000 )
                 responses.push( currentResponse )
 
               #
