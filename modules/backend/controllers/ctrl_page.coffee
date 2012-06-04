@@ -15,35 +15,102 @@
   #
   # PAGE LINKS
   #
-  @post '/:lang/admin/page/get_link' : (req) =>
-    req.send "Links..."
-
-    """
-    <dl class="small dropArticleAsLink dropPageAsLink">
-    <dt>
-      <label for="link" title="Internal or External HTTP link. Replace the default page link">Link</label>
-      <br/>
-    </dt>
-    <dd>
-      <textarea id="link" class="inputtext w140 h40 droppable" alt="drop a link here..."></textarea>
-      <br />
-      <a id="add_link">Add link</a>
-    </dd>
-  </dl>
-
-  <script type="text/javascript">
+  @post '/:lang/admin/page/get_link' : (req) =>    
+    values = req.body
     
+    # Retrieve page_id from parameter in URL
+    findPage = ->      
+      Page.find( {where: {id_page:values.id_page} } )
+        .on 'success', (page) ->
+          if page
+            renderView( page )
+          else
+            req.send "page #{page_id} not found"
     
-    ION.initDroppable();
+    renderView = (page) ->
+      #
+      # Display the page edition view 
+      #
+      req.render "backend_getLink", 
+        layout        : no        
+        page          : page
+        hardcode      : @helpers 
+        lang          : req.params.lang
+        ion_lang      : ion_lang[ req.params.lang ] 
+        settings      : Settings
+        parent        : 'page'        
+    #
+    # Start process
+    #
+    findPage()
 
-    $('add_link').addEvent('click', function()
-    {
-      ION.JSON('article/add_link', {'receiver_rel': $('rel').value, 'link_type': 'external', 'url': $('link').value});
-    })
+  #
+  # Adding a link
+  #
+  # @param post.link_rel = destination
+  # @param post.receiver_rel  
+  # @param post.link_type = "page" | ... 
+  @post '/:lang/admin/page/add_link' : (req) =>    
+    values = req.body
+
+    callback = (err, page) =>
+      message = 
+      message_type:""
+      message:""
+      update:[]
+      callback:[
+        fn:"ION.HTML"
+        args:[
+          "page\/\/get_link"
+        ,
+          id_page:page.id_page
+        ,
+          update:"linkContainer"
+        ]
+      ,
+        fn:"ION.notification"
+        args:[
+          "success"
+          "Link added"
+        ]
+      ]
+
+      req.send message  
+
+    #
+    # Start link addition
+    #
+    Page.addLink( values, callback )
     
+  #
+  # Removing a link
+  #
+  # @param post.rel = id_page
+  @post '/:lang/admin/page/remove_link' : (req) =>    
+    values = req.body
 
-  </script>
-  """
+    callback = (err, page) =>
+      message = 
+      message_type:""
+      message:""
+      update:[]
+      callback:[
+        fn:"ION.HTML"
+        args:[
+          "page\/\/get_link"
+        ,
+          id_page:page.id_page
+        ,
+          update:"linkContainer"
+        ]      
+      ]
+
+      req.send message  
+
+    #
+    # Start link deletion
+    #
+    Page.removeLink( values, callback )
 
   #
   # EDITING a page
@@ -313,7 +380,7 @@
               page_lang.online = values['online_'+lang]
               page_lang.meta_title = values['meta_title_'+lang]
               page_lang.nav_title = values['nav_title_'+lang]
-              page_lang.home = values['home']
+              page_lang.home = values['home']              
               
               page_lang.save()
                 .on 'success', (page_lang) =>
@@ -379,6 +446,7 @@
           page.home = if values.home then values.home else 0
           page.view = values.view
           page.id_parent = values.id_parent
+          page.appears = values.appears
 
           if values.id_parent == "0"
             page.level = 0        
@@ -415,6 +483,7 @@
       page.id_group = values.id_group
       page.priority = values.priority
       page.view = values.view
+      page.appears = values.appears
 
       
       if values.id_parent == "0"
@@ -450,13 +519,13 @@
     #
     # Retrieve pages in menu 
     #    
-
-    responses = []
+    @responses = []
+    
     #
     # Request counter is used to define when all async requests are finished
     # (+1 when launching a request, -1 once finishing, 0 everything is done)         
     #
-    request_counter = 1
+    @request_counter = 1
     
     #
     # Building the response path 
@@ -466,106 +535,27 @@
     #
     # Send response once async requests are done
     #
-    displayResponse = =>
-      request_counter--
+    displayResponse = (responses) =>
+      @request_counter--
       
       #
       # Requests are finished, building & sending the response
       #
-      if request_counter==0        
-        
+      if @request_counter==0        
         #
-        # Sorting responses, using the path value
+        # Building the <select> tag
         #
-        responses.sort( (a,b) ->          
-          return 1 if a.path > b.path
-          return -1 if a.path < b.path
-          return 0
-        )
-        
-        #
-        # Building the response message
-        #
-        response = "<option value='0'"+(if @params.id_current is '0' then " selected='selected'" else "")+">/</option>"
-      
-        for line in responses                    
-            response += "<option value='#{line.value}'"+(if @params.id_parent is line.value.toString() then " selected='selected'" else "")+">"          
-            response += "&#160;&#187;&#160;" for level in [1..line.level] unless line.level<1
-            response += "#{line.title}</option>"
-
+        response = buildMenuSelect( responses, @params.id_current, @params.id_parent )
         #
         # Send response
         #
-        req.send response
-
-    
-    #
-    # Recursive function to retrieve pages
-    #
-    getParents = (path, id_menu, id_parent, callback) =>
-      #
-      # Launch query
-      # Not using Sequelize yet there, but should be used for compatibility with all supported DB engines  
-      #
-      DB.query( """
-        SELECT 
-          page_lang.title,
-          page.level,
-          page.id_menu,
-          page.id_page
-        FROM
-          page_lang, page, menu
-        WHERE
-          page_lang.lang = '#{req.params.lang}' AND 
-          menu.id_menu = #{id_menu} AND 
-          page.id_parent = #{id_parent} AND
-          page_lang.id_page = page.id_page AND
-          page.id_menu = menu.id_menu 
-        ORDER BY 
-          page.ordering
-      """, 
-      Page )
-        #
-        # On success, store results + launch additional recursive queries
-        #
-        .on 'success', (results) =>
-                          
-          index = 0
-          for page in results
-              index++
-              newPath = path + index + "/"
-                              
-              #
-              # Storing results in the responses array
-              #
-              currentResponse = {}
-              currentResponse["path"] = newPath;
-              currentResponse["value"] = page.id_page;
-              currentResponse["title"] = page.title;
-              currentResponse["level"] = page.level;
-                            
-              responses.push( currentResponse ) if page.id_page.toString() isnt @params.id_current
-
-              #
-              # Use to watch async queries termination
-              #
-              request_counter++
-              
-              #
-              # Search for child pages of the current page
-              #
-              getParents( newPath, id_menu, page.id_page, callback )
-              
-          callback()
-
-        .on 'failure', (err) ->
-            console.log "GetParents error ", err
+        req.send response    
     
     #
     # Launch the first request
+    # Callback is "displayResponse"
     #    
-    #getParents( path, req.params.id_menu, req.params.id_parent, displayResponse )
-    getParents( path, req.params.id_menu, 0, displayResponse )
+    getParentPages( @, path, req.params.id_menu, 0, req.params.lang, @params.id_current, displayResponse )
 
   #
   # PAGE ORDERING
@@ -734,3 +724,87 @@
         req.send message
 
 
+  #
+  # Recursive function to retrieve pages
+  #
+  getParentPages = (context, path, id_menu, id_parent, lang, currentPageId, callback) =>    
+    #
+    # Launch query
+    # Not using Sequelize yet there, but should be used for compatibility with all supported DB engines  
+    #
+    DB.query( """
+      SELECT 
+        page_lang.title,
+        page.level,
+        page.id_menu,
+        page.id_page
+      FROM
+        page_lang, page, menu
+      WHERE
+        page_lang.lang = '#{lang}' AND 
+        menu.id_menu = #{id_menu} AND 
+        page.id_parent = #{id_parent} AND
+        page_lang.id_page = page.id_page AND
+        page.id_menu = menu.id_menu 
+      ORDER BY 
+        page.ordering
+    """, 
+    Page )
+      #
+      # On success, store results + launch additional recursive queries
+      #
+      .on 'success', (results) =>
+                        
+        index = 0        
+
+        for page in results
+            index++
+            newPath = path + index + "/"
+                            
+            #
+            # Storing results in the responses array
+            #
+            currentResponse = {}
+            currentResponse["path"] = newPath;
+            currentResponse["value"] = page.id_page;
+            currentResponse["title"] = page.title;
+            currentResponse["level"] = page.level;
+                          
+            context.responses.push( currentResponse ) if page.id_page.toString() isnt currentPageId
+
+            #
+            # Use to watch async queries termination
+            #
+            context.request_counter++
+            
+            #
+            # Search for child pages of the current page
+            #
+            getParentPages( context, newPath, id_menu, page.id_page, lang, currentPageId, callback )
+            
+        callback( context.responses )
+
+      .on 'failure', (err) ->
+          console.log "GetParents error ", err
+
+  buildMenuSelect = (responses, id_current, id_parent ) =>
+    #
+    # Sorting responses, using the path value
+    #
+    responses.sort( (a,b) ->          
+      return 1 if a.path > b.path
+      return -1 if a.path < b.path
+      return 0
+    )
+    
+    #
+    # Building the response message
+    #
+    response = "<option value='0'"+(if id_current is '0' then " selected='selected'" else "")+">/</option>"
+  
+    for line in responses                    
+        response += "<option value='#{line.value}'"+(if id_parent is line.value.toString() then " selected='selected'" else "")+">"          
+        response += "&#160;&#187;&#160;" for level in [1..line.level] unless line.level<1
+        response += "#{line.title}</option>"
+
+    return response

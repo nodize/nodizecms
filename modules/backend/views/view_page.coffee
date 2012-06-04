@@ -9,15 +9,14 @@
         input '#element', type: 'hidden', name: 'element', value: 'page'
         input '#action', type: 'hidden', name: 'action', value: 'save'
 
-        input type: 'hidden', name: 'id_menu', value: @page.id_menu
+        #input type: 'hidden', name: 'id_menu', value: @page.id_menu
         input type: 'hidden', name: 'created', value: '0000-00-00 00:00:00'
         input '#id_page', type: 'hidden', name: 'id_page', value: @page.id_page
         input '#rel', type: 'hidden', name: 'rel', value: @page.id_page
         input '#name', type: 'hidden', name: 'name', value: 'welcome-url'
-        input '#origin_id_parent', type: 'hidden', value: @page.id_parent
-        console.log @page.id_parent
+        input '#origin_id_parent', type: 'hidden', value: @page.id_parent        
         input '#origin_id_subnav', type: 'hidden', value: '0'
-        input '.online2', type: 'hidden', name: 'online', value: '1'
+        #input '.online2', type: 'hidden', name: 'online', value: '1'
         div '#sidecolumn.close', ->
           
           div '.info', ->
@@ -50,7 +49,7 @@
                   dt ->
                     label for: 'appears', title:@ion_lang.ionize_help_appears, -> @ion_lang.ionize_label_appears
                   dd ->
-                    input '#appears.inputcheckbox', name: 'appears', type: 'checkbox', checked: 'checked', value: '1'
+                    input '#appears.inputcheckbox', name: 'appears', type: 'checkbox', checked: "#{if @page.appears then 'checked' else ''}", value: '1'
               # 'Has one URL ? Means is reachable through its URL'
               dl '.small', ->
                 dt ->
@@ -71,37 +70,38 @@
                         option selected: ('selected' if view==@page.view), value: view, -> @views["pages"][view]
                       
                       
-                # 'Single Article Page view'
-                dl '.small', ->
-                  dt ->
-                    label for: 'view', title: 'Page view used to display one Article', 'Single View'
-                  dd ->
-                    select '.customselect.select.w160', name: 'view_single', ->
-                      option value: '', selected: 'selected', '-- Default view --'
-                      for view of @views["pages"]
-                        option selected: ('selected' if view==@page.view_single), value: view, -> @views["pages"][view]
+              #   # 'Single Article Page view'
+              #   dl '.small', ->
+              #     dt ->
+              #       label for: 'view', title: 'Page view used to display one Article', 'Single View'
+              #     dd ->
+              #       select '.customselect.select.w160', name: 'view_single', ->
+              #         option value: '', selected: 'selected', '-- Default view --'
+              #         for view of @views["pages"]
+              #           option selected: ('selected' if view==@page.view_single), value: view, -> @views["pages"][view]
                       
-              # 'Article List Template'
-              dl '.small', ->
-                dt ->
-                  label for: 'article_list_view', title: 'Article view : If more than 1 article on the page, use this view by default for each article', 'List view'
-                dd ->
-                  select '.customselect.select.w160', name: 'article_list_view', ->
-                    option value: '', selected: 'selected', '-- Default view --'
-                    for view of @views["pages"]
-                        option selected: ('selected' if view==@page.article_list_view), value: view, -> @views["pages"][view]
+              # # 'Article List Template'
+              # dl '.small', ->
+              #   dt ->
+              #     label for: 'article_list_view', title: 'Article view : If more than 1 article on the page, use this view by default for each article', 'List view'
+              #   dd ->
+              #     select '.customselect.select.w160', name: 'article_list_view', ->
+              #       option value: '', selected: 'selected', '-- Default view --'
+              #       for view of @views["pages"]
+              #           option selected: ('selected' if view==@page.article_list_view), value: view, -> @views["pages"][view]
                       
-              # 'Article Template'
-              dl '.small', ->
-                dt ->
-                  label for: 'article_view', title: 'Article view : Use this view for each article displayed in standalone mode OR if just one article in this page', 'Article view'
-                dd ->
-                  select '.customselect.select.w160', name: 'article_view', ->
-                    option value: '', selected: 'selected', '-- Default view --'
-                    for view of @views["block"]
-                        option selected: ('selected' if view==@page.article_view), value: view, -> @views["block"][view]
+              # # 'Article Template'
+              # dl '.small', ->
+              #   dt ->
+              #     label for: 'article_view', title: 'Article view : Use this view for each article displayed in standalone mode OR if just one article in this page', 'Article view'
+              #   dd ->
+              #     select '.customselect.select.w160', name: 'article_view', ->
+              #       option value: '', selected: 'selected', '-- Default view --'
+              #       for view of @views["block"]
+              #           option selected: ('selected' if view==@page.article_view), value: view, -> @views["block"][view]
                     
             # 'Parent'
+
             if @page.id_page
               h3 '.toggler', 'Parent'
               div '.element', ->
@@ -111,8 +111,8 @@
                     label for: 'id_menu', 'Menu'
                   dd ->                    
                     select '#id_menu.select', name :'id_menu', ->
-                      for menu in @menus                       
-                        option value:menu.id_menu, selected:"#{'selected' if menu.id_menu is @page.id_menu}", -> menu.title
+                      for menu in @menus                        
+                        option value:menu.id_menu, selected:"#{if menu.id_menu is @page.id_menu then 'selected' else ''}", -> menu.title
                 # 'Parent'
                 dl '.small.last', ->
                   dt ->
@@ -139,121 +139,122 @@
                 dd ->
                   input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: ''
             # Subnavigation
-            if @page.id_page isnt ''
-              h3 '.toggler', 'Sub Navigation'
-              div '.element', ->
-                comment 'Subnav Menu'
-                dl '.small', ->
-                  dt ->
-                    label for: 'id_subnav_menu', 'Menu'
-                  dd ->
-                    select '#id_subnav_menu.select', name: 'id_subnav_menu', ->
-                      option value: '1', 'Main menu'
-                      option value: '2', 'System menu'
-                # ID sub navigation Page
-                dl '.small.last', ->
-                  dt ->
-                    label for: 'id_subnav', 'Page'
-                  dd ->
-                    select '#id_subnav.select.w150', name: 'id_subnav'
-                # Title
-                dl '.small', ->
-                  dt ->
-                    label title: '', 'Title'
-                  dd ->
-                    # Tabs
-                    div '#subnavTitleTab.mainTabs.small gray', ->
-                      ul '.tab-menu', ->
-                        li ->
-                          a 'En'
-                      div class:'clear'
-                    div '#subnavTitleTabContent.w160', ->
-                      div '.tabcontent', ->
-                        textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
+            # if @page.id_page isnt ''
+            #   h3 '.toggler', 'Sub Navigation'
+            #   div '.element', ->
+            #     comment 'Subnav Menu'
+            #     dl '.small', ->
+            #       dt ->
+            #         label for: 'id_subnav_menu', 'Menu'
+            #       dd ->
+            #         select '#id_subnav_menu.select', name: 'id_subnav_menu', ->
+            #           option value: '1', 'Main menu'
+            #           option value: '2', 'System menu'
+            #     # ID sub navigation Page
+            #     dl '.small.last', ->
+            #       dt ->
+            #         label for: 'id_subnav', 'Page'
+            #       dd ->
+            #         select '#id_subnav.select.w150', name: 'id_subnav'
+            #     # Title
+            #     dl '.small', ->
+            #       dt ->
+            #         label title: '', 'Title'
+            #       dd ->
+            #         # Tabs
+            #         div '#subnavTitleTab.mainTabs.small gray', ->
+            #           ul '.tab-menu', ->
+            #             li ->
+            #               a 'En'
+            #           div class:'clear'
+            #         div '#subnavTitleTabContent.w160', ->
+            #           div '.tabcontent', ->
+            #             textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
             # 'Advanced Options'
-            h3 '.toggler', 'Advanced options'
-            div '.element', ->
-              # 'Pagination'
-              dl '.small', ->
-                dt ->
-                  label for: 'pagination', title: 'If>0, activates the pagination of article.', ->            
-                    text 'Articles / page'
-                dd ->
-                  input '#pagination.inputtext.w40', name: 'pagination', type: 'text', value: '0'
-              # 'Home page'
-              dl '.small.last', ->
-                dt ->
-                  label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
-                dd ->
-                  homeChecked = if @page.home then 'checked' else ''
-                  input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
+             h3 '.toggler', 'Advanced options'
+             div '.element', ->
+            #   # 'Pagination'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'pagination', title: 'If>0, activates the pagination of article.', ->            
+            #         text 'Articles / page'
+            #     dd ->
+            #       input '#pagination.inputtext.w40', name: 'pagination', type: 'text', value: '0'
+               # 'Home page'
+               dl '.small.last', ->
+                 dt ->
+                   label for: 'home', title:@ion_lang.ionize_help_home_page, -> @ion_lang.ionize_label_home_page
+                 dd ->
+                   homeChecked = if @page.home then 'checked' else ''
+                   input '#home.inputcheckbox', name: 'home', type: 'checkbox', checked: homeChecked, value: '1'
             # 'SEO'
-            h3 '.toggler', 'SEO'
-            div '.element', ->
-              # 'Meta_Description'
-              dl '.small', ->
-                dt ->
-                  label title: 'Replace the global website META when not empty', 'Description'
-                dd ->
-                  # 'Tabs'
-                  div '#metaDescriptionTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#metaDescriptionTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#meta_description_en.h80', name: 'meta_description_en', style: 'border-top:none;width:142px;'
-              # 'Meta_Keywords'
-              dl '.small.last', ->
-                dt ->
-                  label title: 'Replace the global website META when not empty', 'Keywords'
-                dd ->
-                  # 'Tabs'
-                  div '#metaKeywordsTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#metaKeywordsTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#meta_keywords_en.h40', name: 'meta_keywords_en', style: 'border-top:none;width:142px;'
-              # 'Priority'
-              dl '.small', ->
-                dt ->
-                  label for: 'priority', title: 'Page priority, between 0 and 10', 'Sitemap priority'
-                dd ->
-                  select '#priority.inputtext.w40', name: 'priority', ->
-                    option value: '0', '0'
-                    option value: '1', '1'
-                    option value: '2', '2'
-                    option value: '3', '3'
-                    option value: '4', '4'
-                    option value: '5', selected: 'selected', '5'
-                    option value: '6', '6'
-                    option value: '7', '7'
-                    option value: '8', '8'
-                    option value: '9', '9'
-                    option value: '10', '10'
+            # h3 '.toggler', 'SEO'
+            # div '.element', ->
+            #   # 'Meta_Description'
+            #   dl '.small', ->
+            #     dt ->
+            #       label title: 'Replace the global website META when not empty', 'Description'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#metaDescriptionTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#metaDescriptionTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#meta_description_en.h80', name: 'meta_description_en', style: 'border-top:none;width:142px;'
+            #   # 'Meta_Keywords'
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label title: 'Replace the global website META when not empty', 'Keywords'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#metaKeywordsTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#metaKeywordsTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#meta_keywords_en.h40', name: 'meta_keywords_en', style: 'border-top:none;width:142px;'
+            #   # 'Priority'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'priority', title: 'Page priority, between 0 and 10', 'Sitemap priority'
+            #     dd ->
+            #       select '#priority.inputtext.w40', name: 'priority', ->
+            #         option value: '0', '0'
+            #         option value: '1', '1'
+            #         option value: '2', '2'
+            #         option value: '3', '3'
+            #         option value: '4', '4'
+            #         option value: '5', selected: 'selected', '5'
+            #         option value: '6', '6'
+            #         option value: '7', '7'
+            #         option value: '8', '8'
+            #         option value: '9', '9'
+            #         option value: '10', '10'
             # 'Access authorization'
-            h3 '.toggler', 'Access authorizations'
-            div '.element', ->
-              dl '.small.last', ->
-                dt ->
-                  label for: 'template', 'Groups'
-                dd ->
-                  div '#groups', ->
-                    select '.select', name: 'id_group', ->
-                      option value: '0', selected: 'selected', '-- Everyone --'
-                      option value: '1', 'Super Admins'
-                      option value: '2', 'Admins'
-                      option value: '3', 'Editors'
-                      option value: '4', 'Users'
-                      option value: '5', 'Pending'
-                      option value: '6', 'Guests'
-                      option value: '7', 'Banned'
-                      option value: '8', 'Deactivated'
-            # 'Operations on Page'
+            # h3 '.toggler', 'Access authorizations'
+            # div '.element', ->
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label for: 'template', 'Groups'
+            #     dd ->
+            #       div '#groups', ->
+            #         select '.select', name: 'id_group', ->
+            #           option value: '0', selected: 'selected', '-- Everyone --'
+            #           option value: '1', 'Super Admins'
+            #           option value: '2', 'Admins'
+            #           option value: '3', 'Editors'
+            #           option value: '4', 'Users'
+            #           option value: '5', 'Pending'
+            #           option value: '6', 'Guests'
+            #           option value: '7', 'Banned'
+            #           option value: '8', 'Deactivated'
+            
+            'Operations on Page'
             h3 '.toggler', 'Operations'
             div '.element', ->
               # 'Copy Content'
@@ -293,22 +294,22 @@
                 dd ->
                   input '#button_reorder_articles.submit.mt10', type: 'submit', value: 'Reorder'
             
-            # 'Other info : Permanent URL, etc.'
-            h3 '.toggler', 'Information'
-            div '.element', ->
-              dl '.small.compact', ->
-                dt ->
-                  label for: 'permanent_url', 'Permanent URL'
-                dd ->
-                  # 'Tabs'
-                  div '#permanentUrlTab.mainTabs.small gray', ->
-                    ul '.tab-menu', ->
-                      li ->
-                        a 'En'
-                    div class:'clear'
-                  div '#permanentUrlTabContent.w160', ->
-                    div '.tabcontent', ->
-                      textarea '#permanent_url_en.h40', name: 'permanent_url_en', style: 'border-top:none;width:142px;', onclick: 'javascript:this.select();', readonly: 'readonly', -> @page.url
+            # # 'Other info : Permanent URL, etc.'
+            # h3 '.toggler', 'Information'
+            # div '.element', ->
+            #   dl '.small.compact', ->
+            #     dt ->
+            #       label for: 'permanent_url', 'Permanent URL'
+            #     dd ->
+            #       # 'Tabs'
+            #       div '#permanentUrlTab.mainTabs.small gray', ->
+            #         ul '.tab-menu', ->
+            #           li ->
+            #             a 'En'
+            #         div class:'clear'
+            #       div '#permanentUrlTabContent.w160', ->
+            #         div '.tabcontent', ->
+            #           textarea '#permanent_url_en.h40', name: 'permanent_url_en', style: 'border-top:none;width:142px;', onclick: 'javascript:this.select();', readonly: 'readonly', -> @page.url
               
             # 'Modules PlaceHolder'
           # '/options'
@@ -384,14 +385,15 @@
                 for lang in Static_langs_records
                   li "#{".dl" if lang.def is 1}", rel: lang.lang, ->
                     a lang.name
-                li '#fileTab.right', ->
-                  a 'Files'
-                li '#musicTab.right', ->
-                  a 'Music'
-                li '#videoTab.right', ->
-                  a 'Videos'
-                li '#pictureTab.right', ->
-                  a 'Images'
+                    
+                # li '#fileTab.right', ->
+                #   a 'Files'
+                # li '#musicTab.right', ->
+                #   a 'Music'
+                # li '#videoTab.right', ->
+                #   a 'Videos'
+                # li '#pictureTab.right', ->
+                #   a 'Images'
               div class:'clear'
             div '#pageTabContent', ->
               # 'Text block'
@@ -434,40 +436,40 @@
                   # 'Online'
                   input "#online_#{lang}", name: "online_#{lang}", type: 'hidden', value: @page_by_lang[lang].online
                   # 'extend fields goes here...'
-              # 'Files'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
-                ul '#fileContainer.sortable-container', ->
-                  span 'No linked file'
-              # 'Music'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
-                ul '#musicContainer.sortable-container', ->
-                  span 'No linked musice'
-              # 'Videos'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
-                ul '#videoContainer.sortable-container', ->
-                  span 'No linked video'
-              # 'Pictures'
-              div '.tabcontent', ->
-                p '.h20', ->
-                  comment '<button class="fmButton right light-button plus">Add Media</button>'
-                  button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
-                  button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
-                div '#pictureContainer.sortable-container', ->
-                  span 'No linked image'
-          #
+              # # 'Files'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'file\');return false;', 'Unlink all files'
+              #   ul '#fileContainer.sortable-container', ->
+              #     span 'No linked file'
+              # # 'Music'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
+              #   ul '#musicContainer.sortable-container', ->
+              #     span 'No linked musice'
+              # # 'Videos'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
+              #   ul '#videoContainer.sortable-container', ->
+              #     span 'No linked video'
+              # # 'Pictures'
+              # div '.tabcontent', ->
+              #   p '.h20', ->
+              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
+              #     button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
+              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
+              #     button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
+              #   div '#pictureContainer.sortable-container', ->
+              #     span 'No linked image'
+          
           # 'Articles'
           #
           if @page.id_page
@@ -499,8 +501,7 @@
       #      
       script ->
         """        
-        id_page = #{@page.id_page}
-        console.log( id_page )
+        id_page = #{@page.id_page}        
         langs = #{JSON.stringify( Static_langs)}        
         """
 
@@ -553,7 +554,7 @@
         #
         # Parent select list
         #
-        $("id_menu").addEvent "change", ->          
+        $("id_menu").addEvent "change", -> 
           # Current page ID
           id_current = (if ($("id_page").value) then $("id_page").value else "0")
           
@@ -562,7 +563,7 @@
           xhr = new Request.HTML(
             url: admin_url + "page/get_parents_select/" + $("id_menu").value + "/" + id_current + "/" + id_parent
             method: "post"
-            onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->              
+            onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->                
               $("id_parent").empty()
               if Browser.ie or (Browser.firefox and Browser.version < 4)
                 $("id_parent").set "html", responseHTML
@@ -660,36 +661,36 @@
           #
           ION.initRequestEvent $("iconPageStatus"), admin_url + "page\/\/switch_online/" + $("id_page").value
           
-          $("id_subnav_menu").addEvent "change", ->
-            xhr = new Request.HTML(
-              url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
-              method: "post"
-              onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
-                $("id_subnav").empty()
-                if Browser.ie or (Browser.firefox and Browser.version < 4)
-                  $("id_subnav").set "html", responseHTML
-                  selected = $("id_subnav").getElement("option[selected=selected]")
-                  selected.setProperty "selected", "selected"
-                else
-                  $("id_subnav").adopt responseTree
-                (new Element("option",
-                  value: "-1"
-                )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
-            ).send()
+          # $("id_subnav_menu").addEvent "change", ->
+          #   xhr = new Request.HTML(
+          #     url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
+          #     method: "post"
+          #     onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
+          #       $("id_subnav").empty()
+          #       if Browser.ie or (Browser.firefox and Browser.version < 4)
+          #         $("id_subnav").set "html", responseHTML
+          #         selected = $("id_subnav").getElement("option[selected=selected]")
+          #         selected.setProperty "selected", "selected"
+          #       else
+          #         $("id_subnav").adopt responseTree
+          #       (new Element("option",
+          #         value: "-1"
+          #       )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
+          #   ).send()
   
-          $("id_subnav_menu").fireEvent "change"
+          # $("id_subnav_menu").fireEvent "change"
           
           #
           # Reorder articles
           #
-          $("button_reorder_articles").addEvent "click", (e) ->
-            e.stop()
-            url = admin_url + "page/reorder_articles"
-            data =
-              id_page: $("id_page").value
-              direction: $("reorder_direction").value
+          # $("button_reorder_articles").addEvent "click", (e) ->
+          #   e.stop()
+          #   url = admin_url + "page/reorder_articles"
+          #   data =
+          #     id_page: $("id_page").value
+          #     direction: $("reorder_direction").value
   
-            ION.sendData url, data
+          #   ION.sendData url, data
   
           #
           # Link to page or article
@@ -719,9 +720,9 @@
           #
           # Loads media only when clicking on the tab
           #
-          mediaManager.initParent "page", $("id_page").value          
-          mediaManager.loadMediaList "file"
-          mediaManager.loadMediaList "music"
-          mediaManager.loadMediaList "video"
-          mediaManager.loadMediaList "picture"
+          # mediaManager.initParent "page", $("id_page").value          
+          # mediaManager.loadMediaList "file"
+          # mediaManager.loadMediaList "music"
+          # mediaManager.loadMediaList "video"
+          # mediaManager.loadMediaList "picture"
 

@@ -20,10 +20,15 @@
   #**
   @helpers['ion_articles'] = (args...) -> 
     tagName = 'ion_articles'
-    from = ''
-    type = ''
+    #
+    # Parameters
+    #
+    from = '' 
+    type = '' 
     live = false
-    
+    refresh = false
+    params = {}
+
     #
     # Parsing attributes if they do exist
     #
@@ -45,6 +50,16 @@
       # "Live" parameter, will allow to refresh article without reloading the page
       #      
       live = if attrs?.live then attrs.live else ""
+
+      #
+      # "Refresh" parameter, will allow to reload page when article is updated
+      #      
+      refresh = if attrs?.refresh then attrs.refresh else ""
+
+      #
+      # "Params" parameter, allows to send parameters for article rendering
+      #      
+      params = if attrs?.params then attrs.params else {}
 
     #
     # We are launching an asynchronous request,
@@ -112,6 +127,8 @@
         
         articleCount = 0
 
+        @params = params
+
         for article in articles          
           articleCount++
 
@@ -124,6 +141,7 @@
           if live
             @article.content = "<div class='ion_live_content'>" + @article.content + "</div>"
 
+          
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
@@ -148,8 +166,14 @@
   #* Basically calling the partial defined as "block"
   #* 
   #**
-  @helpers['ion_article'] = (args...) -> 
-    partial @article.view if @article.view
+  @helpers['ion_article'] = (args...) ->
+    # Using "partial" for .coffee templates
+    if partial?
+      partial @article.view if @article.view
+    # Using "@partial" for .eco templates
+    else if @partial?
+      @partial @article.view if @article.view
+
 
   #*****
   #* Displaying articles, @articles array has to be sent with @render

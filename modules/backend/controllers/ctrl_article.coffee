@@ -488,6 +488,63 @@
         .on 'failure', (err) ->
           console.log 'error ', err
           
+
+  #
+  # ARTICLE MOVE / LINK
+  #
+  @post "/:lang/admin/article/link_to_page" : (req) ->
+    values = req.body 
+
+    callback = (err, article, page_article) =>
+      
+      if err
+        console.log "Error while moving article",err
+      else                    
+        #
+        # Response
+        #
+        message = 
+          message_type:""
+          message:""
+          update:[]
+          callback:[          
+            
+            fn:"ION.unlinkArticleFromPageDOM"
+            args:
+              id_page:values.id_page_origin
+              id_article:values.id_article
+          ,          
+            fn:"mainTree.insertElement"
+            args: [            
+              id_article:values.id_article
+              name:article.name
+              flag:"0"
+              title:article.name
+              online:page_article.online
+              id_page:values.id_page
+              ordering:"1"            
+              inserted:true
+              link_type:""
+              link_id:""
+              link:""
+            ,
+              "article"
+            ]
+          ,
+            fn:"ION.notification"
+            args : [
+              "success","Article linked to page"
+            ]
+          ]
+
+        req.send( message ) 
+
+
+
+    Article.moveArticle( values, callback )
+
+
+    
   #
   # ARTICLE DELETE
   #
