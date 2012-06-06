@@ -3,7 +3,7 @@
   "description": "Nodize CMS",
   "author": "Hypee & Partikule <contact@nodize.com>",
   "homepage": "http://www.nodize.com",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "main": "app.coffee",
   "dependencies": {
     "connect":"1.8.6",
@@ -16,7 +16,10 @@
     "socket.io-client":"0.9.6",
     "imageinfo":"1.0.4",
     "validator":"0.4.5",
-    "zappajs":"0.3.8"
+    "zappajs":"0.3.8",
+    "redis":"0.7.2",
+    "connect-redis":"1.3.0",
+    "nodetime":"0.2.9"
   },
   "devDependencies":
   {

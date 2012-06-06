@@ -298,7 +298,9 @@
               req.send message
               #
               # Inform modules that a new page has been created
-              __nodizeEvents.emit  'articleSave', 'id_article:article_lang.id_article'
+              __nodizeEvents.emit  'articleCreate', 
+                article : article_lang
+                parent : values.main_parent
               
             # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
           .on 'failure', (err) ->
@@ -335,7 +337,9 @@
                     req.send message
                     #
                     # Inform modules that a new page has been created
-                    __nodizeEvents.emit 'articleUpdate', id_article:article_lang.id_article, article:article_lang
+                    __nodizeEvents.emit 'articleUpdate'
+                      article:article_lang
+                      parent:values.main_parent
                   
                   # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
                 .on 'failure', (err) ->
@@ -451,6 +455,12 @@
                 id : article_lang.id                              
               
               req.send message
+
+              #
+              # Inform modules that a new page has been created
+              __nodizeEvents.emit  'articleCreate', 
+                article : article_lang
+                parent : values.main_parent
               
           .on 'failure', (err) ->
             console.log 'save failed : ', err
@@ -485,6 +495,13 @@
           req.send '{"message_type":"success","message":"Operation OK","update":[],'+
             '"callback":[{"fn":"ION.switchOnlineStatus","args":{"status":'+page_article.online+
             ',"selector":".article'+page_article.id_page+'x'+page_article.id_article+'"}}]}'
+
+          #
+          # Inform modules that a new page has been modified
+          __nodizeEvents.emit  'articleUpdate', 
+            article : page_article.id_article
+            parent : page_article.id_page
+
         .on 'failure', (err) ->
           console.log 'error ', err
           

@@ -213,7 +213,7 @@
     #
     finished = (response) =>
       @requestCompleted requestId, response
-
+    
     DB.query( "SELECT * FROM media, article_media "+
               "WHERE article_media.id_media = media.id_media AND "+              
               "article_media.id_article = #{@article.id_article} "+
