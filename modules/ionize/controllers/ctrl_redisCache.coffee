@@ -1,37 +1,83 @@
 @include = ->
-    
+
+  #
+  # Redis client if enabled
+  #
+  if __nodizeSettings.get 'redis_enabled'
+    redis = require 'redis'
+    redisClient = redis.createClient()    
   
+  #
+  # Removing a key
+  #
+  removeRedisKey = (key) ->
+    redisClient.keys key, (err, results) ->
+        if err
+          console.log err
+        else
+          for result in results            
+            redisClient.del result 
+
+  #
+  # Force page refresh by removing its keys from Redis
+  #
+  page_refresh = (id_page) ->    
+    if __nodizeSettings.get 'page_cache_enabled'
+      #
+      # Get url from id_page
+      #
+      redisClient.keys "page_cache:id:#{id_page}", (err, results) ->
+        if err
+          console.log err
+        else
+          #
+          # Remove 
+          #
+          for result in results
+            redisClient.get result, (err, url) =>
+              if err
+                console.log "Err on redis get"
+              else                              
+                removeRedisKey "page_cache:id:#{id_page}"
+                removeRedisKey "page_cache:name:#{url}"
+
   # ---------------------------
   # SERVER SIDE EVENTS
   #
   __nodizeEvents
+    
     #
-    # Page has been updated, we could store pages in a static JSON array
-    # TODO: should probably be in backend module
+    # An article has been created
+    #
+    .on 'articleCreate', (params) =>
+      #
+      # Remove page from cache
+      #
+      page_refresh params.parent      
+
+    #
+    # An article has been updated
     #
     .on 'articleUpdate', (params) =>
-      console.log "article update event in memoryStore"
-      #console.log "articleUpdate event in ctrl-> ", params.id_article
-      #console.log params
-      #@io.sockets.emit 'live_articleUpdate', {id_article:params.id_article, content:params.article.content}
-
+      #
+      # Remove page from cache
+      #
+      page_refresh params.parent
+    
     #
     # Application initialization, loading cache
     #
     .on 'initialization', (params) =>
-      console.log "Application initializated event"
-      
-      if __nodizeSettings.get 'redis_enabled'
-        redis = require 'redis'
-        client = redis.createClient()
-
+      #
+      # Remove existing cached page
+      #      
       if __nodizeSettings.get 'page_cache_enabled'        
-        client.keys 'page_cache:*', (err, results) ->
+        redisClient.keys 'page_cache:*', (err, results) ->
           if err
             console.log err
           else
             for result in results
-              client.del result
+              redisClient.del result
 
       if __nodizeSettings.get 'database_cache_enabled'      
         #
@@ -45,7 +91,7 @@
               for attribute in result.attributes
                 content[attribute] = result[attribute]
               
-              client.set "page:#{result.id_page}", JSON.stringify( content )
+              redisClient.set "page:#{result.id_page}", JSON.stringify( content )
 
           .on 'failure', (err) ->
             console.log 'database error ', err
@@ -62,13 +108,13 @@
 
               #console.log content
               
-              client.set "page_lang:#{result.url}:#{result.lang}", JSON.stringify( content )
+              redisClient.set "page_lang:#{result.url}:#{result.lang}", JSON.stringify( content )
 
               #
               # Adding a key for home page
               #
               if content.home is 1
-                client.set "page_lang:__home__:#{result.lang}", JSON.stringify( content )                
+                redisClient.set "page_lang:__home__:#{result.lang}", JSON.stringify( content )                
 
               # Page_cached.create record, (err, record) ->
               #   if err

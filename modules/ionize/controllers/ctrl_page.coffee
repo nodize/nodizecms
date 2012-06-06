@@ -58,6 +58,10 @@
     else
       condition = {url : name, lang:lang }
 
+    #
+    # Saving id_page, used by cache
+    #
+    id_page = -1
 
     startPageRendering = =>
       #
@@ -81,8 +85,8 @@
         # Add page to cache
         #
         if __nodizeSettings.get 'page_cache_enabled'         
-          redisClient.set "page_cache:"+name, layout
-
+          redisClient.set "page_cache:name:"+name, layout
+          redisClient.set "page_cache:id:"+id_page, name
         req.send layout
 
       #
@@ -201,6 +205,11 @@
 
       processPage = (page_lang, page) =>
         #
+        # Saving id_page, for caching purpose
+        #
+        id_page = page.id_page
+
+        #
         # If a link is set we use it
         #
         if page.link? 
@@ -263,7 +272,7 @@
     # Is page in cache ?
     #    
     if __nodizeSettings.get 'page_cache_enabled' 
-      redisClient.get "page_cache:"+name, (err, page )->      
+      redisClient.get "page_cache:name:"+name, (err, page )->      
         if err
           console.log err
         else if page isnt null

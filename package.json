@@ -3,7 +3,7 @@
   "description": "Nodize CMS",
   "author": "Hypee & Partikule <contact@nodize.com>",
   "homepage": "http://www.nodize.com",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "main": "app.coffee",
   "dependencies": {
     "connect":"1.8.6",
