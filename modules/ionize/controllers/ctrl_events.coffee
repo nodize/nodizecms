@@ -38,7 +38,6 @@
       #
       # Refresh page when an article is updated
       #
-
       if $('#ion_refreshArticle_'+params.data.id_article).length>0      
         location.reload()
       
