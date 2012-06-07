@@ -127,17 +127,17 @@
                 dt ->
                   label for: 'logical_date', 'Date'
                 dd ->
-                  input '#logical_date.inputtext.w120 date', name: 'logical_date', type: 'text', value: ''
+                  input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: ''
               dl '.small', ->
                 dt ->
                   label for: 'publish_on', title: 'Publish the item at this date and replace the displayed item date', 'Publish'
                 dd ->
-                  input '#publish_on.inputtext.w120 date', name: 'publish_on', type: 'text', value: ''
+                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: ''
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
                 dd ->
-                  input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: ''
+                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: ''
             # Subnavigation
             # if @page.id_page isnt ''
             #   h3 '.toggler', 'Sub Navigation'
@@ -266,7 +266,7 @@
                     select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
                       option value: 'en', 'English'
                     br()
-                    select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+                    select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
                       option value: 'en', 'English'
                   div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
               # 'Include article content'
@@ -281,7 +281,7 @@
                 dd ->
                   input '#copy_lang.submit', type: 'submit', value: 'Copy content'
               hr '.ml10'
-              dl '.small.compact mt10', ->
+              dl '.small.compact.mt10', ->
                 dt ->
                   label for: 'reorder_direction', title: 'Reorder articles by date. Date calculation : Logical or Publish On or Creation.', 'Reorder Articles'
                 dd ->
@@ -486,7 +486,7 @@
                     #input "#articleCreate", type:"button", class:"light-button plus right", value:"Add Article", rel:"#{@page.id_page}"
                     #button '.right.light-button helpme type', 'About Types'
                     # Droppable to link one article to this page
-                    input '#new_article.inputtext.w120 italic droppable empty nofocus', type: 'text', alt: 'drop an article here...'
+                    input '#new_article.inputtext.w120.italic.droppable.empty.nofocus', type: 'text', alt: 'drop an article here...'
                     label title: 'Drag an article from the left tree by selecting its name.'
                   br()
                   div id:'articleListContainer'
@@ -524,7 +524,7 @@
         #
         ION.initAccordion ".toggler", "div.element", true, "pageAccordion"
         
-        ION.initHelp "#articles .type.helpme", "article_type", Lang.get("ionize_title_help_articles_types")
+        ION.initHelp "#articles.type.helpme", "article_type", Lang.get("ionize_title_help_articles_types")
         
         #
         # Init help tips on label
