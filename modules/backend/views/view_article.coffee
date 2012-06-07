@@ -36,19 +36,21 @@
           div '.info', ->
             if @article.id_article
               dl '.small.compact', ->
-                dt ->
-                  label @ion_lang.ionize_label_created
+                dt ->                  
+                  label @ion_lang.ionize_label_created                  
                 dd ->
+                  dateArray = @article.created._toMysql().split(' ')
+                  text dateArray[0]
+                  span '.lite', ' '+dateArray[1]
 
-                  text @article.created._toMysql()
-                  span '.lite', '19:04:22'
               dl '.small.compact', ->
                 dt ->
                   label @ion_lang.ionize_label_updated
                 dd ->
-                  text '2011.08.25'
-                  span '.lite', '16:40:45'
-
+                  dateArray = @article.updated._toMysql().split(' ')
+                  text dateArray[0]
+                  span '.lite', ' '+dateArray[1]
+                  
                 # 'Link ?'
                 # div id:'linkContainer'
 
@@ -58,6 +60,17 @@
             # 'Options'
             h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_attributes
             div '.element.element-options', ->
+               # 'Page view'             
+              if @article.id_article
+                dl '.small', ->
+                  dt ->
+                    label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
+                  dd ->                    
+                    select '.customselect.select.w160', name: 'view', ->
+                      option value: '', '-- Default view --'
+                      for view of @views["blocks"]
+                        option selected: ('selected' if view==@page_article.view), value: view, -> @views["blocks"][view]
+                      
               # 'Indexed content'
               dl '.small', ->
                 dt ->
@@ -343,6 +356,12 @@
         #- console.log "in coffee script"
 
         j$ = jQuery.noConflict() 
+
+        # Using ui.select jQuery widget for selects
+        j$('document').ready ->           
+          j$('.customselect').selectmenu
+            width : 140
+            style : 'dropdown'
 
         initFileUpload = ->
           j$("#fileupload").fileupload('destroy')
