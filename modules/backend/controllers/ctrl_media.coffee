@@ -21,7 +21,7 @@
   #
   @get '/:lang/admin/media/get_media_list/picture/article/:id_article' : ->
     
-    ck = require 'coffeekup'
+    ck = require 'coffeecup'
 
     DB.query( "SELECT * FROM media, article_media WHERE article_media.id_media = media.id_media AND article_media.id_article = #{@params.id_article}", Media)
       .on 'success', (medias) =>
@@ -160,7 +160,7 @@
 
       __sessionStore.get data.sessionID, (err, session) ->        
         if err or not session
-          console.log "error in get session"
+          console.log "Error in get session, client cookie might be expired. Check server date if this is happening when it shouldn't."
           accept( 'Error', false )
         else
           #console.log "session retrieved ", session

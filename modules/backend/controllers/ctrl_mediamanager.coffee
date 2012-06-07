@@ -296,7 +296,7 @@
     console.log values
     fs = require 'fs'
 
-    fs.mkdir values.directory+'\/'+values.file, 0777, (err) ->
+    fs.mkdir values.directory+'\/'+values.file, 0o0777, (err) ->
       if err 
         console.log err
         response = 

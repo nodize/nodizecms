@@ -145,10 +145,8 @@
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
-            htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh
-
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html            
-            htmlResponse += "</span>" if live or refresh
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html            
+            htmlResponse += "</span>" if live
 
         finished( htmlResponse )
       
@@ -215,7 +213,7 @@
     #
     finished = (response) =>
       @requestCompleted requestId, response
-
+    
     DB.query( "SELECT * FROM media, article_media "+
               "WHERE article_media.id_media = media.id_media AND "+              
               "article_media.id_article = #{@article.id_article} "+
@@ -235,7 +233,7 @@
       
           # Render nested tags
           if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html
             args[args.length-1]() 
 
         finished( htmlResponse )

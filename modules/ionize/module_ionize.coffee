@@ -419,6 +419,7 @@ DB.sync()
   .on "failure", (err) ->
     console.log "Database synchronisation error :", err    
 
+
 # ---------------------------
 # EVENTS
 #

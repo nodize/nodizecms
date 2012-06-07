@@ -10,13 +10,16 @@
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/MIT
 #
+
+#
+# You should really use the Redis session store when possible
+#
+
 @include = ->
-  console.log( "Module nodize-sessions loaded" )
   _moduleName = "nodize-sessions"
 
   Store = @express.session.Store
-  #Sequelize = require("sequelize")
-
+    
   #
   # Retrieve database configuration from json setting file
   #
@@ -54,7 +57,7 @@
       dialect: config.get('dialect'),
       storage: global.__applicationPath+'/database/db.sqlite',
       define: { timestamps: false, freezeTableName: true },
-      maxConcurrentQueries:500; 
+      maxConcurrentQueries:100; 
     }
   )
   
@@ -187,9 +190,11 @@
       , callback
 
   global.__sessionStore = new MySQLStore(
-      cookie:
-        maxAge: 4 * 7 * 24 * 60 * 60 * 1000
-    )
+    cookie: 
+      maxAge: 4 * 7 * 24 * 60 * 60 * 1000
+  )
+  
+  
   #
   # Starting the session manager
   #
@@ -197,11 +202,4 @@
     secret: __sessionSecret
     store: __sessionStore
   }
-
-
-
-
-
-
-
 

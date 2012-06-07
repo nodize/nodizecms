@@ -95,7 +95,7 @@
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_livePage_#{@page.id_page}'>" if live
-            htmlResponse += yield args[args.length-1] # Compile the nested content to html            
+            htmlResponse += cede args[args.length-1] # Compile the nested content to html            
             htmlResponse += "</span>" if live
 
         finished( htmlResponse )

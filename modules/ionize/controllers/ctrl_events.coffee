@@ -12,7 +12,7 @@
     .on 'articleUpdate', (params) =>
       #console.log "articleUpdate event in ctrl-> ", params.id_article
       #console.log params
-      @io.sockets.emit 'live_articleUpdate', {id_article:params.id_article, content:params.article.content}
+      @io.sockets.emit 'live_articleUpdate', {id_article:params.article.id_article, content:params.article.content}
 
   # ---------------------------
   # CLIENT SIDE EVENTS
@@ -38,7 +38,6 @@
       #
       # Refresh page when an article is updated
       #
-
       if $('#ion_refreshArticle_'+params.data.id_article).length>0      
         location.reload()
       

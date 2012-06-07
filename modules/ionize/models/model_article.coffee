@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes)->
     updated           : DataTypes.DATE
     publish_on        : DataTypes.DATE
     publish_off       : DataTypes.DATE
-    updated           : DataTypes.DATE   
     logical_date      : DataTypes.DATE   
   ,
     instanceMethods: 

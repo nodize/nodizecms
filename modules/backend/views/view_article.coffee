@@ -113,21 +113,21 @@
                 dd ->
                   logical_date = ''
                   logical_date = @article.logical_date._toMysql() if @article.logical_date isnt ''
-                  input '#logical_date.inputtext.w120 date', name: 'logical_date', type: 'text', value: logical_date
+                  input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   label for: 'publish_on', -> @ion_lang.ionize_label_publish_on
                 dd ->
                   publish_on = ''
                   publish_on = @article.publish_on._toMysql() if @article.publish_on isnt ''
-                  input '#publish_on.inputtext.w120 date', name: 'publish_on', type: 'text', value: publish_on
+                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', -> @ion_lang.ionize_label_publish_off
                 dd ->
                   publish_off = ''
                   publish_off = @article.publish_off._toMysql() if @article.publish_off isnt ''
-                  input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: publish_off
+                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # 'Comments'
             h3 class:'toggler', -> @ion_lang.ionize_title_comments
             div '.element', ->
@@ -145,7 +145,7 @@
                 dt ->
                   label for: 'comment_expire', -> @ion_lang.ionize_label_comment_expire
                 dd ->
-                  input '#comment_expire.inputtext.w120 date', name: 'comment_expire', type: 'text', value: ''
+                  input '#comment_expire.inputtext.w120.date', name: 'comment_expire', type: 'text', value: ''
             # 'end comments'
 
             if @article.id_article
@@ -160,7 +160,7 @@
                       select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
                         option value: 'en', 'English'
                       br()
-                      select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+                      select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
                         option value: 'en', 'English'
                     div '.w30.h50 left ml5', style: 'background:url(http://192.168.1.162/themes/admin/images/icon_24_from_to.png) no-repeat 50% 50%;'
                 # 'Submit button'
@@ -273,7 +273,7 @@
                   h3 ".toggler.toggler-#{lang}", 'Summary'
                   div ".element.element-#{lang}", ->
                     div ->
-                      textarea "#summary_#{lang}.smallTinyTextarea.w600 h100", name: "summary_#{lang}", rel: lang
+                      textarea "#summary_#{lang}.smallTinyTextarea.w600.h100", name: "summary_#{lang}", rel: lang
                       p '.clear.h15 mb15', ->
                         button "#wysiwyg_summary_#{lang}.light-button.left", type: 'button', onclick: "tinymce.execCommand(\'mceToggleEditor\',false,\'summary_#{lang}\');return false;", 'toggle editor'
 
@@ -308,12 +308,12 @@
               div '.tabcontent', ->
                 p '.h20', ->
                   # '<a class="fmButton right"><img src="http://192.168.1.162/themes/admin/images/icon_16_plus.png" /> Add Media</a>'
-                  button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
-                  button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
+                  button '.right.light-button.pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
+                  button '.left.light-button.delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
+                  button '.left.light-button.refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
                   form '#fileup.left', name: 'fileupform', ->
-                    input '#fileupload.inputtext.w120 italic droppable empty nofocus', type: 'text', name:'myfiles', alt: 'drop images here...'
-                    label title: 'Drag an article from the left tree by selecting its name.'
+                    input '#fileupload.inputtext.w120.italic.droppable.empty.nofocus', type: 'text', name:'myfiles', alt: 'drop images here...'
+                    label title: 'Drag an here to upload and attach it the article.'
      
                 div '#pictureContainer.sortable-container', ''
                 p '.h20', ->                  

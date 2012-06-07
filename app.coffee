@@ -7,7 +7,7 @@
 #  | |\  | (_) | (_| | |/ /  __/
 #  \_| \_/\___/ \__,_|_/___\___|
 #
-#  v0.0.1
+#  v0.0.3
 #
 #  Nodize CMS by Hypee (c)2012 (www.hypee.com)
 #  Released under MIT License
@@ -38,7 +38,7 @@ nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 #
 require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
 
-nodize = require('zappa').app ->
+application = ->
     
   @use bodyParser:{ uploadDir: __dirname+'/uploads' } # Needed to get POST params & handle uploads
   
@@ -59,14 +59,31 @@ nodize = require('zappa').app ->
   global.__default_lang = 'en'
  
   # Allow to request static content from /public folder of current theme
+  @use 'staticCache'
   @use 'static': __dirname + "/themes/" + __nodizeTheme + "/public" 
+
 
   @use 'cookieParser'
   @use 'cookieDecoder'
  
-  # Including Nodize MySQL/SQLite session store (use same database dialect than specified in config file)
-  @include './modules/nodize-sessions/module_nodize-sessions.coffee'
+  #
+  # Using redis as session store (if option redis-enabled is set)
+  #
+  if nodizeSettings.get("redis_enabled")
+    Store = @express.session.MemoryStore
+    RedisStore = require('connect-redis')(@express)
+    global.__sessionStore = new RedisStore
+    
+    @use 'session':{
+      secret: __sessionSecret
+      store: __sessionStore
+    }
+  else  
+    # Including Nodize MySQL/SQLite session store (use same database dialect than specified in config file)
+    @include './modules/nodize-sessions/module_nodize-sessions.coffee'
+    
   
+
   #
   # Logging connexions to /logs/access.log file
   #  
@@ -98,6 +115,9 @@ nodize = require('zappa').app ->
 
   
 
+nodize = require('zappajs').app( application, {disable_io: false, require_css: []} )
+
+
 #
 # Desactivating socket.io console debug messages
 #
@@ -116,10 +136,12 @@ port = process.env.PORT or 3000
 
 cluster = require 'cluster'
 
-numCPUs = require('os').cpus().length
 
-# Cluster mode is currently disabled
-numCPUs = 0
+
+# Cluster mode enabled if cores > 0
+numCPUs = nodizeSettings.get( "cores" )
+# Use all available cores if cores = 'max'
+numCPUs = require('os').cpus().length if numCPUs is 'max'
 
 if cluster.isMaster
   console.log "ZappaJS", nodize.zappa.version, "orchestrating the show"
@@ -150,14 +172,19 @@ if cluster.isMaster
         .on 'death', ->
           console.log 'worker ' + worker.pid + ' died'
   else
-    nodize.app.listen( port )    
-    
+    nodize.app.listen( port )
+
 else 
   # Worker processes have a Express/Zappa/Nodize server.
 
   console.log "Cluster", cluster.pid, "started" if cluster.pid # pid seems to be available in node.js >= 0.6.12
   nodize.app.listen( port )  
 
+#
+# THROW INITIALIZATION EVENT
+#
+#
+__nodizeEvents.emit  'initialization', 'application ready'
 
 
 
