@@ -27,5 +27,9 @@
     "#": "The website must be reacheable from Internet for Pixlr integration to work",
     "pixlr_integration": false,
     "pixlr_callback_server": "http://127.0.0.1",
-    "pixlr_callback_url": "/pixlr/save_callback"
+    "pixlr_callback_url": "/pixlr/save_callback",
+
+    "# production_server": "Tag to identify in your code when you're running in production",
+    "production_server": false
+    
 }
