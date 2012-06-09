@@ -87,6 +87,24 @@
       article_by_lang[ lang ] = Article_lang.build()
       article_by_lang[ lang ].createBlank()
 
+
+    views = {}
+
+    #
+    # Loading theme views
+    #
+    loadViews = ->
+      # File containing views definition (page/blocks)
+      viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"
+
+      fs = require 'fs'
+      fs.readFile viewsParamFile, (err, data) ->
+        if err
+          req.send "Views definition not found"
+        else
+          views = JSON.parse( data )          
+          loadPage()
+
     #
     # Load article's PARENT PAGE
     #
@@ -113,13 +131,14 @@
             lang                : req.params.lang      
             ion_lang            : ion_lang[ req.params.lang ]
             page                : page
+            views               : views
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
 
           
         .on 'failure', (err) ->
           console.log 'database error ', err
     
-    loadPage()
+    loadViews()
 
   #
   # ARTICLE EDIT
@@ -404,7 +423,7 @@
                   console.log 'fail : ', err
             else
               createArticleLang( lang )
-    else
+    else      
       # -------------------------------------
       # Creating a new article
       # -------------------------------------
@@ -422,7 +441,7 @@
         .on 'failure', (err) ->
           console.log 'article save failed : ', err
           req.send "Save failed"
-         
+           
       #
       # Creating linked page_article record
       #
@@ -432,7 +451,8 @@
         page_article.createBlank()
         page_article.id_article = article.id_article
         page_article.id_page = values.main_parent
-        page_article.main_parent = values.main_parent        
+        page_article.main_parent = values.main_parent 
+        page_article.view = values.view       
          
         # Save to database
         page_article.save()

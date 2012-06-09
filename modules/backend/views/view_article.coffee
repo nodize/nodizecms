@@ -195,6 +195,17 @@
               # New article
               h2 '#main-title.main.article', @ion_lang.ionize_title_new_article
 
+              div style: 'margin: 15px 0pt 20px 0px;', ->  
+                # Views
+                dl '.small', ->
+                    dt ->
+                      label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
+                    dd ->                    
+                      select '.customselect.select.w160', name: 'view', ->
+                        option value: '', '-- Default view --', selected:'selected'
+                        for view of @views["blocks"]
+                          option value: view, -> @views["blocks"][view]
+               
             div style: 'margin: -15px 0pt 20px 72px;', ->
               p ->
                 span '.lite', 'ID :'
