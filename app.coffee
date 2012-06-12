@@ -7,7 +7,7 @@
 #  | |\  | (_) | (_| | |/ /  __/
 #  \_| \_/\___/ \__,_|_/___\___|
 #
-#  v0.0.3
+#  v0.0.4
 #
 #  Nodize CMS by Hypee (c)2012 (www.hypee.com)
 #  Released under MIT License
@@ -101,11 +101,40 @@ application = ->
   EventEmitter = require( "events" ).EventEmitter
   global.__nodizeEvents = new EventEmitter();  
   
-  # Defining helpers container                       
+  #  
+  # Defining helpers container
+  #
   @helpers = {}
   
   # Including backend/administration module
   @include './modules/backend/module_backend.coffee'
+
+  # Including theme/site modules
+  _moduleName = "ionize"
+
+
+  #
+  # LOADING VIEWS, HELPERS, CONTROLLERS from THEME'S MODULES
+  #
+  fs = require 'fs'
+  path = require 'path'
+
+  themeModuleDir = './themes/'+__nodizeTheme+'/modules'
+
+  if path.existsSync themeModuleDir
+    modules = fs.readdirSync themeModuleDir
+    for _moduleName in modules
+      console.log "Module found :",_moduleName
+      includeFolders = []
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/controllers/"
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/helpers/"
+
+      for includeFolder in includeFolders
+        if path.existsSync includeFolder
+          files = fs.readdirSync includeFolder
+          @include includeFolder+file for file in files
+
 
   # Must be the last module, it's handling the "catch all" router
   @include './modules/ionize/module_ionize.coffee'
