@@ -32,7 +32,7 @@
       id = $("id_page").value
       unless id
         $("tPageDeleteButton").hide()
-        $("tPageAddContentElement").hide()
+        #$("tPageAddContentElement").hide()
         $("tPageMediaButton").hide()
         $("tPageAddArticle").hide()
       else
