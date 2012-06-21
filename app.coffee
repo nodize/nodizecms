@@ -96,6 +96,11 @@ application = ->
   @set 'views' : __dirname + "/themes/" + __nodizeTheme + "/views"
 
   #
+  # Activating jade engine
+  # 
+  # @register jade: @zappa.adapter 'jade' # Uncomment to use jade engine
+
+  #
   # Event engine
   #
   EventEmitter = require( "events" ).EventEmitter
@@ -134,6 +139,14 @@ application = ->
         if path.existsSync includeFolder
           files = fs.readdirSync includeFolder
           @include includeFolder+file for file in files
+
+      #
+      # Load main module file, if it exists
+      #
+      includeFile = themeModuleDir+"/"+_moduleName+"/module_"+_moduleName
+      @include includeFile
+
+
 
 
   # Must be the last module, it's handling the "catch all" router
