@@ -1,3 +1,6 @@
+#
+# Not used anymore, replaced by Twitter Bootstrap dropdowns
+#
 @include = ->
 	
 	#
