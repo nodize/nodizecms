@@ -236,7 +236,8 @@
             layout    : no
             req       : req
             registerRequest : registerRequest
-            requestCompleted : requestCompleted            
+            requestCompleted : requestCompleted
+            settings  : __nodizeSettings.stores.nodize.store             
 
           #
           # Making CoffeeKup helpers available to .eco pages 

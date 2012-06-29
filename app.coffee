@@ -7,7 +7,7 @@
 #  | |\  | (_) | (_| | |/ /  __/
 #  \_| \_/\___/ \__,_|_/___\___|
 #
-#  v0.0.2
+#  v0.0.3
 #
 #  Nodize CMS by Hypee (c)2012 (www.hypee.com)
 #  Released under MIT License

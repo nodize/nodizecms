@@ -1,9 +1,17 @@
 {
   "name": "nodize",
-  "description": "Nodize CMS",
+  "version": "0.0.3",  
+  "description": "Nodize is a CMS (Content Management System) for Node.js, written in CoffeeScript. ",
   "author": "Hypee & Partikule <contact@nodize.com>",
-  "homepage": "http://www.nodize.com",
-  "version": "0.0.3",
+  "homepage": "http://nodize.com",
+  "repository": {
+    "type":"git",
+    "url":"git://github.com/nodize/nodizecms.git"
+    },
+  "keywords": ["cms","blog"],
+  "engines": {
+    "node": "0.6.x || 0.7.x"
+  },
   "main": "app.coffee",
   "dependencies": {
     "connect":"1.8.6",
