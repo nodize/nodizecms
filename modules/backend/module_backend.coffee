@@ -173,12 +173,14 @@
   # INTERFACE header
   #  
   @get "/:lang/admin/desktop/get_header" : (req) =>
-    req.render "backend_desktopHeader", 
+    #req.render "backend_desktopHeader", 
+    req.render "backend_desktopNavBar", 
       hardcode  : @helpers 
       lang      : req.params.lang      
       ion_lang  : ion_lang[ req.params.lang ]
       layout    : no
       user      : req.session.user
+
 
   #
   # ARTICLE toolbox
