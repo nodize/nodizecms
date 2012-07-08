@@ -79,7 +79,7 @@
             for result in results
               redisClient.del result
 
-      if __nodizeSettings.get 'database_cache_enabled'      
+      if __nodizeSettings.get('database_cache_enabled') and __nodizeSettings.get('redis_enabled')   
         #
         # Loading Page table in memory
         #
