@@ -19,49 +19,9 @@
   _moduleName = "nodize-sessions"
 
   Store = @express.session.Store
-    
-  #
-  # Retrieve database configuration from json setting file
-  #
-  nconf = require 'nconf'
-
-  #
-  # Looking for specific settings for the current theme
-  #
-  fs = require 'fs'
-  themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.json'
-  try
-    result = fs.statSync themeDatabaseSettingsFile
-    #
-    # Using theme's settings
-    #
-    databaseSettingsFile = themeDatabaseSettingsFile
-  catch error
-    #
-    # Using default's settings
-    #
-    databaseSettingsFile = 'settings/database.json'
-
-  nconf.add( 'config', {type: 'file', file:databaseSettingsFile } )
-  config = nconf
-
-  console.log "Using database settings from",databaseSettingsFile,"->",config.get('database')
 
   Sequelize = require 'sequelize'
-
-  # Connecting to the database
-  sequelize = new Sequelize( config.get('database'),config.get('user'), config.get('password'), 
-    { 
-      host: config.get('host'), 
-      logging:  config.get('logging'), 
-      dialect: config.get('dialect'),
-      storage: global.__applicationPath+'/database/db.sqlite',
-      define: { timestamps: false, freezeTableName: true },
-      maxConcurrentQueries:100; 
-    }
-  )
-  
-  global.sequelize = sequelize
+  sequelize = require __applicationPath+"/modules/ionize/libs/nodize_db"
   sequelize.sync()
 
   global.initialized = false
@@ -77,8 +37,8 @@
     initialize = (callback) ->
       unless global.initialized
         sequelize.sync(force: @forceSync)
-        .on "success", ->
-          console.log config.get('dialect')," session store initialized."
+        .on "success", ->          
+          console.log "Sequelize session store initialized."
           global.initialized = true
           callback()
         .on "failure", (error) ->
