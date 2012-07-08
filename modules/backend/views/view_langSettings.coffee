@@ -53,7 +53,7 @@
                   select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
                     option value: 'en', 'English'
                   br()
-                  select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+                  select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
                     option value: 'en', 'English'
                 div '.w30.h50 left ml5', style: 'background:url(/backend/images/icon_24_from_to.png) no-repeat 50% 50%;'
             # 'Submit button'
@@ -86,7 +86,7 @@
               for lang in @langs          
                 li "#langElement_#{lang.lang}.sortme.h100", rel: lang.lang, ->
                   # 'Drag icon'
-                  div '.drag.left h100', ->
+                  div '.drag.left.h100', ->
                     img src: '/backend/images/icon_16_ordering.png'
                   # 'Lang Code'
                   dl '.small', ->

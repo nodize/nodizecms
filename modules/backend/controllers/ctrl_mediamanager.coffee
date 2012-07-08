@@ -57,7 +57,7 @@
     console.log values
 
     fileDirectory =  values.directory.replace( basePath, '' )
-    ck = require 'coffeekup'
+    ck = require 'coffeecup'
 
     imageinfo = require 'imageinfo'
     fs = require 'fs'    

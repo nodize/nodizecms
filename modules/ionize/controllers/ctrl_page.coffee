@@ -17,7 +17,7 @@
   #* DEFAULT HANDLER, DISPLAYING PAGE FROM DATABASE
   #*
   #**
-  @ionize_displayPage = (req, helpers, name) ->  
+  @ionize_displayPage = (req, helpers, name, args) ->
     #console.log req.request.headers["accept-language"]
     
     #console.log req.params
@@ -192,6 +192,7 @@
               #
               registerRequest "main"
 
+
               req.render 'page_default',
                 hardcode  : helpers              
                 page      : page
@@ -199,6 +200,7 @@
                 layout    : no
                 registerRequest : registerRequest
                 requestCompleted : requestCompleted
+                params    : args
               ,
                 (err,list) ->
                   renderCompleted err, list                          
@@ -237,7 +239,8 @@
             req       : req
             registerRequest : registerRequest
             requestCompleted : requestCompleted
-            settings  : __nodizeSettings.stores.nodize.store             
+            settings  : __nodizeSettings.stores.nodize.store
+            params    : args
 
           #
           # Making CoffeeKup helpers available to .eco pages 
@@ -248,11 +251,11 @@
           # in .eco views will become :
           #   <% @ion_articles => %>
           #   <p> <%- @article.content %> </p>
-          #         
+          # 
           for helper of helpers
             do (helper) ->
               data[helper] = (args...) -> @hardcode[helper].apply(this, args)
-
+          
           #
           # Render the page
           #

@@ -356,7 +356,7 @@
                 dt ->
                   label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                 dd ->
-                  select 'select.w160', name: 'view', ->
+                  select '.select.w160.customselect', name: 'view', ->
                     option value: '', '-- Default view --'
                     for view of @views["pages"]
                       option value: view, -> @views["pages"][view]
