@@ -70,7 +70,6 @@ application = ->
   # Using redis as session store (if option redis-enabled is set)
   #
   if nodizeSettings.get("redis_enabled")
-    Store = @express.session.MemoryStore
     RedisStore = require('connect-redis')(@express)
     global.__sessionStore = new RedisStore
     

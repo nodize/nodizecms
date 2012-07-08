@@ -251,12 +251,11 @@
           # in .eco views will become :
           #   <% @ion_articles => %>
           #   <p> <%- @article.content %> </p>
-          #         
+          # 
           for helper of helpers
             do (helper) ->
               data[helper] = (args...) -> @hardcode[helper].apply(this, args)
-
-          console.log page.view
+          
           #
           # Render the page
           #
