@@ -1,6 +1,11 @@
 sequelize = null
 config = null
 
+queryInterface = null
+
+
+
+
 init = ->
   #
   # TODO:Should be put in a module
@@ -33,7 +38,8 @@ init = ->
     nconf.add( 'config', {type: 'file', file:databaseSettingsFile } )
     config = nconf
     
-    console.log "** Using database settings from",databaseSettingsFile,"->",config.get('database')
+    console.log "Using database settings from",databaseSettingsFile,"->",config.get('database')
+          
 
     # Connecting to the database
     sequelize = new Sequelize( config.get('database'),config.get('user'), config.get('password'), 
@@ -44,10 +50,98 @@ init = ->
         storage: global.__applicationPath+'/database/db.sqlite'
         define: { timestamps: false, freezeTableName: true }      
         maxConcurrentQueries:50
+        pool: { maxConnections: 5, maxIdleTime : 30 }
       }
     )
 
+    
+
+    #
+    # TableVersion definition
+    #
+    TableVersion = sequelize.define 'tableVersion',
+      name       : Sequelize.STRING
+      version    : Sequelize.INTEGER 
+    #
+    # Create tableVersion if doesn't exists
+    #
+    sequelize.sync() 
+    sequelize.TableVersion = TableVersion
+    
+    #
+    # Migrations management
+    #    
+
+    # Retrieving object to make low level database calls for migrations
+    queryInterface = sequelize.getMigrator().queryInterface
+
+    class migrator
+      constructor: (table) ->
+        @table = table
+
+      setTable: (table) ->
+        @table = table
+
+      addColumn: (name, datatype) ->
+        queryInterface.addColumn( @table, name, datatype )
+          .on 'success', ->
+            console.log "success"
+          .on 'failure', (err) ->
+            console.log "error", err
+
+      doMigrations: (tableName, migrations, lastVersion) ->
+        @table = tableName
+        #
+        # Search for table version 
+        #
+        sequelize.TableVersion.find( { where:{'name':tableName} } )
+          .on "success", (tableVersion) ->
+            if tableVersion
+              #
+              # We have a version for this table, we check if migration are needed
+              #  
+              for migration in migrations
+                if lastVersion >= migration.version > tableVersion.version
+                  migration.code()
+
+              #
+              # Version update if needed
+              #
+              if tableVersion.version<lastVersion
+                tableVersion.version = lastVersion
+                tableVersion.save()
+                  .on 'success', (tableVersion) ->
+                    console.log "version updated for", tableVersion.name
+                  .on 'failure', (err) ->
+                    console.log "Database error", err
+
+            else
+              #
+              # No version found for this table, we expect to have the last version (just created) 
+              #
+              tableVersion = TableVersion.build()
+              tableVersion.name = tableName
+              tableVersion.version = lastVersion
+              tableVersion.save()
+                .on 'success', (tableVersion) ->
+                  console.log "version created for", tableVersion.name
+                .on 'failure', (err) ->
+                  console.log "Database error", err
+
+
+          .on "failure", (err) ->
+            console.log "fail", err
+
+        
+
+    sequelize.migrator = new migrator
+
+
 init()
+
+
+
+#console.log sequelize.getMigrator().queryInterface
 
 module.exports = sequelize
 exports.config = config
