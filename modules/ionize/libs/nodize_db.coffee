@@ -1,15 +1,7 @@
 sequelize = null
 config = null
 
-queryInterface = null
-
-
-
-
-init = ->
-  #
-  # TODO:Should be put in a module
-  #
+init = ->  
   if not sequelize  
     console.log "sequelize initialization"
     Sequelize = require 'sequelize'
@@ -75,7 +67,7 @@ init = ->
     # Retrieving object to make low level database calls for migrations
     queryInterface = sequelize.getMigrator().queryInterface
 
-    class migrator
+    class Migrator
       constructor: (table) ->
         @table = table
 
@@ -83,9 +75,10 @@ init = ->
         @table = table
 
       addColumn: (name, datatype) ->
+        # console.log "[#{@table}] adding column"
         queryInterface.addColumn( @table, name, datatype )
-          .on 'success', ->
-            console.log "success"
+          # .on 'success', ->
+            # console.log "success"
           .on 'failure', (err) ->
             console.log "error", err
 
@@ -108,6 +101,7 @@ init = ->
               #  
               for migration in migrations
                 if lastVersion >= migration.version > tableVersion.version
+                  console.log "[#{tableName}] applying upgrade to version #{migration.version}"
                   migration.code()
 
               #
@@ -117,7 +111,7 @@ init = ->
                 tableVersion.version = lastVersion
                 tableVersion.save()
                   .on 'success', (tableVersion) ->
-                    console.log "version updated for", tableVersion.name
+                    console.log "[#{tableVersion.name}] updated to version ", tableVersion.version
                   .on 'failure', (err) ->
                     console.log "Database error", err
 
@@ -140,7 +134,11 @@ init = ->
 
         
 
-    sequelize.migrator = new migrator
+    sequelize.migrator = new Migrator
+
+    sequelize.getMigrator = (tableName) ->
+      migrator = new Migrator( tableName )
+
 
 
 init()
