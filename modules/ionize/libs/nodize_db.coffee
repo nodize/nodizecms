@@ -89,7 +89,7 @@ init = ->
           .on 'failure', (err) ->
             console.log "error", err
 
-      doMigrations: (tableName, migrations, lastVersion) ->
+      doMigrations: (tableName, migrations ) ->
         @table = tableName
         #
         # Search for table version 
@@ -97,6 +97,12 @@ init = ->
         sequelize.TableVersion.find( { where:{'name':tableName} } )
           .on "success", (tableVersion) ->
             if tableVersion
+              
+              #
+              # Last element of "migrations" array has to be the last version
+              #
+              lastVersion = migrations[ migrations.length-1 ].version
+
               #
               # We have a version for this table, we check if migration are needed
               #  
