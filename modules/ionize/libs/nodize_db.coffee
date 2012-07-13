@@ -11,7 +11,16 @@ init = ->
     # Looking for specific settings for the current theme
     #
     fs = require 'fs'
-    themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.json'
+    
+    #
+    # If we are in test mode, a specific database setting files must be defined
+    #
+    switch process.env.NODE_ENV
+      when 'test'
+        themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.test.json'
+      else
+        themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.json'
+
     try
       result = fs.statSync themeDatabaseSettingsFile
       #

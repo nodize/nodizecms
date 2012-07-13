@@ -19,6 +19,7 @@
 #
 fs = require 'fs'
 path = require 'path'
+sugar = require 'sugar' 
 
 nodizeSettings = require 'nconf'
 global.__nodizeSettings = nodizeSettings
