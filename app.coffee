@@ -128,8 +128,14 @@ application = ->
 
   if path.existsSync themeModuleDir
     modules = fs.readdirSync themeModuleDir
+
+    #
+    # Sorting modules, to allow module with a name starting with "_" to be loaded first
+    # 
+    modules = modules.sort()
+    
     for _moduleName in modules
-      console.log "Module found :",_moduleName
+      console.log "Loading module (#{_moduleName})"
       includeFolders = []
       includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
       includeFolders.push themeModuleDir+"/"+_moduleName+"/controllers/"
