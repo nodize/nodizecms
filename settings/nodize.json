@@ -1,15 +1,35 @@
 {
+    "# Cores": "Number of cores to use, under testing, use 0 if you want to be safe (one core) or set to 'max' to use all available cores",
+    "cores": 0,    
+ 
+    "# redis_enabled": "Use Redis for session storage, else the default database engine is used (MySQL, SQLite...)",
+    "redis_enabled": false,
+
+    "# page_cache_enabled": "Cache dynamic pages, uses Redis (has to be enabled). Status : testing",
+    "page_cache_enabled": false,
+
+    "# database_cache_enabled": "Cache main database tables, uses Redis (has to be enabled). Status : testing",
+    "database_cache_enabled": false,
+
     "# theme": "Sets the theme to use",
     "theme": "pageone",
+ 
     "# session_secret": "Used to encrypt sessions and passwords, change it !",
     "session_secret": "changeMeRightNow!",
-    "# admin_password": "Can be temporarily set if you lose the admin password",
+ 
+    "# admin_password": "Can be temporarily set to any value if you forget the admin password",
     "admin_password": null,
+ 
     "# nodetime_profiler": "Enabling NodeTime module for profiling",
     "nodetime_profiler": false,
+ 
     "# pixlr #": "Enabling Pixlr integration in backoffice",
     "#": "The website must be reacheable from Internet for Pixlr integration to work",
     "pixlr_integration": false,
     "pixlr_callback_server": "http://127.0.0.1",
-    "pixlr_callback_url": "/pixlr/save_callback"
+    "pixlr_callback_url": "/pixlr/save_callback",
+
+    "# production_server": "Tag to identify in your code when you're running in production",
+    "production_server": false
+    
 }

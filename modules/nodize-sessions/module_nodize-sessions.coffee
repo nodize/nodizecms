@@ -10,55 +10,18 @@
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/MIT
 #
+
+#
+# You should really use the Redis session store when possible
+#
+
 @include = ->
-  console.log( "Module nodize-sessions loaded" )
   _moduleName = "nodize-sessions"
 
   Store = @express.session.Store
-  #Sequelize = require("sequelize")
-
-  #
-  # Retrieve database configuration from json setting file
-  #
-  nconf = require 'nconf'
-
-  #
-  # Looking for specific settings for the current theme
-  #
-  fs = require 'fs'
-  themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.json'
-  try
-    result = fs.statSync themeDatabaseSettingsFile
-    #
-    # Using theme's settings
-    #
-    databaseSettingsFile = themeDatabaseSettingsFile
-  catch error
-    #
-    # Using default's settings
-    #
-    databaseSettingsFile = 'settings/database.json'
-
-  nconf.add( 'config', {type: 'file', file:databaseSettingsFile } )
-  config = nconf
-
-  console.log "Using database settings from",databaseSettingsFile,"->",config.get('database')
 
   Sequelize = require 'sequelize'
-
-  # Connecting to the database
-  sequelize = new Sequelize( config.get('database'),config.get('user'), config.get('password'), 
-    { 
-      host: config.get('host'), 
-      logging:  config.get('logging'), 
-      dialect: config.get('dialect'),
-      storage: global.__applicationPath+'/database/db.sqlite',
-      define: { timestamps: false, freezeTableName: true },
-      maxConcurrentQueries:500; 
-    }
-  )
-  
-  global.sequelize = sequelize
+  sequelize = require __applicationPath+"/modules/ionize/libs/nodize_db"
   sequelize.sync()
 
   global.initialized = false
@@ -74,8 +37,8 @@
     initialize = (callback) ->
       unless global.initialized
         sequelize.sync(force: @forceSync)
-        .on "success", ->
-          console.log config.get('dialect')," session store initialized."
+        .on "success", ->          
+          console.log "Sequelize session store initialized."
           global.initialized = true
           callback()
         .on "failure", (error) ->
@@ -187,9 +150,11 @@
       , callback
 
   global.__sessionStore = new MySQLStore(
-      cookie:
-        maxAge: 4 * 7 * 24 * 60 * 60 * 1000
-    )
+    cookie: 
+      maxAge: 4 * 7 * 24 * 60 * 60 * 1000
+  )
+  
+  
   #
   # Starting the session manager
   #
@@ -197,11 +162,4 @@
     secret: __sessionSecret
     store: __sessionStore
   }
-
-
-
-
-
-
-
 

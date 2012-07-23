@@ -76,6 +76,15 @@
 				script src: '/socket.js'
 				#script src: '/backend_dashboard.js'
 
+				# "Bootstrap framework"
+				link rel: "stylesheet", href: "backend/bootstrap/css/bootstrap-nodize.css"
+				#link rel: "stylesheet", href: "backend/bootstrap/css/bootstrap-responsive.min.css"
+				# "Blue theme"
+				link "#link_theme", rel: "stylesheet", href: "backend/css/blue.css"
+				# "main bootstrap js"
+				script src: "backend/bootstrap/js/bootstrap.min.js"
+
+
 				#
 				# Defining admin language & base URL
 				# & building translations for Javascript localization

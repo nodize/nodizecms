@@ -7,7 +7,7 @@
 #  | |\  | (_) | (_| | |/ /  __/
 #  \_| \_/\___/ \__,_|_/___\___|
 #
-#  v0.0.1
+#  v0.0.4
 #
 #  Nodize CMS by Hypee (c)2012 (www.hypee.com)
 #  Released under MIT License
@@ -38,7 +38,7 @@ nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 #
 require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
 
-nodize = require('zappa').app ->
+application = ->
     
   @use bodyParser:{ uploadDir: __dirname+'/uploads' } # Needed to get POST params & handle uploads
   
@@ -59,14 +59,30 @@ nodize = require('zappa').app ->
   global.__default_lang = 'en'
  
   # Allow to request static content from /public folder of current theme
+  @use 'staticCache'
   @use 'static': __dirname + "/themes/" + __nodizeTheme + "/public" 
+
 
   @use 'cookieParser'
   @use 'cookieDecoder'
  
-  # Including Nodize MySQL/SQLite session store (use same database dialect than specified in config file)
-  @include './modules/nodize-sessions/module_nodize-sessions.coffee'
+  #
+  # Using redis as session store (if option redis-enabled is set)
+  #
+  if nodizeSettings.get("redis_enabled")
+    RedisStore = require('connect-redis')(@express)
+    global.__sessionStore = new RedisStore
+    
+    @use 'session':{
+      secret: __sessionSecret
+      store: __sessionStore
+    }
+  else  
+    # Including Nodize MySQL/SQLite session store (use same database dialect than specified in config file)
+    @include './modules/nodize-sessions/module_nodize-sessions.coffee'
+    
   
+
   #
   # Logging connexions to /logs/access.log file
   #  
@@ -79,16 +95,58 @@ nodize = require('zappa').app ->
   @set 'views' : __dirname + "/themes/" + __nodizeTheme + "/views"
 
   #
+  # Activating jade engine
+  # 
+  # @register jade: @zappa.adapter 'jade' # Uncomment to use jade engine
+
+  #
   # Event engine
   #
   EventEmitter = require( "events" ).EventEmitter
   global.__nodizeEvents = new EventEmitter();  
   
-  # Defining helpers container                       
+  #  
+  # Defining helpers container
+  #
   @helpers = {}
   
   # Including backend/administration module
   @include './modules/backend/module_backend.coffee'
+
+  # Including theme/site modules
+  _moduleName = "ionize"
+
+
+  #
+  # LOADING VIEWS, HELPERS, CONTROLLERS from THEME'S MODULES
+  #
+  fs = require 'fs'
+  path = require 'path'
+
+  themeModuleDir = './themes/'+__nodizeTheme+'/modules'
+
+  if path.existsSync themeModuleDir
+    modules = fs.readdirSync themeModuleDir
+    for _moduleName in modules
+      console.log "Module found :",_moduleName
+      includeFolders = []
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/controllers/"
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/helpers/"
+
+      for includeFolder in includeFolders
+        if path.existsSync includeFolder
+          files = fs.readdirSync includeFolder
+          @include includeFolder+file for file in files
+
+      #
+      # Load main module file, if it exists
+      #
+      includeFile = themeModuleDir+"/"+_moduleName+"/module_"+_moduleName
+      @include includeFile
+
+
+
 
   # Must be the last module, it's handling the "catch all" router
   @include './modules/ionize/module_ionize.coffee'
@@ -97,6 +155,9 @@ nodize = require('zappa').app ->
   helpers = @helpers
 
   
+
+nodize = require('zappajs').app( application, {disable_io: false, require_css: []} )
+
 
 #
 # Desactivating socket.io console debug messages
@@ -116,10 +177,12 @@ port = process.env.PORT or 3000
 
 cluster = require 'cluster'
 
-numCPUs = require('os').cpus().length
 
-# Cluster mode is currently disabled
-numCPUs = 0
+
+# Cluster mode enabled if cores > 0
+numCPUs = nodizeSettings.get( "cores" )
+# Use all available cores if cores = 'max'
+numCPUs = require('os').cpus().length if numCPUs is 'max'
 
 if cluster.isMaster
   console.log "ZappaJS", nodize.zappa.version, "orchestrating the show"
@@ -150,14 +213,19 @@ if cluster.isMaster
         .on 'death', ->
           console.log 'worker ' + worker.pid + ' died'
   else
-    nodize.app.listen( port )    
-    
+    nodize.app.listen( port )
+
 else 
   # Worker processes have a Express/Zappa/Nodize server.
 
   console.log "Cluster", cluster.pid, "started" if cluster.pid # pid seems to be available in node.js >= 0.6.12
   nodize.app.listen( port )  
 
+#
+# THROW INITIALIZATION EVENT
+#
+#
+__nodizeEvents.emit  'initialization', 'application ready'
 
 
 

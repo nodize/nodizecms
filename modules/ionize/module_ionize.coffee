@@ -169,80 +169,27 @@ String::getMonth = ->
 #
 # Connecting to the database & creating models
 #
-
-
-
-  
-
-
-
-
-#
-# Database can be already opened by session management
-#
-if global.sequelize
-  sequelize = global.sequelize
-else
-  Sequelize = require 'sequelize'
-  
-  #
-  # Looking for specific settings for the current theme
-  #
-  fs = require 'fs'
-  themeDatabaseSettingsFile = 'themes/'+__nodizeTheme+'/settings/database.json'
-  try
-    result = fs.statSync themeDatabaseSettingsFile
-    #
-    # Using theme's settings
-    #
-    databaseSettingsFile = themeDatabaseSettingsFile
-  catch error
-    #
-    # Using default's settings
-    #
-    databaseSettingsFile = 'settings/database.json'
-
-  #
-  # Retrieve database configuration from json setting file
-  #
-  nconf.add( 'config', {type: 'file', file:databaseSettingsFile } )
-  config = nconf
-
-
-  console.log "Using database settings from",databaseSettingsFile,"->",config.get('database')
-
-  # Connecting to the database
-  sequelize = new Sequelize( config.get('database'),config.get('user'), config.get('password'), 
-    { 
-      host: config.get('host')
-      logging:  config.get('logging')
-      dialect: config.get('dialect')
-      storage: global.__applicationPath+'/database/db.sqlite'
-      define: { timestamps: false, freezeTableName: true }      
-      maxConcurrentQueries:50
-    }
-  )
-
-global.DB = sequelize
+db = require __applicationPath+"/modules/ionize/libs/nodize_db"
+global.DB = db
 
 #
 # Retrieve models
 #
-Article           = sequelize.import( __dirname + "/models/model_article" )
-Article_lang      = sequelize.import( __dirname + "/models/model_articleLang" )
-Article_media     = sequelize.import( __dirname + "/models/model_articleMedia" )
-Article_type      = sequelize.import( __dirname + "/models/model_articleType" )
-Article_category  = sequelize.import( __dirname + "/models/model_articleCategory" )
-Category          = sequelize.import( __dirname + "/models/model_category" )
-Category_lang     = sequelize.import( __dirname + "/models/model_categoryLang" )
-Lang              = sequelize.import( __dirname + "/models/model_lang" )
-Menu              = sequelize.import( __dirname + "/models/model_menu" )
-Media             = sequelize.import( __dirname + "/models/model_media" )
-Page              = sequelize.import( __dirname + "/models/model_page" )
-Page_article      = sequelize.import( __dirname + "/models/model_pageArticle" )
-Page_lang         = sequelize.import( __dirname + "/models/model_pageLang" )
-User              = sequelize.import( __dirname + "/models/model_user" )
-User_group        = sequelize.import( __dirname + "/models/model_userGroup" )
+Article           = db.import( __dirname + "/models/model_article" )
+Article_lang      = db.import( __dirname + "/models/model_articleLang" )
+Article_media     = db.import( __dirname + "/models/model_articleMedia" )
+Article_type      = db.import( __dirname + "/models/model_articleType" )
+Article_category  = db.import( __dirname + "/models/model_articleCategory" )
+Category          = db.import( __dirname + "/models/model_category" )
+Category_lang     = db.import( __dirname + "/models/model_categoryLang" )
+Lang              = db.import( __dirname + "/models/model_lang" )
+Menu              = db.import( __dirname + "/models/model_menu" )
+Media             = db.import( __dirname + "/models/model_media" )
+Page              = db.import( __dirname + "/models/model_page" )
+Page_article      = db.import( __dirname + "/models/model_pageArticle" )
+Page_lang         = db.import( __dirname + "/models/model_pageLang" )
+User              = db.import( __dirname + "/models/model_user" )
+User_group        = db.import( __dirname + "/models/model_userGroup" )
 
 
 #
@@ -418,6 +365,7 @@ DB.sync()
 
   .on "failure", (err) ->
     console.log "Database synchronisation error :", err    
+
 
 # ---------------------------
 # EVENTS

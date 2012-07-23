@@ -9,7 +9,7 @@
         for article in @articles
           li id:"articleinpage#{@page.id_page}", class:"sortme article#{article.id_article} article#{@page.id_page}x2 online", rel: "#{@page.id_page}.#{article.id_article}", ->
             # 'Drag icon'
-            img '.icon.left drag pr5', src: "#{@settings.assetsPath}/images/icon_16_ordering.png"
+            img '.icon.left.drag.pr5', src: "#{@settings.assetsPath}/images/icon_16_ordering.png"
             # 'Status icon'
             a class: 'icon right pr5 status article#{article.id_article} article#{@page.id_page}x#{article.id_article} online', rel: "#{@page.id_page}.#{article.id_article}"
             # 'Unlink icon'
@@ -22,13 +22,13 @@
 
             # 'Type'
             span class:'right ml10 type-block', rel: "#{@page.id_page}.#{article.id_article}", ->              
-              select "#type#{@page.id_page}x#{article.id_article}.select.w80 type left", style: 'padding:0;', rel: "#{@page.id_page}.#{article.id_article}", ->
+              select "#type#{@page.id_page}x#{article.id_article}.select.w80.type.left", style: 'padding:0;', rel: "#{@page.id_page}.#{article.id_article}", ->
                 option value: '--', ->  @ion_lang.ionize_select_no_type
                 for type in @types
                   option selected: ('selected' if type.id_type==article.id_type), value: type.id_type, -> type.type
             # 'Used view'
             span '.right.ml10', ->
-              select "#view#{@page.id_page}x#{article.id_article}.customselect.select.w110 view", style: 'padding:0;', rel: "#{@page.id_page}.#{article.id_article}", ->
+              select "#view#{@page.id_page}x#{article.id_article}.customselect.select.w110.view", style: 'padding:0;', rel: "#{@page.id_page}.#{article.id_article}", ->
                 option value: '--', -> @ion_lang.ionize_select_default_view               
                 for view of @views["blocks"]
                   option selected: ('selected' if view==article.view), value: view, -> @views["blocks"][view]

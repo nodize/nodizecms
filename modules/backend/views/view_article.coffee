@@ -36,19 +36,21 @@
           div '.info', ->
             if @article.id_article
               dl '.small.compact', ->
-                dt ->
-                  label @ion_lang.ionize_label_created
+                dt ->                  
+                  label @ion_lang.ionize_label_created                  
                 dd ->
+                  dateArray = @article.created._toMysql().split(' ')
+                  text dateArray[0]
+                  span '.lite', ' '+dateArray[1]
 
-                  text @article.created._toMysql()
-                  span '.lite', '19:04:22'
               dl '.small.compact', ->
                 dt ->
                   label @ion_lang.ionize_label_updated
                 dd ->
-                  text '2011.08.25'
-                  span '.lite', '16:40:45'
-
+                  dateArray = @article.updated._toMysql().split(' ')
+                  text dateArray[0]
+                  span '.lite', ' '+dateArray[1]
+                  
                 # 'Link ?'
                 # div id:'linkContainer'
 
@@ -58,6 +60,17 @@
             # 'Options'
             h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_attributes
             div '.element.element-options', ->
+               # 'Page view'             
+              if @article.id_article
+                dl '.small', ->
+                  dt ->
+                    label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
+                  dd ->                    
+                    select '.customselect.select.w160', name: 'view', ->
+                      option value: '', '-- Default view --'
+                      for view of @views["blocks"]
+                        option selected: ('selected' if view==@page_article.view), value: view, -> @views["blocks"][view]
+                      
               # 'Indexed content'
               dl '.small', ->
                 dt ->
@@ -113,21 +126,21 @@
                 dd ->
                   logical_date = ''
                   logical_date = @article.logical_date._toMysql() if @article.logical_date isnt ''
-                  input '#logical_date.inputtext.w120 date', name: 'logical_date', type: 'text', value: logical_date
+                  input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   label for: 'publish_on', -> @ion_lang.ionize_label_publish_on
                 dd ->
                   publish_on = ''
                   publish_on = @article.publish_on._toMysql() if @article.publish_on isnt ''
-                  input '#publish_on.inputtext.w120 date', name: 'publish_on', type: 'text', value: publish_on
+                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', -> @ion_lang.ionize_label_publish_off
                 dd ->
                   publish_off = ''
                   publish_off = @article.publish_off._toMysql() if @article.publish_off isnt ''
-                  input '#publish_off.inputtext.w120 date', name: 'publish_off', type: 'text', value: publish_off
+                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # 'Comments'
             h3 class:'toggler', -> @ion_lang.ionize_title_comments
             div '.element', ->
@@ -145,7 +158,7 @@
                 dt ->
                   label for: 'comment_expire', -> @ion_lang.ionize_label_comment_expire
                 dd ->
-                  input '#comment_expire.inputtext.w120 date', name: 'comment_expire', type: 'text', value: ''
+                  input '#comment_expire.inputtext.w120.date', name: 'comment_expire', type: 'text', value: ''
             # 'end comments'
 
             if @article.id_article
@@ -160,7 +173,7 @@
                       select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
                         option value: 'en', 'English'
                       br()
-                      select '#lang_copy_to.w100.select mt5', name: 'lang_copy_to', ->
+                      select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
                         option value: 'en', 'English'
                     div '.w30.h50 left ml5', style: 'background:url(http://192.168.1.162/themes/admin/images/icon_24_from_to.png) no-repeat 50% 50%;'
                 # 'Submit button'
@@ -182,6 +195,17 @@
               # New article
               h2 '#main-title.main.article', @ion_lang.ionize_title_new_article
 
+              div style: 'margin: 15px 0pt 20px 0px;', ->  
+                # Views
+                dl '.small', ->
+                    dt ->
+                      label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
+                    dd ->                    
+                      select '.customselect.select.w160', name: 'view', ->
+                        option value: '', '-- Default view --', selected:'selected'
+                        for view of @views["blocks"]
+                          option value: view, -> @views["blocks"][view]
+               
             div style: 'margin: -15px 0pt 20px 72px;', ->
               p ->
                 span '.lite', 'ID :'
@@ -273,7 +297,7 @@
                   h3 ".toggler.toggler-#{lang}", 'Summary'
                   div ".element.element-#{lang}", ->
                     div ->
-                      textarea "#summary_#{lang}.smallTinyTextarea.w600 h100", name: "summary_#{lang}", rel: lang
+                      textarea "#summary_#{lang}.smallTinyTextarea.w600.h100", name: "summary_#{lang}", rel: lang
                       p '.clear.h15 mb15', ->
                         button "#wysiwyg_summary_#{lang}.light-button.left", type: 'button', onclick: "tinymce.execCommand(\'mceToggleEditor\',false,\'summary_#{lang}\');return false;", 'toggle editor'
 
@@ -308,12 +332,12 @@
               div '.tabcontent', ->
                 p '.h20', ->
                   # '<a class="fmButton right"><img src="http://192.168.1.162/themes/admin/images/icon_16_plus.png" /> Add Media</a>'
-                  button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
-                  button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
-                  button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
+                  button '.right.light-button.pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
+                  button '.left.light-button.delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
+                  button '.left.light-button.refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
                   form '#fileup.left', name: 'fileupform', ->
-                    input '#fileupload.inputtext.w120 italic droppable empty nofocus', type: 'text', name:'myfiles', alt: 'drop images here...'
-                    label title: 'Drag an article from the left tree by selecting its name.'
+                    input '#fileupload.inputtext.w120.italic.droppable.empty.nofocus', type: 'text', name:'myfiles', alt: 'drop images here...'
+                    label title: 'Drag an here to upload and attach it the article.'
      
                 div '#pictureContainer.sortable-container', ''
                 p '.h20', ->                  
@@ -343,6 +367,12 @@
         #- console.log "in coffee script"
 
         j$ = jQuery.noConflict() 
+
+        # Using ui.select jQuery widget for selects
+        j$('document').ready ->           
+          j$('.customselect').selectmenu
+            width : 140
+            style : 'dropdown'
 
         initFileUpload = ->
           j$("#fileupload").fileupload('destroy')

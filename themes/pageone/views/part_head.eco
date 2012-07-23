@@ -32,7 +32,7 @@
     <script src="js/init.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="zappa/zappa.js"></script>
+    <script src="/zappa/zappa.js"></script>
     <script src="/nodize.js"></script>
 
 </head>

@@ -87,6 +87,24 @@
       article_by_lang[ lang ] = Article_lang.build()
       article_by_lang[ lang ].createBlank()
 
+
+    views = {}
+
+    #
+    # Loading theme views
+    #
+    loadViews = ->
+      # File containing views definition (page/blocks)
+      viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"
+
+      fs = require 'fs'
+      fs.readFile viewsParamFile, (err, data) ->
+        if err
+          req.send "Views definition not found"
+        else
+          views = JSON.parse( data )          
+          loadPage()
+
     #
     # Load article's PARENT PAGE
     #
@@ -113,13 +131,14 @@
             lang                : req.params.lang      
             ion_lang            : ion_lang[ req.params.lang ]
             page                : page
+            views               : views
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
 
           
         .on 'failure', (err) ->
           console.log 'database error ', err
     
-    loadPage()
+    loadViews()
 
   #
   # ARTICLE EDIT
@@ -132,6 +151,23 @@
     id_page = params[0]
     id_article = params[1]
     parent_page = null
+    page_article = null
+    views = {}
+
+    #
+    # Loading theme views
+    #
+    loadViews = ->
+      # File containing views definition (page/blocks)
+      viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"
+
+      fs = require 'fs'
+      fs.readFile viewsParamFile, (err, data) ->
+        if err
+          req.send "Views definition not found"
+        else
+          views = JSON.parse( data )          
+          loadPage()
 
     #
     # Load article's PARENT PAGE
@@ -140,6 +176,18 @@
       Page.find({where:{id_page:id_page}})
         .on 'success', (page) ->          
           parent_page = page                         
+          loadPageArticle()
+          
+        .on 'failure', (err) ->
+          console.log 'database error ', err
+
+    #
+    # Load article's PARENT PAGE_ARTICLE
+    #
+    loadPageArticle = ->
+      Page_article.find({where:{id_page:id_page, id_article:id_article}})
+        .on 'success', (record) ->          
+          page_article = record                         
           loadArticle()
           
         .on 'failure', (err) ->
@@ -209,12 +257,14 @@
           req.render "backend_article", 
             layout              : no 
             page                : parent_page
+            page_article        : page_article
             article             : article            
             article_by_lang     : article_by_lang
             article_categories  : article_categories
             categories          : categories
             lang                : req.params.lang      
             ion_lang            : ion_lang[ req.params.lang ]
+            views               : views
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
           
         .on 'failure', (err) ->
@@ -223,7 +273,7 @@
     #
     # Start process
     #
-    loadPage()
+    loadViews()
     
   #
   # ARTICLE SAVE
@@ -232,32 +282,59 @@
     values = req.body    
 
     requestCount = 0
+    
 
+        
     if values.id_article and values.id_article isnt ''
       # --------------------------------------
       # Updating article
       # --------------------------------------
-      Article.find({where:{id_article:values.id_article}})
-        .on 'success', (article) ->
-          article.publish_on = values.publish_on
-          article.publish_off = values.publish_off
-          article.logical_date = values.logical_date          
-          article.has_url = values.has_url
 
-          article.name = values['url_'+Static_lang_default]
-          
-          
-          article.save()
-            .on 'success', (article) ->
-              # We will send as many async requests than existing langs
-              requestCount += Static_langs.length 
-              for lang in Static_langs
-                articleLangUpdate( lang )
+      #
+      # Load article's PARENT PAGE_ARTICLE
+      #  
+      Page_article.find({where:{id_page:values.main_parent, id_article:values.id_article}})
+        .on 'success', (page_article) ->          
+          page_article.view = values.view
+
+          #
+          # Save updated page_article 
+          #
+          page_article.save()
+            .on 'success', (page_article) ->
+              articleUpdate()
             .on 'failure', (err) ->
               console.log 'database error ', err
+                    
         .on 'failure', (err) ->
           console.log 'database error ', err
-      
+
+      #
+      # Article update
+      #
+      articleUpdate = ->    
+        Article.find({where:{id_article:values.id_article}})
+          .on 'success', (article) ->
+            article.updated = new Date            
+            article.publish_on = values.publish_on
+            article.publish_off = values.publish_off
+            article.logical_date = values.logical_date          
+            article.has_url = values.has_url
+
+            article.name = values['url_'+Static_lang_default]
+            
+            
+            article.save()
+              .on 'success', (article) ->
+                # We will send as many async requests than existing langs
+                requestCount += Static_langs.length 
+                for lang in Static_langs
+                  articleLangUpdate( lang )
+              .on 'failure', (err) ->
+                console.log 'database error ', err
+          .on 'failure', (err) ->
+            console.log 'database error ', err
+        
       #
       # Creating article_lang record
       # Creation will happen when a new lang is added after article creation
@@ -298,7 +375,9 @@
               req.send message
               #
               # Inform modules that a new page has been created
-              __nodizeEvents.emit  'articleSave', 'id_article:article_lang.id_article'
+              __nodizeEvents.emit  'articleCreate', 
+                article : article_lang
+                parent : values.main_parent
               
             # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
           .on 'failure', (err) ->
@@ -335,14 +414,16 @@
                     req.send message
                     #
                     # Inform modules that a new page has been created
-                    __nodizeEvents.emit 'articleUpdate', id_article:article_lang.id_article, article:article_lang
+                    __nodizeEvents.emit 'articleUpdate'
+                      article:article_lang
+                      parent:values.main_parent
                   
                   # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
                 .on 'failure', (err) ->
                   console.log 'fail : ', err
             else
               createArticleLang( lang )
-    else
+    else      
       # -------------------------------------
       # Creating a new article
       # -------------------------------------
@@ -360,7 +441,7 @@
         .on 'failure', (err) ->
           console.log 'article save failed : ', err
           req.send "Save failed"
-         
+           
       #
       # Creating linked page_article record
       #
@@ -370,7 +451,8 @@
         page_article.createBlank()
         page_article.id_article = article.id_article
         page_article.id_page = values.main_parent
-        page_article.main_parent = values.main_parent        
+        page_article.main_parent = values.main_parent 
+        page_article.view = values.view       
          
         # Save to database
         page_article.save()
@@ -451,6 +533,12 @@
                 id : article_lang.id                              
               
               req.send message
+
+              #
+              # Inform modules that a new page has been created
+              __nodizeEvents.emit  'articleCreate', 
+                article : article_lang
+                parent : values.main_parent
               
           .on 'failure', (err) ->
             console.log 'save failed : ', err
@@ -485,6 +573,13 @@
           req.send '{"message_type":"success","message":"Operation OK","update":[],'+
             '"callback":[{"fn":"ION.switchOnlineStatus","args":{"status":'+page_article.online+
             ',"selector":".article'+page_article.id_page+'x'+page_article.id_article+'"}}]}'
+
+          #
+          # Inform modules that a new page has been modified
+          __nodizeEvents.emit  'articleUpdate', 
+            article : page_article.id_article
+            parent : page_article.id_page
+
         .on 'failure', (err) ->
           console.log 'error ', err
           
