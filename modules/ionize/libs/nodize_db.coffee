@@ -98,13 +98,12 @@ init = ->
         #
         sequelize.TableVersion.find( { where:{'name':tableName} } )
           .on "success", (tableVersion) ->
-            if tableVersion
-              
-              #
-              # Last element of "migrations" array has to be the last version
-              #
-              lastVersion = migrations[ migrations.length-1 ].version
-
+            #
+            # Last element of "migrations" array has to be the last version
+            #
+            lastVersion = migrations[ migrations.length-1 ].version
+            
+            if tableVersion              
               #
               # We have a version for this table, we check if migration are needed
               #  
