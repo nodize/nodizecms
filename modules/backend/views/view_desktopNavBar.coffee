@@ -11,6 +11,8 @@
           a ".brand", href: "/", ->
             text " Nodize"
           ul ".nav.user_menu.pull-right", ->
+            # Can be used to display pending notifications 
+
             # li ".hidden-phone.hidden-tablet", ->
             #   div ".nb_boxes.clearfix", ->
             #     a ".label.ttip_b", "data-toggle": "modal", "data-backdrop": "static", href: "#invoiceAdd", title: "New messages", ->
