@@ -27,12 +27,7 @@
                 b class:"caret"
               ul ".dropdown-menu", ->
                 li ->
-                  a href: "user_profile.html", "My Profile"
-                li ->
-                  a href: "javascrip:void(0)", "Another action"
-                li class:"divider"
-                li ->
-                  a href: "login.html", "Log Out"
+                  a href: "/admin/logout", "Log Out"
 
           # a ".btn_menu", "data-target": ".nav-collapse", "data-toggle": "collapse", ->
           #   span class:"icon-align-justify icon-white"
