@@ -1,3 +1,17 @@
+# Nodize database management library
+#
+# Also used to handle migrations
+#
+# Nodize CMS
+# https://github.com/hypee/nodize
+#
+# Copyright 2012, Hypee
+# http://hypee.com
+#
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT
+#
+
 sequelize = null
 config = null
 
@@ -86,6 +100,14 @@ init = ->
       addColumn: (name, datatype) ->
         # console.log "[#{@table}] adding column"
         queryInterface.addColumn( @table, name, datatype )
+          # .on 'success', ->
+            # console.log "success"
+          .on 'failure', (err) ->
+            console.log "error", err
+
+      removeColumn: (name) ->
+        # console.log "[#{@table}] removing column"
+        queryInterface.removeColumn( @table, name )
           # .on 'success', ->
             # console.log "success"
           .on 'failure', (err) ->
