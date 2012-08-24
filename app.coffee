@@ -78,10 +78,7 @@ application = ->
     RedisStore = require('connect-redis')(@express)
     global.__sessionStore = new RedisStore
     
-    @use 'session':{
-      secret: __sessionSecret
-      store: __sessionStore
-    }
+    @use 'session':{secret: __sessionSecret, store: __sessionStore}
   else
     # Including Nodize MySQL/SQLite session store
     # (use same database dialect than specified in config file)
