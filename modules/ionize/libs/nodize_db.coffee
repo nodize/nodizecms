@@ -40,12 +40,12 @@ init = ->
     config = nconf
     
     console.log "Using database settings from",databaseSettingsFile,"->",config.get('database')
-          
-
+        
     # Connecting to the database
     sequelize = new Sequelize( config.get('database'),config.get('user'), config.get('password'), 
       { 
         host: config.get('host')
+        port: if config.get('port') then config.get('port') else 3306
         logging:  config.get('logging')
         dialect: config.get('dialect')
         storage: global.__applicationPath+'/database/db.sqlite'
