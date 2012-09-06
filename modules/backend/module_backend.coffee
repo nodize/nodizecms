@@ -82,8 +82,7 @@
     validateUser()  
 
   #
-  # LOGIN/PASSWORD POST
-  # Checking if user can log in
+  # LOGIN OUT
   #
   @get "/:lang?/admin/logout" : (req) ->   
     #
@@ -116,7 +115,14 @@
     if (req.session and req.session.authenticated is true)
       @next()
     else
-      @redirect "/"+__default_lang+"/admin/login"      
+      @redirect "/"+__default_lang+"/admin/login"  
+
+  @get "/:lang?/backend*" : (req) ->
+    if req.session and req.session.authenticated is true
+      @next()
+    else
+      req.send('nope', 502)
+      
 
   @post "/:lang/admin*" : (req) ->        
     if req.session and req.session.authenticated is true
