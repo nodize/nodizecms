@@ -368,7 +368,7 @@
     # Start process
     #
     if values.id_page and values.id_page isnt ''
-      pageLangUpdate = (lang) =>
+      pageLangUpdate = (page, lang) =>
         #
         # UPDATING PAGE_LANG
         #
@@ -412,11 +412,12 @@
                     __nodizeEvents
                       .emit  'pageSave', 'begin save'
             else
-              createPageLang( values.id_page, lang )
+              console.log "PageLang not found, creating it"
+              createPageLang( page, values.id_page, lang )
 
                                      
-              .on 'failure', (err) ->
-                console.log 'fail to save page: ', err
+          .on 'failure', (err) ->
+            console.log 'fail to save page: ', err
       
       #
       # UPDATING an existing PAGE
@@ -429,14 +430,14 @@
 
       saveExistingPage = (page) ->
         page.save()
-            .on 'success', (page) =>
+          .on 'success', (page) =>
 
-              requestCount += Static_langs.length 
-              for lang in Static_langs                
-                pageLangUpdate(lang)
-                                   
-            .on 'failure', (err) ->
-              console.log 'fail to save page: ', err
+            requestCount += Static_langs.length 
+            for lang in Static_langs                
+              pageLangUpdate(page,lang)
+                                 
+          .on 'failure', (err) ->
+            console.log 'fail to save page: ', err
 
       Page.find({
         where: {id_page:values.id_page}
