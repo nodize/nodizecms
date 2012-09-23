@@ -1,6 +1,6 @@
 
 #
-#  .
+#  ._   _           _ _
 #  | \ | |         | (_)
 #  |  \| | ___   __| |
 #  | . ` |/ _ \ / _` | |_  / _ \
@@ -36,7 +36,7 @@ else
 nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 
 #
-# Starting profiler if specified in settings
+# Starting profiler if enabled in settings
 #
 require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
 
@@ -201,7 +201,7 @@ if cluster.isMaster
   console.log "ZappaJS", nodize.zappa.version, "orchestrating the show"
 
   console.log """
-  .
+  ._   _           _ _
   | \\ | |         | (_)
   |  \\| | ___   __| |_ _______
   | . ` |/ _ \\ / _` | |_  / _ \\
