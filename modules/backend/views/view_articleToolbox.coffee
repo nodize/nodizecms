@@ -28,8 +28,8 @@
 			div '#tArticleDuplicateButton.toolbox.divider', ->
 				span '#articleDuplicateButton.iconWrapper', ->
 					img src: '/backend/images/icon_16_copy_article.gif', width: '16', height: '16', alt: '#ionize_button_duplicate_article', title: @ion_lang.ionize_button_duplicate_article
-			div '#tArticleAddContentElement.toolbox.divider', ->
-				input '#addContentElement.toolbar-button.element', type: 'button', value: @ion_lang.ionize_label_add_content_element
+			# div '#tArticleAddContentElement.toolbox.divider', ->
+			# 	input '#addContentElement.toolbar-button.element', type: 'button', value: @ion_lang.ionize_label_add_content_element
 			div '#tArticleMediaButton.toolbox', ->
 				input '#addMedia.fmButton.toolbar-button pictures', type: 'button', value: @ion_lang.ionize_label_attach_media
 
@@ -70,13 +70,13 @@
 					mediaManager.toggleFileManager()
 
 				# Add Content Element button
-				$("addContentElement").addEvent "click", (e) ->
-				    ION.dataWindow "contentElement", "ionize_title_add_content_element", "element/add_element",
-					      width: 500
-					      height: 350
-				    ,
-					      parent: "article"
-					      id_parent: id
+				# $("addContentElement").addEvent "click", (e) ->
+				#     ION.dataWindow "contentElement", "ionize_title_add_content_element", "element/add_element",
+				# 	      width: 500
+				# 	      height: 350
+				#     ,
+				# 	      parent: "article"
+				# 	      id_parent: id
 			# Options show / hide button
 			ION.initSideColumn()
 			# Save with CTRL+s
