@@ -119,8 +119,11 @@ Date::_toMysql = ->
     strDate = ''
   else  
     strDate = this.getFullYear()+'-'
-    strDate += '0' if this.getMonth()<=9
+    
+    # Month starts at 0, we add 1 for human display
+    strDate += '0' if parseInt(this.getMonth())<=8
     strDate += this.getMonth()+1+'-'
+    
     strDate += '0' if this.getDate()<=9
     strDate += this.getDate()+' '
     
