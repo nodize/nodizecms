@@ -25,9 +25,9 @@
 				input '#articleDeleteButton.button.no', type: 'button', value: @ion_lang.ionize_button_delete
 			div '.toolbox.divider', ->
 				input '#sidecolumnSwitcher.toolbar-button', type: 'button', value: @ion_lang.ionize_show_options
-			div '#tArticleDuplicateButton.toolbox.divider', ->
-				span '#articleDuplicateButton.iconWrapper', ->
-					img src: '/backend/images/icon_16_copy_article.gif', width: '16', height: '16', alt: '#ionize_button_duplicate_article', title: @ion_lang.ionize_button_duplicate_article
+			# div '#tArticleDuplicateButton.toolbox.divider', ->
+			# 	span '#articleDuplicateButton.iconWrapper', ->
+			# 		img src: '/backend/images/icon_16_copy_article.gif', width: '16', height: '16', alt: '#ionize_button_duplicate_article', title: @ion_lang.ionize_button_duplicate_article
 			# div '#tArticleAddContentElement.toolbox.divider', ->
 			# 	input '#addContentElement.toolbar-button.element', type: 'button', value: @ion_lang.ionize_label_add_content_element
 			div '#tArticleMediaButton.toolbox', ->
@@ -42,8 +42,8 @@
 			id = $("id_article").value
 			unless id
 			  $("tArticleDeleteButton").hide()
-			  $("tArticleDuplicateButton").hide()
-			  $("tArticleAddContentElement").hide()
+			  # $("tArticleDuplicateButton").hide()
+			  # $("tArticleAddContentElement").hide()
 			  $("tArticleMediaButton").hide()
 			else
 				# Delete button
@@ -55,14 +55,14 @@
 				message: Lang.get("ionize_confirm_element_delete")
 
 				# Duplicate button
-				$("articleDuplicateButton").addEvent "click", (e) ->
-				  url = $("name").value
-				  rel = ($("rel").value).split(".")
-				  data = id_page: rel[0]
-				  ION.formWindow "DuplicateArticle", "newArticleForm", "ionize_title_duplicate_article", "article/duplicate/" + id + "/" + url,
-				    width: 520
-				    height: 280
-				  , data
+				# $("articleDuplicateButton").addEvent "click", (e) ->
+				#   url = $("name").value
+				#   rel = ($("rel").value).split(".")
+				#   data = id_page: rel[0]
+				#   ION.formWindow "DuplicateArticle", "newArticleForm", "ionize_title_duplicate_article", "article/duplicate/" + id + "/" + url,
+				#     width: 520
+				#     height: 280
+				#   , data
 
 				$("addMedia").addEvent "click", (e) ->
 					e.stop()

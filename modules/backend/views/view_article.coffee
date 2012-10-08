@@ -443,18 +443,18 @@
           ION.initCorrectUrl "title_#{lang}", "url_#{lang}" if $("id_article").value is '' or $("url_#{lang}").value is ''
 
         # Copy content from a language to another
-        if $("copy_lang")
-          $("copy_lang").addEvent "click", (e) ->
-            e.stop()
-            url = admin_url + "lang/copy_lang_content"
-            data =
-              case: "article"
-              id_article: $("id_article").value
-              rel: $("rel").value
-              from: $("lang_copy_from").value
-              to: $("lang_copy_to").value
+        # if $("copy_lang")
+        #   $("copy_lang").addEvent "click", (e) ->
+        #     e.stop()
+        #     url = admin_url + "lang/copy_lang_content"
+        #     data =
+        #       case: "article"
+        #       id_article: $("id_article").value
+        #       rel: $("rel").value
+        #       from: $("lang_copy_from").value
+        #       to: $("lang_copy_to").value
 
-            ION.sendData url, data
+        #     ION.sendData url, data
 
         # Article ordering :
         # - Show / hide article list depending on Ordering select
@@ -470,7 +470,8 @@
 
 
         # Copy Lang data to other languages dynamically
-        ION.initCopyLang ".copyLang", Array("title", "subtitle", "url", "content", "meta_title")
+        # ION.initCopyLang ".copyLang", Array("title", "subtitle", "url", "content", "meta_title")
+        
         nbCategories = ($("categories").getElements("option")).length
         $$("#categories select").setStyles height: (nbCategories * 15) + "px"  if nbCategories > 5
 
