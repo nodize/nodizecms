@@ -24,7 +24,8 @@
     # Parameters
     #
     from = '' 
-    type = '' 
+    type = ''
+    id = '' 
     live = false
     refresh = false
     params = {}
@@ -81,6 +82,12 @@
     else
       fromType = ""
       whereType = "AND (page_article.id_type is null OR page_article.id_type = 0) "
+
+    #
+    # Search on exact id
+    #
+    if id isnt ''
+      whereType += "AND page_article.id_article = #{id} "
 
     #
     # When connected which right >= editors, offline articles are also displayed

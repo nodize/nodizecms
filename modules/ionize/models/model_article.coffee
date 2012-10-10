@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes)->
         getExistingRecord()
 
       #
-      # Move article to another page
+      # Link article to another page (and keep existing link)
       #
       # @param data.id_article
       # @param data.id_page

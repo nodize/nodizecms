@@ -448,6 +448,7 @@
           page.view = values.view
           page.id_parent = values.id_parent
           page.appears = values.appears
+          page.name = values.page_name
 
           if values.id_parent == "0"
             page.level = 0        

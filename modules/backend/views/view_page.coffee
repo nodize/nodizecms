@@ -324,7 +324,10 @@
                 p ->
                   span '.lite', 'ID :'
                   text "#{@page.id_page} |"
-                  span '.lite', text @page_by_lang['en'].title
+                  #span '.lite', text @page_by_lang['en'].title
+                  span '.lite', ->                    
+                    input "page_name", name: "page_name", type: 'text', value: @page.name
+                  
                 # 'extend fields goes here...'
             # ------------------
             # When it's a new page
