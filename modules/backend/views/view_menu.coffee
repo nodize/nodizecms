@@ -55,7 +55,7 @@
                     input '.inputtext', type: 'text', disabled: 'disabled', value: menu.name
                     input "#name_#{menu.id_menu}.inputtext", type: 'hidden', name: "name_#{menu.id_menu}", value: menu.name
                     # Delete button'                    
-                    a class:'icon right delete', rel:menu.id_menu if menu.id_menu > 2
+                    a class:'icon right delete', rel:menu.id_menu if menu.id_menu > 1
                 # Title'
                 dl '.small', ->
                   dt ->

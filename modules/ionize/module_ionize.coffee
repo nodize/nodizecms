@@ -337,6 +337,16 @@ initDatabase = ->
           .on 'success', ->
             console.log "Default menu created"
 
+    menu = Menu.build()
+    menu.title = "System"
+    menu.name = "system"
+    menu.ordering = 2
+
+    menu.save()
+      .on "success", (menu) ->
+        menu.id_menu = menu.id
+        menu.save()          
+
   #
   # Start process
   #
