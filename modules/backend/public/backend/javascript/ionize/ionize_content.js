@@ -262,38 +262,6 @@ ION.append({
 	 */
 	initDatepicker: function(dateFormat)
 	{
-		/**
-		 * Implementation of https://github.com/arian/mootools-datepicker
-		 * Not useful because no inputOutputFormat capabilities
-		 *
-		if (ION.datePicker)
-		{
-			ION.datePicker.close();
-			ION.datePicker.detach($$('input.date'));
-		}
-		else
-		{
-			ION.datePicker = new Picker.Date($$('.date'), {
-				timePicker: true,
-				positionOffset: {x: -30, y: 0},
-				pickerClass: 'datepicker_dashboard',
-				format: '%d.%m.%Y %H:%M:%S',
-				useFadeInOut: !Browser.ie,
-				draggable: false,
-				onSelect: function(date,all)
-				{
-					var inputs = ((this.input && !all) ? [this.input] : this.inputs);
-					
-					inputs.each(function(input){
-						input.set('value', 'toto');
-					}, this);
-
-				}
-			});
-		}
-		ION.datePicker.attach($$('input.date'));
-		*/
-		
 		if (typeOf(dateFormat) == 'null') dateFormat = '%d.%m.%Y';
 		
 		if (ION.datePicker)
@@ -305,12 +273,12 @@ ION.append({
 			var date_format = (dateFormat).replace(/%/g, '');
 
 			ION.datePicker = new DatePicker('.date', {
-				pickerClass: 'datepicker_dashboard', 
-				timePicker:true, 
-				format: date_format + ' H:i:s', 
-				inputOutputFormat: date_format + ' H:i:s', 
-				allowEmpty:true, 
-				useFadeInOut:false, 
+				pickerClass: 'datepicker_dashboard',
+				timePicker:true,
+				format: date_format + ' H:i:s',
+				inputOutputFormat: date_format + ' H:i:s',
+				allowEmpty:true,
+				useFadeInOut:false,
 				positionOffset: {x:-30,y:0},
 				onSelect: function(d, input)
 				{
@@ -405,7 +373,7 @@ ION.append({
 	 */
 	initTitleUpdate: function(source, dest, lang)
 	{
-		if (lang == true)
+		if (lang === true)
 		{
 			// Add event to sources elements
 			(Lang.get('languages')).each(function(l, idx)
@@ -437,8 +405,8 @@ ION.append({
 	{
 		if (src && dest)
 		{
-			if (typeOf(src) == 'string') {src = $(src)};
-			if (typeOf(dest) == 'string') {dest = $(dest)};
+			if (typeOf(src) == 'string') { src = $(src) };
+			if (typeOf(dest) == 'string') {dest = $(dest) };
 			
 			dest.set('html', src.value);
 		}
@@ -467,7 +435,7 @@ ION.append({
 	 * @param	String				Callback function(s), comma separated names.
 	 *
 	 * @usage
-	 * 			ION.addDragDrop (item, '.dropcreators', 
+	 * 			ION.addDragDrop (item, '.dropcreators',
 	 *			{
 	 *				fn:'ION.JSON',
 	 *				args: ['perfume/link_creator', {'creator_id' : rel, 'perfume_id': $('perfume_id').value} ]
@@ -500,7 +468,7 @@ ION.append({
 				{
 					/* For each droppable class, a function need to be executed
 					 * ION.addDragDrop(
-					 *		el, 
+					 *		el,
 					 *		'.drop-class-1, .drop-class-2',		// this.options.droppables, string of comma separated classes names
 					 *		'drop-func-1, drop-func-2'			// this.options.dropCallbacks, string of functions names
 					 * );
@@ -526,7 +494,7 @@ ION.append({
 						});
 					}
 					else
-					{					
+					{
 						if (dropCB.contains(',') && this.dropClasses.length > 1)
 						{
 							var onDrops = (dropCB).replace(' ','').split(',');
@@ -561,7 +529,7 @@ ION.append({
 				el.addClass('enter');
 				droppable.addClass('onenter');
 			},
-			onLeave: function(el, droppable) 
+			onLeave: function(el, droppable)
 			{
 				el.removeClass('enter');
 				droppable.removeClass('onenter');
@@ -573,11 +541,11 @@ ION.append({
 	initSortable: function(lists, onDrop)
 	{
 		var mySortables = new Sortables(lists, {
-		    clone: true,
-		    revert: true,
-		    snap:10,
-		    opacity:0.8,
-		    preventDefault:true
+			clone: true,
+			revert: true,
+			snap:10,
+			opacity:0.8,
+			preventDefault:true
 		});
 	},
 
@@ -622,9 +590,9 @@ ION.append({
 	 * Test
 	 *
 	 */
-	editArticle: function(id, title) 
+	editArticle: function(id, title)
 	{
-		if ($('mainPanel')) {			
+		if ($('mainPanel')) {
 			
 			MUI.Content.update({
 				'element': $('mainPanel'),
@@ -728,44 +696,7 @@ ION.append({
 	// ------------------------------------------------------------------------
 	// / Rewritten functions
 	// ------------------------------------------------------------------------
-
-	/**
-	 * Test function to get all the elements
-	 *
-	 
-	getContentElements: function(parent, id_parent)
-	{
-		// ION.JSON(admin_url + 'element/get_elements', {'parent': parent, 'id_parent': id_parent});
-		var r = new Request.JSON(
-		{
-			url: admin_url + 'element/get_elements', 
-			method: 'post',
-			loadMethod: 'xhr',
-			data:
-			{
-				'parent': parent,
-				'id_parent': id_parent
-			},
-			onSuccess: function(responseJSON, responseText)
-			{
-				$each(responseJSON, function(item, idx)
-				{
-					console.log(item.name);
-					
-					$each(item.elements, function(element, idx)
-					{
-						console.log('-' + element.id_element);
-		
-						$each(element.fields, function(field, idx)
-						{
-							console.log('--' + field.label);
-						});
-					});
-				});
-			}
-		}).send();
-	},	
-	*/
+	
 
 	/**
 	 * Insert Content Elements Definition tabs
@@ -775,7 +706,7 @@ ION.append({
 	{
 		// tabSwapper elements
 		var tabSwapper = $('desktop').retrieve('tabSwapper');
-		var tabs = 		tabSwapper.tabs;
+		var tabs = tabSwapper.tabs;
 		
 		// DOM elements
 		var tabsContainer = $(tabSwapper.options.tabsContainer);
@@ -784,7 +715,7 @@ ION.append({
 
 		var r = new Request.JSON(
 		{
-			url: admin_url + 'element_definition/get_definitions_from_parent', 
+			url: admin_url + 'element_definition/get_definitions_from_parent',
 			method: 'post',
 			loadMethod: 'xhr',
 			data:
@@ -856,7 +787,7 @@ ION.append({
 			
 			if (typeOf(ul) != 'null')
 			{
-				nb = (ul.getChildren('li')).length;		
+				nb = (ul.getChildren('li')).length;
 			}
 			else
 			{

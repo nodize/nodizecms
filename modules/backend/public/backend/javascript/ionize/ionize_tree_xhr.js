@@ -30,7 +30,7 @@ ION.TreeXhr = new Class({
 		
 		// Array of itemManagers
 		this.itemManagers = {'page': new Array(), 'article': new Array()};
-		
+
 		this.elementIcon_Model = new Element('div', {'class': 'tree-img drag'});
 		this.plusMinus_Model = new Element('div', {'class': 'tree-img plus'});
 		this.lineNode_Model = new Element('div', {'class': 'tree-img line node'});
@@ -245,7 +245,7 @@ ION.TreeXhr = new Class({
 		{
 			li.addClass('file').addClass(type + id);
 			
-			// Icon : unlink
+			// Icon : unlink			
 			var iconUnlink = this.icon_Model.clone().adopt(new Element('a', {'class': 'unlink', 'rel': rel}));
 			action.adopt(iconUnlink);
 
