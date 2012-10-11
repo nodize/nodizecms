@@ -1,3 +1,11 @@
+# Langs controller
+#
+# Nodize CMS
+# https://github.com/nodize/nodizecms
+#
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT
+#
 @include = ->  
   #
   # LANGS SETTINGS 

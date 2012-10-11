@@ -62,6 +62,11 @@
       #      
       params = if attrs?.params then attrs.params else {}
 
+      #
+      # "Id" parameter, to select article by id 
+      #
+      id = if attrs?.id then attrs.id else ""
+
     #
     # We are launching an asynchronous request,
     # we need to register it, to be able to wait for it to be finished
@@ -90,7 +95,7 @@
       whereType += "AND page_article.id_article = #{id} "
 
     #
-    # When connected which right >= editors, offline articles are also displayed
+    # When connected with right >= editors, offline articles are also displayed
     #
 
     if @req.session.usergroup_level > 1000

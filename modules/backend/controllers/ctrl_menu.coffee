@@ -1,3 +1,14 @@
+# Menu controller 
+#
+# Nodize CMS
+# https://github.com/nodize/nodizecms
+#
+# Copyright 2012, Hypee
+# http://hypee.com
+#
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT
+#
 @include = ->
   
   Settings = @Settings
