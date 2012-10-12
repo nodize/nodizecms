@@ -228,7 +228,13 @@
           
           page.view = "page_default" if page.view is null
 
-          page.title = page_lang.title          
+          #
+          # Defining page.title, using the "window title" if defined, else the regular "title" field
+          #
+          if page_lang.meta_title isnt ''
+            page.title = page_lang.meta_title
+          else
+            page.title = page_lang.title          
           
           data =
             hardcode  : helpers              

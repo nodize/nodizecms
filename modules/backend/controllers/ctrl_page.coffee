@@ -620,11 +620,12 @@
           req.send "Views definition not found"
         else
           views = JSON.parse( data )
+          console.log views
           loadTypes()
 
     # Retrieve id_page from parameter in URL
     loadTypes = ->      
-      Article_type.findAll( )
+      Article_type.findAll( {order:'type'} )
         .on 'success', (article_types) ->
           if article_types
             types = article_types

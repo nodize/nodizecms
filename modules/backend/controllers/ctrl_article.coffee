@@ -222,10 +222,11 @@
             article_by_lang[ lang ] = ""
           
           # Filling with values from database for existing translations
-          for article_lang in article_langs                    
+          for article_lang in article_langs              
             article_by_lang[ article_lang.lang ] = article_lang
             article_by_lang[ article_lang.lang ].content = sanitize( article_by_lang[ article_lang.lang ].content ).entityEncode()
-                      
+            article_by_lang[ article_lang.lang ].title = sanitize( article_by_lang[ article_lang.lang ].title ).entityEncode()
+
           if article_langs
             loadArticleCategories( article, article_by_lang )
           else

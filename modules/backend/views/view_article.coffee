@@ -247,7 +247,7 @@
                   dl '.first', ->
                     dt ->
                       label for: "title_#{lang}", -> @ion_lang.ionize_label_title
-                    dd ->
+                    dd ->                      
                       input "#title_#{lang}.inputtext.title", name: "title_#{lang}", type: 'text', value: @article_by_lang[ lang ].title or ''
                   
                   # 'Online'
