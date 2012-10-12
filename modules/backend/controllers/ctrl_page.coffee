@@ -609,6 +609,7 @@
     id_page = req.body.id_page    
     views = ''
     types = ''
+    blocks = []
 
     #
     # Loading theme views
@@ -620,7 +621,18 @@
           req.send "Views definition not found"
         else
           views = JSON.parse( data )
-          console.log views
+          
+          # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadTypes()
 
     # Retrieve id_page from parameter in URL
@@ -670,6 +682,7 @@
               lang      : req.params.lang
               ion_lang  : ion_lang[ req.params.lang ]              
               views     : views
+              blocks    : blocks
               types     : types
           else
             req.send "articles on page #{page_id} not found"

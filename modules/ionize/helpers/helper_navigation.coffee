@@ -329,7 +329,8 @@
           page.id_page,
           page.home,
           page.online,
-          page.appears
+          page.appears,
+          page.link
         FROM
           page_lang, page, menu
         WHERE
@@ -355,16 +356,22 @@
               # Storing results in the responses array
               #
               currentResponse = {}
-              currentResponse["path"]       = newPath;
-              currentResponse["value"]      = page.id_page;
-              currentResponse["title"]      = page.title;
-              currentResponse["nav_title"]  = page.nav_title;
-              currentResponse["level"]      = page.level;
-              currentResponse["url"]        = page.url;
-              currentResponse["home"]       = page.home;
-              currentResponse["id_page"]    = page.id_page;
-              currentResponse["online"]     = page.online;
+              currentResponse["path"]       = newPath
+              currentResponse["value"]      = page.id_page
+              currentResponse["title"]      = page.title
+              currentResponse["nav_title"]  = page.nav_title
+              currentResponse["level"]      = page.level
+              currentResponse["url"]        = page.url
+              currentResponse["home"]       = page.home
+              currentResponse["id_page"]    = page.id_page
+              currentResponse["online"]     = page.online
+              currentResponse["link"]       = page.link
               
+              #
+              # If a link is declared, we replace url by the link
+              #
+              if page.link then currentResponse["url"] = page.link
+
               if (page.appears is 1) and (page.online or @req.session.usergroup_level >= 1000 )
                 responses.push( currentResponse )
 

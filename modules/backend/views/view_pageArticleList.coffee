@@ -30,8 +30,10 @@
             span '.right.ml10', ->
               select "#view#{@page.id_page}x#{article.id_article}.customselect.select.w110.view", style: 'padding:0;', rel: "#{@page.id_page}.#{article.id_article}", ->
                 option value: '--', -> @ion_lang.ionize_select_default_view               
-                for view of @views["blocks"]
-                  option selected: ('selected' if view==article.view), value: view, -> @views["blocks"][view]
+                for block in @blocks
+                  option selected: ('selected' if article.view==block.file), value: block.file, -> block.name
+                  
+                  #option selected: ('selected' if view==article.view), value: view, -> @views["blocks"][view]
                                 
             # 'Main parent page'
             # 'Title (draggable)'
