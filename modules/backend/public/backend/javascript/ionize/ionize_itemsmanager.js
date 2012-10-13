@@ -1,13 +1,13 @@
 /**
 	Ionize Item Manager
 	
-	Manage a list of elements : 
+	Manage a list of elements :
 	- Make them sortable
 	- Init the delete icon event
 	- Init the status (online / offline) icon event
 
 	@example
- 	var myItemsManager = new ION.ItemManager(
+	var myItemsManager = new ION.ItemManager(
 	{
 		container: 'myUL',
 		'controller':'module/my_module/controller_name',
@@ -21,7 +21,7 @@ ION.ItemManager = new Class({
 
 	Implements: [Events, Options],
 	
-	options: 
+	options:
 	{
 		'controller': false,
 		'method': 'save_ordering',
@@ -42,10 +42,10 @@ ION.ItemManager = new Class({
 		// Options
 		this.setOptions(options);
 		this.container = $(this.options.container);
-		if (this.options.controller == false) this.options.controller = this.options.element;
+		if (this.options.controller === false) this.options.controller = this.options.element;
 
 		// Set parent and id_parent (for ordering)
-		if (options.parent_element && options.id_parent && options.parent_element !='')
+		if (options.parent_element && options.id_parent && options.parent_element !=='')
 		{
 			this.parent_element = options.parent_element;
 			this.id_parent = options.id_parent;
@@ -59,7 +59,7 @@ ION.ItemManager = new Class({
 		this.initDeleteEvent();
 		this.initStatusEvents();
 
-		if (this.options.sortable == true)
+		if (this.options.sortable === true)
 		{
 			this.makeSortable();
 		}
@@ -72,11 +72,11 @@ ION.ItemManager = new Class({
 	initDeleteEvent: function()
 	{
 		var self = this;
- 		var url = this.adminUrl + this.options.controller + '\/\/delete/';
+		var url = this.adminUrl + this.options.controller + '\/\/delete/';
 		
 		$$('#' + this.options.container + ' .delete').each(function(item)
 		{
-			ION.initRequestEvent(item, url + item.getProperty('rel'), {}, {'confirm': self.options.confirmDelete, 'message': self.options.confirmDeleteMessage})
+			ION.initRequestEvent(item, url + item.getProperty('rel'), {}, {'confirm': self.options.confirmDelete, 'message': self.options.confirmDeleteMessage});
 		});
 	},
 
@@ -114,7 +114,7 @@ ION.ItemManager = new Class({
 
 			var self = this;
 
-			// Init the sortable 
+			// Init the sortable
 			this.sortables = new Sortables(list, {
 				revert: true,
 				handle: '.drag',
@@ -126,11 +126,11 @@ ION.ItemManager = new Class({
 					// Hides the current sorted element (correct a Mocha bug on hidding modal window)
 					item.removeProperty('style');
 
-					// Get the new order					
-					var serialized = this.serialize(0, function (element, index) 
+					// Get the new order
+					var serialized = this.serialize(0, function (element, index)
 					{
 						// Check for the not removed clone
-						if (element.id != '')
+						if (element.id !== '')
 						{
 							var rel = (element.getProperty('rel')).split(".");
 							var id = rel[0];
@@ -142,16 +142,16 @@ ION.ItemManager = new Class({
 
 					// Items sorting
 					self.sortItemList(serialized);
-				}			
+				}
 			});
 
 			// Store the sortables in the container, for further access
 			this.container.store('sortables', this.sortables);
 		
 			// Store the first ordering after picture list load
-			this.container.store('sortableOrder', this.sortables.serialize(0,function (element, index) 
+			this.container.store('sortableOrder', this.sortables.serialize(0,function (element, index)
 			{
-				if (element.id != '')
+				if (element.id !== '')
 				{
 					var rel = (element.getProperty('rel')).split(".");
 					var id = rel[0];
@@ -163,7 +163,7 @@ ION.ItemManager = new Class({
 	},
 
 	
-	/** 
+	/**
 	 * Items list ordering
 	 * called on items sorting complete
 	 * calls the XHR server ordering method
@@ -172,20 +172,20 @@ ION.ItemManager = new Class({
 	 * @param	string	new order as a string. coma separated
 	 *
 	 */
-	sortItemList: function(serialized) 
+	sortItemList: function(serialized)
 	{
 		var sortableOrder = this.container.retrieve('sortableOrder');
 
 		// Remove "undefined" from serialized. Undefined comes from the clone, which isn't removed before serialize.
-		var serie = new Array();
+		var serie = [];
 		serialized.each(function(item)
 		{
 			if (typeOf(item) != 'null')
 				serie.push(item);
 		});
 
-		// If current <> new ordering : Save it ! 
-		if (sortableOrder.toString() != serie.toString() ) 
+		// If current <> new ordering : Save it !
+		if (sortableOrder.toString() != serie.toString() )
 		{
 			// Store the new ordering
 			this.container.store('sortableOrder', serie);
@@ -196,7 +196,7 @@ ION.ItemManager = new Class({
 			// If parent and parent ID are defined, send them to the controller through the URL
 			if (this.parent_element && this.id_parent)
 			{
-				url += '/' + this.parent_element + '/' + this.id_parent
+				url += '/' + this.parent_element + '/' + this.id_parent;
 			}
 
 			// Save the new ordering
@@ -210,7 +210,7 @@ ION.ItemManager = new Class({
 					MUI.hideSpinner();
 
 					// Get the update table and do the jobs
-					if (responseJSON.update != null && responseJSON.update != '')
+					if (responseJSON.update !== null && responseJSON.update !== '')
 					{
 						ION.updateElements(responseJSON.update);
 					}
@@ -231,7 +231,7 @@ ION.ItemManager = new Class({
 	},
 
 
-	/** 
+	/**
 	 * XHR failure
 	 *
 	 */
@@ -265,7 +265,7 @@ ION.ArticleManager = new Class({
 		this.initDeleteEvent();
 		this.initStatusEvents();
 
-		if (this.options.sortable == true)
+		if (this.options.sortable === true)
 		{
 			this.makeSortable();
 		}
@@ -291,7 +291,7 @@ ION.ArticleManager = new Class({
 
 	initUnlinkEvents: function()
 	{
-		var url = this.adminUrl + 'article/unlink/';
+		var url = this.adminUrl + 'article\/\/unlink/';
 
 		$$('#' + this.options.container + ' .unlink').each(function(item,idx)
 		{

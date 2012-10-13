@@ -27,9 +27,9 @@
         # 'Tabs'
         div '#articlesTab.mainTabs', ->
           ul '.tab-menu', ->
-            li ->
-              a ->
-                span 'Articles'
+            # li ->
+            #   a ->
+            #     span 'Articles'
             li ->
               a ->
                 span 'Categories'
@@ -40,119 +40,46 @@
           div class:'clear'
         # 'Articles list'
         div '#articlesTabContent', ->
-          div '.tabcontent', ->
+        #   div '.tabcontent', ->
             # 'Article list filtering'
-            form '#filterArticles', ->
-              label '.left', title: 'Filter articles (not fully implemented)', 'Filter'
-              input '#contains.inputtext.w160 left', type: 'text'
-              a id: 'cleanFilter', class: 'icon clearfield left ml5'
-            table '#articlesTable.list', ->
-              thead ->
-                tr ->
-                  th 'Title'
-                  th axis: 'string', 'Pages'
-                  th axis: 'string', style: 'width:30px;', 'Content'
-                  th '.right', style: 'width:70px;', 'Actions'
-              tbody ->
+            # form '#filterArticles', ->
+            #   label '.left', title: 'Filter articles (not fully implemented)', 'Filter'
+            #   input '#contains.inputtext.w160 left', type: 'text'
+            #   a id: 'cleanFilter', class: 'icon clearfield left ml5'
+
+            # table '#articlesTable.list', ->
+            #   thead ->
+            #     tr ->
+            #       th 'Title'
+            #       th axis: 'string', 'Pages'
+            #       th axis: 'string', style: 'width:30px;', 'Content'
+            #       th '.right', style: 'width:70px;', 'Actions'
+            #   tbody ->
                 
-                tr '.article1', ->
-                  td '.title', style: 'overflow:hidden;', ->
-                    div style: 'overflow:hidden;', ->
-                      span '.toggler.left', rel: 'content1', ->
-                        a class: 'left article', rel: '0.1', ->
-                          span class:'flag flag0'
-                          text '404'
-                    div '#content1.content', ->
-                      div '.text', ->
-                        div '.mr10.left langcontent dl', style: 'width:90%;', ->
-                          img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                          div ->
-                            p 'The content you asked was not found !'
-                  td ->
-                    img '.help', src: 'http://192.168.1.162/themes/admin/images/icon_16_alert.png', title: 'Orphan article. Not linked to any page.'
-                  td ->
-                    img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                  comment '<td><img class="pr5" src="http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif" /></td>'
-                  td ->
-                    a class: 'icon right delete', rel: '1'
-                    a class: 'icon right duplicate mr5', rel: '1|404'
-                    a class: 'icon right edit mr5', rel: '1', title: '404'
+            #     tr '.article1', ->
+            #       td '.title', style: 'overflow:hidden;', ->
+            #         div style: 'overflow:hidden;', ->
+            #           span '.toggler.left', rel: 'content1', ->
+            #             a class: 'left article', rel: '0.1', ->
+            #               span class:'flag flag0'
+            #               text '404'
+            #         div '#content1.content', ->
+            #           div '.text', ->
+            #             div '.mr10.left langcontent dl', style: 'width:90%;', ->
+            #               img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
+            #               div ->
+            #                 p 'The content you asked was not found !'
+            #       td ->
+            #         img '.help', src: 'http://192.168.1.162/themes/admin/images/icon_16_alert.png', title: 'Orphan article. Not linked to any page.'
+            #       td ->
+            #         img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
+            #       comment '<td><img class="pr5" src="http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif" /></td>'
+            #       td ->
+            #         a class: 'icon right delete', rel: '1'
+            #         a class: 'icon right duplicate mr5', rel: '1|404'
+            #         a class: 'icon right edit mr5', rel: '1', title: '404'
                 
                 
-                
-                tr '.article31', ->
-                  td '.title', style: 'overflow:hidden;', ->
-                    div style: 'overflow:hidden;', ->
-                      span '.toggler.left', rel: 'content31', ->
-                        a class: 'left article', rel: '0.31', ->
-                          span class:'flag flag0'
-                          text 'Picture Gallery Example'
-                    div '#content31.content', ->
-                      div '.text', ->
-                        div '.mr10.left langcontent dl', style: 'width:90%;', ->
-                          img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                          div ->
-                            p 'This is an article with pictures linked to.This article uses the view called "Picture Gallery".Location of the view file  : themes/demo/views/article_picture_gallery.php'
-                  td ->
-                    img '.help', src: 'http://192.168.1.162/themes/admin/images/icon_16_alert.png', title: 'Orphan article. Not linked to any page.'
-                  td ->
-                    img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                  comment '<td><img class="pr5" src="http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif" /></td>'
-                  td ->
-                    a class: 'icon right delete', rel: '31'
-                    a class: 'icon right duplicate mr5', rel: '31|picture-gallery'
-                    a class: 'icon right edit mr5', rel: '31', title: 'Picture Gallery Example'
-                tr '.article4', ->
-                  td '.title', style: 'overflow:hidden;', ->
-                    div style: 'overflow:hidden;', ->
-                      span '.toggler.left', rel: 'content4', ->
-                        a class: 'left article', rel: '0.4', ->
-                          span class:'flag flag0'
-                          text 'Some examples ?'
-                    div '#content4.content', ->
-                      div '.text', ->
-                        div '.mr10.left langcontent dl', style: 'width:90%;', ->
-                          img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                          div ->
-                            p 'The Examples page introduce more complex use of tags.'
-                            p 'Don\'t hesitate to have a look at the "views" sources files.'
-                            p 'If you don\'t know what\'s a view, look at the ionize documentation.'
-                  td ->
-                    img '.help', src: 'http://192.168.1.162/themes/admin/images/icon_16_alert.png', title: 'Orphan article. Not linked to any page.'
-                  td ->
-                    img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                  comment '<td><img class="pr5" src="http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif" /></td>'
-                  td ->
-                    a class: 'icon right delete', rel: '4'
-                    a class: 'icon right duplicate mr5', rel: '4|home-example'
-                    a class: 'icon right edit mr5', rel: '4', title: 'Some examples ?'
-                tr '.article2', ->
-                  td '.title', style: 'overflow:hidden;', ->
-                    div style: 'overflow:hidden;', ->
-                      span '.toggler.left', rel: 'content2', ->
-                        a class: 'left article', rel: '0.2', ->
-                          span class:'flag flag0'
-                          text 'Welcome to Ionize'
-                    div '#content2.content', ->
-                      div '.text', ->
-                        div '.mr10.left langcontent dl', style: 'width:90%;', ->
-                          img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                          div ->
-                            p 'For more information about building a website with Ionize, you can:'
-                            p()
-                            ul ->
-                              li 'Download &amp; read the Documentation'
-                              li 'Visit the Community Forum'
-                            p 'Have fun !'
-                  td ->
-                    span rel: '', 'Welcome Here'
-                  td ->
-                    img '.pr5', src: 'http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif'
-                  comment '<td><img class="pr5" src="http://192.168.1.162/themes/admin/images/world_flags/flag_en.gif" /></td>'
-                  td ->
-                    a class: 'icon right delete', rel: '2'
-                    a class: 'icon right duplicate mr5', rel: '2|welcome-article-url'
-                    a class: 'icon right edit mr5', rel: '2', title: 'Welcome to Ionize'
           
 
           # --------------------------- 'Categories'
@@ -256,18 +183,18 @@
       #
       # Make each article draggable
       #
-      $$("#articlesTable .article").each (item, idx) ->
-        ION.addDragDrop item, ".dropArticleInPage,.dropArticleAsLink,.folder", "ION.dropArticleInPage,ION.dropArticleAsLink,ION.dropArticleInPage"
+      # $$("#articlesTable .article").each (item, idx) ->
+      #   ION.addDragDrop item, ".dropArticleInPage,.dropArticleAsLink,.folder", "ION.dropArticleInPage,ION.dropArticleAsLink,ION.dropArticleInPage"
 
       #
       # Adds Sortable function to the user list table
       #
-      new SortableTable("articlesTable",
-        sortOn: 0
-        sortBy: "ASC"
-      )
-      ION.initLabelHelpLinks "#articlesTable"
-      ION.initLabelHelpLinks "#filterArticles"
+      # new SortableTable("articlesTable",
+      #   sortOn: 0
+      #   sortBy: "ASC"
+      # )
+      # ION.initLabelHelpLinks "#articlesTable"
+      # ION.initLabelHelpLinks "#filterArticles"
 
       #
       # Categories list
@@ -439,22 +366,22 @@
             h = c.replace(reg, "")
             el.set "html", h
 
-      $("contains").addEvent "keyup", (e) ->
-        e.stop()
-        search = @value
-        if search.length > 2
-          $clear @timeoutID  if @timeoutID
-          @timeoutID = filterArticles.delay(500, this, search)
+      # $("contains").addEvent "keyup", (e) ->
+      #   e.stop()
+      #   search = @value
+      #   if search.length > 2
+      #     $clear @timeoutID  if @timeoutID
+      #     @timeoutID = filterArticles.delay(500, this, search)
 
-      $("cleanFilter").addEvent "click", (e) ->
-        reg = new RegExp("<span class=\"highlight\"[^><]*>|<.span[^><]*>", "g")
-        $("contains").setProperty("value", "").set "text", ""
-        $$("#articlesTable tr").each (el) ->
-          el.removeProperty "style"
+      # $("cleanFilter").addEvent "click", (e) ->
+      #   reg = new RegExp("<span class=\"highlight\"[^><]*>|<.span[^><]*>", "g")
+      #   $("contains").setProperty("value", "").set "text", ""
+      #   $$("#articlesTable tr").each (el) ->
+      #     el.removeProperty "style"
 
-        $$("#articlesTable .text").each (el) ->
-          c = el.get("html")
-          c = c.replace(reg, "")
-          el.set "html", c
+      #   $$("#articlesTable .text").each (el) ->
+      #     c = el.get("html")
+      #     c = c.replace(reg, "")
+      #     el.set "html", c
 
       ION.initToolbox "articles_toolbox"

@@ -142,45 +142,45 @@
                   publish_off = @article.publish_off._toMysql() if @article.publish_off isnt ''
                   input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # 'Comments'
-            h3 class:'toggler', -> @ion_lang.ionize_title_comments
-            div '.element', ->
-              dl '.small', ->
-                dt ->
-                  label for: 'comment_allow', -> @ion_lang.ionize_label_comment_allow
-                dd ->
-                  input '#comment_allow.inputcheckbox', name: 'comment_allow', type: 'checkbox'
-              dl '.small', ->
-                dt ->
-                  label for: 'comment_autovalid', -> @ion_lang.ionize_label_comment_autovalid
-                dd ->
-                  input '#comment_autovalid.inputcheckbox', name: 'comment_autovalid', type: 'checkbox'
-              dl '.small.last', ->
-                dt ->
-                  label for: 'comment_expire', -> @ion_lang.ionize_label_comment_expire
-                dd ->
-                  input '#comment_expire.inputtext.w120.date', name: 'comment_expire', type: 'text', value: ''
+            # h3 class:'toggler', -> @ion_lang.ionize_title_comments
+            # div '.element', ->
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'comment_allow', -> @ion_lang.ionize_label_comment_allow
+            #     dd ->
+            #       input '#comment_allow.inputcheckbox', name: 'comment_allow', type: 'checkbox'
+            #   dl '.small', ->
+            #     dt ->
+            #       label for: 'comment_autovalid', -> @ion_lang.ionize_label_comment_autovalid
+            #     dd ->
+            #       input '#comment_autovalid.inputcheckbox', name: 'comment_autovalid', type: 'checkbox'
+            #   dl '.small.last', ->
+            #     dt ->
+            #       label for: 'comment_expire', -> @ion_lang.ionize_label_comment_expire
+            #     dd ->
+            #       input '#comment_expire.inputtext.w120.date', name: 'comment_expire', type: 'text', value: ''
             # 'end comments'
 
-            if @article.id_article
-              # 'Copy Content'
-              h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_content
-              div '.element.element-options', ->
-                dl '.small', ->
-                  dt ->
-                    label for: 'lang_copy_from', title: @ion_lang.ionize_help_copy_content, -> @ion_lang.ionize_label_copy_content
-                  dd ->
-                    div '.w100.left', ->
-                      select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
-                        option value: 'en', 'English'
-                      br()
-                      select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
-                        option value: 'en', 'English'
-                    div '.w30.h50 left ml5', style: 'background:url(http://192.168.1.162/themes/admin/images/icon_24_from_to.png) no-repeat 50% 50%;'
-                # 'Submit button'
-                dl '.small', ->
-                  dt '&#160;'
-                  dd ->
-                    input '#copy_lang.submit', type: 'submit', value: @ion_lang.ionize_button_copy_content
+            # if @article.id_article
+            #   # 'Copy Content'
+            #   h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_content
+            #   div '.element.element-options', ->
+            #     dl '.small', ->
+            #       dt ->
+            #         label for: 'lang_copy_from', title: @ion_lang.ionize_help_copy_content, -> @ion_lang.ionize_label_copy_content
+            #       dd ->
+            #         div '.w100.left', ->
+            #           select '#lang_copy_from.w100.select', name: 'lang_copy_from', ->
+            #             option value: 'en', 'English'
+            #           br()
+            #           select '#lang_copy_to.w100.select.mt5', name: 'lang_copy_to', ->
+            #             option value: 'en', 'English'
+            #         div '.w30.h50 left ml5', style: 'background:url(http://192.168.1.162/themes/admin/images/icon_24_from_to.png) no-repeat 50% 50%;'
+            #     # 'Submit button'
+            #     dl '.small', ->
+            #       dt '&#160;'
+            #       dd ->
+            #         input '#copy_lang.submit', type: 'submit', value: @ion_lang.ionize_button_copy_content
 
               # 'Modules PlaceHolder'
           # '/options'
@@ -247,7 +247,7 @@
                   dl '.first', ->
                     dt ->
                       label for: "title_#{lang}", -> @ion_lang.ionize_label_title
-                    dd ->
+                    dd ->                      
                       input "#title_#{lang}.inputtext.title", name: "title_#{lang}", type: 'text', value: @article_by_lang[ lang ].title or ''
                   
                   # 'Online'
@@ -272,12 +272,12 @@
                   h3 ".toggler.toggler-#{lang}", 'SEO'
                   div ".element.element-#{lang}", ->
                     # 'sub title'
-                    dl ->
-                      dt ->
-                        label for: "subtitle_#{lang}", 'Subtitle'
-                      dd ->
-                        textarea "#subtitle_#{lang}.textarea.subtitleTiny h30", name: "subtitle_#{lang}", type: 'text', ->
-                          text @article_by_lang[ lang ].subtitle or ''
+                    # dl ->
+                    #   dt ->
+                    #     label for: "subtitle_#{lang}", 'Subtitle'
+                    #   dd ->
+                    #     textarea "#subtitle_#{lang}.textarea.subtitleTiny h30", name: "subtitle_#{lang}", type: 'text', ->
+                    #       text @article_by_lang[ lang ].subtitle or ''
                         #a class:"icon edit subtitle"
                     # 'URL'
                     dl '.mt15', ->
@@ -410,7 +410,9 @@
 
         # Options Accordion
         ION.initAccordion ".toggler-options", "div.element-options", true, "articleAccordion"
-        ION.initAccordion ".toggler-en", "div.element-en", true, "articleAccordion-en"
+
+        for lang in langs
+          ION.initAccordion ".toggler-#{lang}", "div.element-#{lang}", true, "articleAccordion-#{lang}"
 
         # Init help tips on label
         # see init-content.js
@@ -441,18 +443,18 @@
           ION.initCorrectUrl "title_#{lang}", "url_#{lang}" if $("id_article").value is '' or $("url_#{lang}").value is ''
 
         # Copy content from a language to another
-        if $("copy_lang")
-          $("copy_lang").addEvent "click", (e) ->
-            e.stop()
-            url = admin_url + "lang/copy_lang_content"
-            data =
-              case: "article"
-              id_article: $("id_article").value
-              rel: $("rel").value
-              from: $("lang_copy_from").value
-              to: $("lang_copy_to").value
+        # if $("copy_lang")
+        #   $("copy_lang").addEvent "click", (e) ->
+        #     e.stop()
+        #     url = admin_url + "lang/copy_lang_content"
+        #     data =
+        #       case: "article"
+        #       id_article: $("id_article").value
+        #       rel: $("rel").value
+        #       from: $("lang_copy_from").value
+        #       to: $("lang_copy_to").value
 
-            ION.sendData url, data
+        #     ION.sendData url, data
 
         # Article ordering :
         # - Show / hide article list depending on Ordering select
@@ -468,7 +470,8 @@
 
 
         # Copy Lang data to other languages dynamically
-        ION.initCopyLang ".copyLang", Array("title", "subtitle", "url", "content", "meta_title")
+        # ION.initCopyLang ".copyLang", Array("title", "subtitle", "url", "content", "meta_title")
+        
         nbCategories = ($("categories").getElements("option")).length
         $$("#categories select").setStyles height: (nbCategories * 15) + "px"  if nbCategories > 5
 

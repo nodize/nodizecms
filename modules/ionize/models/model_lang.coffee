@@ -73,15 +73,15 @@ module.exports = (sequelize, DataTypes)->
           #
           for value of data
             record[value] = data[value]
-        
-            #
-            # Saving the record
-            #
-            record.save()
-              .on 'success', (record) ->
-                callback(null, record )
-              .on 'failure', (err) ->
-                callback(err, null)
+                  
+          #
+          # Saving the record
+          #
+          record.save()
+            .on 'success', (record) ->
+              callback(null, record )
+            .on 'failure', (err) ->
+              callback(err, null)
 
         #
         # Start process

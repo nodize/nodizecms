@@ -222,10 +222,11 @@
             article_by_lang[ lang ] = ""
           
           # Filling with values from database for existing translations
-          for article_lang in article_langs                    
+          for article_lang in article_langs              
             article_by_lang[ article_lang.lang ] = article_lang
             article_by_lang[ article_lang.lang ].content = sanitize( article_by_lang[ article_lang.lang ].content ).entityEncode()
-                      
+            article_by_lang[ article_lang.lang ].title = sanitize( article_by_lang[ article_lang.lang ].title ).entityEncode()
+
           if article_langs
             loadArticleCategories( article, article_by_lang )
           else
@@ -594,49 +595,90 @@
       
       if err
         console.log "Error while moving article",err
-      else                    
-        #
-        # Response
-        #
-        message = 
-          message_type:""
-          message:""
-          update:[]
-          callback:[          
-            
-            fn:"ION.unlinkArticleFromPageDOM"
-            args:
-              id_page:values.id_page_origin
-              id_article:values.id_article
-          ,          
-            fn:"mainTree.insertElement"
-            args: [            
-              id_article:values.id_article
-              name:article.name
-              flag:"0"
-              title:article.name
-              online:page_article.online
-              id_page:values.id_page
-              ordering:"1"            
-              inserted:true
-              link_type:""
-              link_id:""
-              link:""
+      else
+        if values.copy
+
+          #
+          # Response
+          #
+          message = 
+            message_type:""
+            message:""
+            update:[]
+            callback:[          
+              
+                       
+              fn:"mainTree.insertElement"
+              args: [            
+                id_article:values.id_article
+                name:article.name
+                flag:"0"
+                title:article.name
+                online:page_article.online
+                id_page:values.id_page
+                ordering:"1"            
+                inserted:true
+                link_type:""
+                link_id:""
+                link:""
+              ,
+                "article"
+              ]
             ,
-              "article"
+              fn:"ION.notification"
+              args : [
+                "success","Article linked to page"
+              ]
             ]
-          ,
-            fn:"ION.notification"
-            args : [
-              "success","Article linked to page"
+
+        else
+
+          #
+          # Response
+          #
+          message = 
+            message_type:""
+            message:""
+            update:[]
+            callback:[          
+              
+              fn:"ION.unlinkArticleFromPageDOM"
+              args:
+                id_page:values.id_page_origin
+                id_article:values.id_article
+            ,          
+              fn:"mainTree.insertElement"
+              args: [            
+                id_article:values.id_article
+                name:article.name
+                flag:"0"
+                title:article.name
+                online:page_article.online
+                id_page:values.id_page
+                ordering:"1"            
+                inserted:true
+                link_type:""
+                link_id:""
+                link:""
+              ,
+                "article"
+              ]
+            ,
+              fn:"ION.notification"
+              args : [
+                "success","Article linked to page"
+              ]
             ]
-          ]
+
 
         req.send( message ) 
 
 
-
-    Article.moveArticle( values, callback )
+    if values.copy
+      console.log "Copy link"
+      Article.link( values, callback )
+    else
+      Article.move( values, callback )
 
 
     

@@ -448,6 +448,7 @@
           page.view = values.view
           page.id_parent = values.id_parent
           page.appears = values.appears
+          page.name = values.page_name
 
           if values.id_parent == "0"
             page.level = 0        
@@ -608,6 +609,7 @@
     id_page = req.body.id_page    
     views = ''
     types = ''
+    blocks = []
 
     #
     # Loading theme views
@@ -619,11 +621,23 @@
           req.send "Views definition not found"
         else
           views = JSON.parse( data )
+          
+          # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadTypes()
 
     # Retrieve id_page from parameter in URL
     loadTypes = ->      
-      Article_type.findAll( )
+      Article_type.findAll( {order:'type'} )
         .on 'success', (article_types) ->
           if article_types
             types = article_types
@@ -668,6 +682,7 @@
               lang      : req.params.lang
               ion_lang  : ion_lang[ req.params.lang ]              
               views     : views
+              blocks    : blocks
               types     : types
           else
             req.send "articles on page #{page_id} not found"

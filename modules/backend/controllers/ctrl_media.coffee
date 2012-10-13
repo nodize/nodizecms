@@ -262,4 +262,21 @@
         .on 'failure', (err) ->
           console.log "Error on associate ", err
 
+  #
+  # Link existing FILE to ARTICLE
+  # 
+  @post '/:lang/admin/media/add_media/picture/article/:id_article' : (req) ->
+    associateMediaToArticle = ( media ) =>
+      article_media = Article_media.build()
+      article_media.id_article = @params.id_article
+      article_media.id_media = media.id_media
+
+      article_media.save()
+        .on 'success', (article_media) =>          
+          @send '{"name":"loading.gif","type":"image/gif","size":3897}'
+        .on 'failure', (err) ->
+          console.log "Error on associate ", err
+
+    req.send("not implemented yet")
+
       

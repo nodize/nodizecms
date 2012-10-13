@@ -1,3 +1,11 @@
+# Tree controller
+#
+# Nodize CMS
+# https://github.com/nodize/nodizecms
+#
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT
+#
 @include = ->
   
   #
@@ -21,6 +29,7 @@
   #
     # Retrieval of one leaf of the page/article tree
   @post "/:lang/admin/tree/get" : (req) =>
+    current_lang = if req.params.lang then req.params.lang else Static_lang_default
     # Retrieving POST datas
     values = req.body
 
@@ -36,7 +45,7 @@
           FROM page, page_lang
           WHERE
             page_lang.id_page = page.id_page AND
-            page_lang.lang = 'en' AND
+            page_lang.lang = '#{current_lang}' AND
             id_parent = #{values.id_parent} AND
             id_menu = #{values.id_menu}
           ORDER BY page.ordering", Page)
@@ -86,7 +95,7 @@
                 page_article.id_page = page.id_page AND
                 page_article.id_article = article.id_article AND
                 article_lang.id_article = article.id_article AND
-                article_lang.lang = 'en' AND
+                article_lang.lang = '#{current_lang}' AND
 
                 page_article.id_page = #{values.id_parent} AND
                 page.id_menu = #{values.id_menu}

@@ -1,3 +1,11 @@
+# Langs controller
+#
+# Nodize CMS
+# https://github.com/nodize/nodizecms
+#
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT
+#
 @include = ->  
   #
   # LANGS SETTINGS 
@@ -102,7 +110,7 @@
   # UPDATE LANGS
   #
   @post "/:lang/admin/lang/update" : (req) ->
-    values = req.body
+    values = req.body    
     requestCount = 0
 
     #console.log values
@@ -161,6 +169,7 @@
         lang : values["lang_"+currentLang] or '??'
         name : values["name_"+currentLang] or '??'
         online : values["online_"+currentLang] or 0
+        def : if values["default_lang"] is values["lang_"+currentLang] then 1 else 0 
       
       #
       # Update the record

@@ -34,13 +34,13 @@ module.exports = (sequelize, DataTypes)->
   
     classMethods:
       #
-      # Move article
+      # Move article to another page
       #
       # @param data.id_article
       # @param data.id_page
       # @param data.id_page_origin
       # @param data.copy 
-      moveArticle : (data, callback) ->
+      move : (data, callback) ->
         #
         # Find record
         #        
@@ -74,6 +74,36 @@ module.exports = (sequelize, DataTypes)->
               callback( err, null, null )
         
         getExistingRecord()
+
+      #
+      # Link article to another page (and keep existing link)
+      #
+      # @param data.id_article
+      # @param data.id_page
+      # @param data.id_page_origin
+      # @param data.copy 
+      link : (data, callback) ->
+        page_article = Page_article.build()
+        page_article.id_article = data.id_article
+        page_article.id_page = data.id_page
+
+        page_article.save()
+          .on 'success', (record) ->
+            Article.find({where:{id_article:record.id_article}})
+              .on 'success', (article) ->
+                Page_article.find({where:{id_page:data.id_page, id_article:article.id_article}})
+                  .on 'success', (page_article) ->
+                    callback(null, article, page_article )    
+                  .on 'failure', (err) ->
+                    callback(err, null, null)                
+              .on 'failure', (err) ->
+                callback(err, null, null)
+
+          .on 'failure', (err) ->
+            callback(err, null, null)                
+          
+        
+
         
 
         

@@ -24,12 +24,14 @@ sequelize
 
 mysql
 
+redis (optional)
+
 Installation 
 ------------
 
-Installation has been tested under Linux, it should work on MacOS, probably not on Windows.
+Installation has been tested under Linux, MacOS and Windows.
 
-MySQL, Node.js and NPM have to be installed
+Git, MySQL, Node.js and NPM have to be installed
 
 Make a global install of CoffeeScript
 ```
