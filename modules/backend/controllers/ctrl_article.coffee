@@ -89,6 +89,7 @@
 
 
     views = {}
+    blocks = []
 
     #
     # Loading theme views
@@ -102,7 +103,19 @@
         if err
           req.send "Views definition not found"
         else
-          views = JSON.parse( data )          
+          views = JSON.parse( data )   
+
+           # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadPage()
 
     #
@@ -132,6 +145,7 @@
             ion_lang            : ion_lang[ req.params.lang ]
             page                : page
             views               : views
+            blocks              : blocks
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
 
           
@@ -153,6 +167,7 @@
     parent_page = null
     page_article = null
     views = {}
+    blocks = []
 
     #
     # Loading theme views
@@ -166,7 +181,19 @@
         if err
           req.send "Views definition not found"
         else
-          views = JSON.parse( data )          
+          views = JSON.parse( data )
+
+          # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadPage()
 
     #
@@ -266,6 +293,7 @@
             lang                : req.params.lang      
             ion_lang            : ion_lang[ req.params.lang ]
             views               : views
+            blocks              : blocks
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
           
         .on 'failure', (err) ->
@@ -350,6 +378,7 @@
         article_lang.online = values['online_'+lang] or 0
         article_lang.title = values['title_'+lang]
         article_lang.subtitle = values['subtitle_'+lang]
+        article_lang.summary = values['summary_'+lang]
          
         # Save to database
         article_lang.save()
@@ -399,6 +428,7 @@
               article_lang.title = values['title_'+lang]
               article_lang.subtitle = values['subtitle_'+lang]
               article_lang.online = values['online_'+lang]
+              article_lang.summary = values['summary_'+lang]
               article_lang.save()
                 .on 'success', (article_lang) =>
                   
