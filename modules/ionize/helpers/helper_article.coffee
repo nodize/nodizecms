@@ -105,7 +105,7 @@
 
 
     if from isnt ''
-      page_search = "SELECT * FROM article, article_lang, page_article, page "+
+      page_search = "SELECT *, page_article.view as view FROM article, article_lang, page_article, page "+
                     fromType +
                     "WHERE article_lang.id_article = article.id_article AND "+
                     "article_lang.lang = '"+@lang+"' AND "+
