@@ -704,14 +704,50 @@
         req.send( message ) 
 
 
-    if values.copy
-      console.log "Copy link"
+    if values.copy      
       Article.link( values, callback )
     else
       Article.move( values, callback )
 
 
+
+  #
+  # ARTICLE UNLINK FROM PAGE
+  #
+  @post "/:lang/admin/article/unlink/:id_page/:id_article" : (req) ->
     
+    callback = (err, article, page_article) =>
+      if err
+        console.log "Error while unlinking article",err
+      else      
+        #
+        # Response
+        #
+        message = 
+          message_type:""
+          message:""
+          update:[]
+          callback:[          
+            
+            fn:"ION.unlinkArticleFromPageDOM"
+            args: [
+              id_page:@params.id_page
+              id_article:@params.id_article
+            ,
+              "article"
+            ]
+          ,
+            fn:"ION.notification"
+            args : [
+              "success","Article unlinked from page"
+            ]
+          ]
+
+
+        req.send( message ) 
+    
+    Article.unlink( @params, callback )
+      
   #
   # ARTICLE DELETE
   #
