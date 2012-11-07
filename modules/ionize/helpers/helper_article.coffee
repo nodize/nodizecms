@@ -152,11 +152,11 @@
 
           if live
             @article.content = "<div class='ion_live_content'>" + @article.content + "</div>"
-
-          
+        
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
+            htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh            
             htmlResponse += cede args[args.length-1] # Compile the nested content to html            
             htmlResponse += "</span>" if live
 

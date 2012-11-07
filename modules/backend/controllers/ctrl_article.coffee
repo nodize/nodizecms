@@ -423,12 +423,14 @@
         Article_lang.find({
           where: {id_article:values.id_article, lang:lang}
         }).on 'success', (article_lang)->   
-            if article_lang      
+            if article_lang                  
+
               article_lang.content = values['content_'+lang]
               article_lang.title = values['title_'+lang]
               article_lang.subtitle = values['subtitle_'+lang]
               article_lang.online = values['online_'+lang]
-              article_lang.summary = values['summary_'+lang]
+              article_lang.summary = values['summary_'+lang]              
+
               article_lang.save()
                 .on 'success', (article_lang) =>
                   
