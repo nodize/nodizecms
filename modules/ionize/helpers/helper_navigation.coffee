@@ -152,7 +152,7 @@
     menu_id = 1 
 
     # default level
-    page_level = 0
+    page_level = 100
     
     level_open    = "<ul>"  # HTML inserted before each level change
     level_close   = "</ul>" # HTML inserted after each level change
@@ -178,7 +178,7 @@
       #
       # Page level
       #
-      page_level = attrs.level if attrs.level
+      page_level = attrs.level if attrs.level?      
 
       #
       # Items & level HTML tags
@@ -295,8 +295,8 @@
             if args.length>=1
               
               htmlResponse += item_open
-
-              htmlResponse += cede args[args.length-1] # Compile the nested content to html 
+              if currentLevel<=page_level
+                htmlResponse += cede args[args.length-1] # Compile the nested content to html 
               args[args.length-1]() 
 
               

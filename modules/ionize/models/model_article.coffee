@@ -100,7 +100,30 @@ module.exports = (sequelize, DataTypes)->
                 callback(err, null, null)
 
           .on 'failure', (err) ->
-            callback(err, null, null)                
+            callback(err, null, null)    
+
+
+      #
+      # Unlink article from a page
+      #      
+      unlink : (data, callback) ->            
+        Page_article.find({where:{id_article : data.id_article, id_page:data.id_page}})
+          .on 'success', (record) ->                            
+            if record
+              record.id_page = data.id_page
+              #
+              # Saving the record & callback
+              #
+              record.destroy()
+                .on 'success', (record) ->
+                  callback(null, data.id_page, data.id_article )    
+                .on 'failure', (err) ->
+                  callback(err, null, null)                
+            else
+              callback( "Record not found", null, null )    
+
+          .on 'failure', (err) ->
+            callback( err, null, null )              
           
         
 
