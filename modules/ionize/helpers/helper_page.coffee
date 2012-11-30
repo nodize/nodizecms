@@ -85,6 +85,7 @@
                   scopeClause+
                   "ORDER BY page.ordering"
 
+    console.log page_search
     
     DB.query(  page_search
               , Page)
