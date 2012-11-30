@@ -83,9 +83,7 @@
                   "page_lang.lang = '"+@lang+"' AND "+
                   isOnline+
                   scopeClause+
-                  "ORDER BY page.ordering"
-
-    console.log page_search
+                  "ORDER BY page.ordering"    
     
     DB.query(  page_search
               , Page)
