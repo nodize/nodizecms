@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes)->
     id_page           : DataTypes.INTEGER
     url               : DataTypes.STRING
     lang              : DataTypes.STRING
-    link              : DataTypes.STRING
+    # link              : DataTypes.STRING
     title             : DataTypes.STRING
     subtitle          : DataTypes.STRING
     nav_title         : DataTypes.STRING
@@ -39,6 +39,25 @@ module.exports = (sequelize, DataTypes)->
     
   
     classMethods:
+      #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'page_lang'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+        , 
+          version : 2
+          code : ->
+            migrator.removeColumn( 'link' )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
       #
       # Deleting page article
       # "data" contains a JSON array with filter to apply (=SQL WHERE)

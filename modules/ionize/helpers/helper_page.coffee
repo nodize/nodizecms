@@ -24,6 +24,11 @@
     scope = ''
 
     #
+    # What page are we retrieving other pages from ?
+    #    
+    page_id = @page_id 
+
+    #
     # Parsing attributes if they do exist
     #
     if args.length>1
@@ -39,6 +44,13 @@
       # "Scope" parameter, allow to retrieve parent pages
       #      
       scope = if attrs?.scope then attrs.scope else ""
+      if scope is 'parent' then page_id = @page.id_parent
+
+      #
+      # "from" parameter, allow to retrieve pages from any given page id
+      #      
+      if attrs?.from then page_id = attrs.from
+
 
     #
     # We are launching an asynchronous request,
@@ -46,6 +58,8 @@
     # and insert the content in the response sent to browser 
     #
     requestId = @registerRequest( tagName )
+
+    
 
     #
     # Finished callback
@@ -57,13 +71,12 @@
     #
     # When connected with rights >= editors, offline pages are also displayed
     #
-
     if @req.session.usergroup_level > 1000
        isOnline = ""
     else
        isOnline = "page_lang.online = 1 AND "
 
-    scopeClause = if scope is 'parent' then "page.id_parent = #{@page.id_parent} " else "page.id_parent = #{@page.id_page} "
+    scopeClause = "page.id_parent = #{page_id} "
 
     page_search = "SELECT * FROM page, page_lang  "+
                   "WHERE page_lang.id_page = page.id_page AND "+
@@ -91,7 +104,9 @@
           @page.index = pageCount
           @page.isFirst = if pageCount is 1 then true else false
           @page.isLast = if pageCount is page.length then true else false
-
+          
+          @page.url = @page.link if @page.link
+          
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_livePage_#{@page.id_page}'>" if live

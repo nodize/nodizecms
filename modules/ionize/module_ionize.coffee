@@ -196,6 +196,12 @@ User_group        = db.import( __dirname + "/models/model_userGroup" )
 
 
 #
+# Run migrations
+#
+Page.migrate()
+Page_lang.migrate()
+
+#
 # Associations, not used right now
 # Seems to need an "id" field to work
 #

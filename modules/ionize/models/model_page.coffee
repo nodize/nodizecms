@@ -35,10 +35,39 @@ module.exports = (sequelize, DataTypes)->
     pagination_nb     : DataTypes.INTEGER
     id_group          : DataTypes.INTEGER
     priority          : DataTypes.INTEGER
-    appears           : DataTypes.INTEGER   
+    appears           : DataTypes.INTEGER
+    created           : DataTypes.DATE
+    updated           : DataTypes.DATE
+    publish_on        : DataTypes.DATE
+    publish_off       : DataTypes.DATE
+    logical_date      : DataTypes.DATE 
   ,
   
-    classMethods:             
+    classMethods:     
+      #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'page'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+        ,
+          version : 2
+          code : ->
+            migrator.addColumn( 'created', DataTypes.DATE )
+            migrator.addColumn( 'updated', DataTypes.DATE )
+            migrator.addColumn( 'publish_on'  , DataTypes.DATE )
+            migrator.addColumn( 'publish_off' , DataTypes.DATE )
+            migrator.addColumn( 'logical_date', DataTypes.DATE )            
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
+         
       #
       # Switch online status
       #  
@@ -132,20 +161,38 @@ module.exports = (sequelize, DataTypes)->
       # @param data.link_type = "page" | ... 
       addLink : (data, callback) ->        
         
+        #
+        # Retrieve the page we link to
+        #
         findDestinationPage = =>
-          @find({where:{id_page:data.link_rel}})
-            .on 'success', (page) =>
-              createLink( page )
-            
-            .on 'failure', (err) ->
-              callback( err, null )
+          if data.link_type is 'page'
+            @find({where:{id_page:data.link_rel}})
+              .on 'success', (page) =>
+                createLink( page )
+              
+              .on 'failure', (err) ->
+                callback( err, null )
+          else
+            createLink( null )
 
         createLink = (pageLink) =>
           @find({where:{id_page:data.receiver_rel}})
             .on 'success', (page) =>
               page.link_type = data.link_type
-              page.link = pageLink.name
-              page.link_id = pageLink.id_page
+              
+              #
+              # If the link is an internal page
+              #
+              if page.link
+                page.link = pageLink.name
+                page.link_id = pageLink.id_page
+              #
+              # if the link is external
+              #
+              else
+                page.link = data.url
+                console.log "link = #{data.url}"
+
 
               page.save()
                 .on 'success', (page) =>
@@ -192,7 +239,7 @@ module.exports = (sequelize, DataTypes)->
         #
         findPage()
     
-    instanceMethods: 
+    instanceMethods:       
       #
       # Define default values on page creation
       #
