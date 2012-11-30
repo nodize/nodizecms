@@ -198,8 +198,21 @@ User_group        = db.import( __dirname + "/models/model_userGroup" )
 #
 # Run migrations
 #
+Article.migrate()
+Article_category.migrate()
+Article_lang.migrate()
+Article_media.migrate()
+Article_type.migrate()
+Category.migrate()
+Category_lang.migrate()
+Lang.migrate()
+Media.migrate()
+Menu.migrate()
 Page.migrate()
+Page_article.migrate()
 Page_lang.migrate()
+User.migrate()
+User_group.migrate()
 
 #
 # Associations, not used right now

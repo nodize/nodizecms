@@ -10,8 +10,8 @@
 # http://www.opensource.org/licenses/MIT
 #
 module.exports = (sequelize, DataTypes)->
-  sequelize.define( "article_lang",
-  {
+  sequelize.define "article_lang",
+  
     id_article        : DataTypes.INTEGER
     lang              : DataTypes.STRING
     url               : DataTypes.TEXT
@@ -23,9 +23,30 @@ module.exports = (sequelize, DataTypes)->
     meta_keywords     : DataTypes.STRING
     meta_description  : DataTypes.TEXT
     online            : DataTypes.STRING   
-  },
-  {
-    instanceMethods: {
+  ,
+    classMethods:
+      #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'article_lang'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+#        ,
+#          version : 2
+#          code : ->
+#            migrator.addColumn( 'newField', DataTypes.STRING )
+#            migrator.removeColumn( 'field' )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
+
+    instanceMethods: 
 
       #
       # Define default values on article creation
@@ -35,6 +56,5 @@ module.exports = (sequelize, DataTypes)->
         @content = ""
         @subtitle = ""
         @id_article = null        
-    }
-  }
-  )
+    
+  

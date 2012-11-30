@@ -245,6 +245,11 @@ module.exports = (sequelize, DataTypes)->
       #
       createBlank : ->
         @name    = ""
+        @created = new Date()
+        @updated = new Date()
+        @publish_on = ''
+        @publish_off = ''
+        @logical_date = ''
 
 
         
