@@ -26,7 +26,7 @@
     #
     # What page are we retrieving other pages from ?
     #    
-    page_id = @page_id 
+    page_id = @page.id_page 
 
     #
     # Parsing attributes if they do exist
