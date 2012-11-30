@@ -106,6 +106,8 @@
           @page.isLast = if pageCount is page.length then true else false
           
           @page.url = @page.link if @page.link
+
+          @page.date = if @page.logical_date isnt '' then @page.logical_date else @page.updated
           
           # Render nested tags
           if args.length>=1

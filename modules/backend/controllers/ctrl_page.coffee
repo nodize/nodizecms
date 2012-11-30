@@ -309,7 +309,7 @@
       page_lang.meta_title = values['meta_title_'+lang]
       page_lang.nav_title = values['nav_title_'+lang]
       page_lang.subnav_title = "" 
-      page_lang.home = page.home
+      page_lang.home = page.home      
 
       #
       # Save record to database
@@ -380,7 +380,7 @@
               page_lang.online = values['online_'+lang]
               page_lang.meta_title = values['meta_title_'+lang]
               page_lang.nav_title = values['nav_title_'+lang]
-              page_lang.home = values['home']              
+              page_lang.home = values['home'] 
               
               page_lang.save()
                 .on 'success', (page_lang) =>
@@ -449,6 +449,11 @@
           page.id_parent = values.id_parent
           page.appears = values.appears
           page.name = values.page_name
+          page.updated = new Date            
+          page.publish_on = values.publish_on
+          page.publish_off = values.publish_off
+          page.logical_date = values.logical_date             
+          
 
           if values.id_parent == "0"
             page.level = 0        
@@ -486,6 +491,12 @@
       page.priority = values.priority
       page.view = values.view
       page.appears = values.appears
+      page.created = new Date
+      page.updated = new Date
+      page.publish_on = values.publish_on
+      page.publish_off = values.publish_off
+      page.logical_date = values.logical_date
+              
 
       
       if values.id_parent == "0"
