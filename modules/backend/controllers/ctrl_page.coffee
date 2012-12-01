@@ -198,8 +198,8 @@
   # CREATING a page
   #
   @get "/:lang/admin/page/create/:id" : (req) =>
-    # Retrieve page_id from parameter in URL
-    page_id = req.params.id
+    # Menu in which we want to create a page
+    menu_id = req.params.id
 
     #
     # Create an empty page object
@@ -243,7 +243,7 @@
           #
           req.render "backend_page", 
             layout        : no
-            page_id       : page_id
+            menu_id       : menu_id
             page          : page
             page_by_lang  : page_by_lang          
             hardcode      : @helpers 
