@@ -47,6 +47,26 @@ module.exports = (sequelize, DataTypes)->
 
     classMethods:
       #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'lang'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+#        ,
+#          version : 2
+#          code : ->
+#            migrator.addColumn( 'newField', DataTypes.STRING )
+#            migrator.removeColumn( 'field' )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
+      #
       # Updating a lang
       #
       update : (data, callback) ->

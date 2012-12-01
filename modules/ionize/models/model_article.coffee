@@ -33,6 +33,27 @@ module.exports = (sequelize, DataTypes)->
         @logical_date = ''
   
     classMethods:
+
+      #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'article'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+#        ,
+#          version : 2
+#          code : ->
+#            migrator.addColumn( 'newField', DataTypes.STRING )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
+
       #
       # Move article to another page
       #
