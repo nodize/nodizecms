@@ -183,13 +183,13 @@ module.exports = (sequelize, DataTypes)->
               #
               # If the link is an internal page
               #
-              if page.link
+              if page and data.link_type is "page"                
                 page.link = pageLink.name
                 page.link_id = pageLink.id_page
               #
               # if the link is external
               #
-              else
+              else if data.link_type is "external"
                 page.link = data.url
                 console.log "link = #{data.url}"
 

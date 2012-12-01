@@ -32,17 +32,19 @@
                 dt ->
                   label @ion_lang.ionize_label_date
                 dd ->
-                  dateArray = @page.created._toMysql().split(' ')
-                  text dateArray[0]
-                  span class:'lite'
+                  if @page.created
+                    dateArray = @page.created._toMysql().split(' ')
+                    text dateArray[0]
+                    span class:'lite'
 
               dl '.small.compact', ->
                 dt ->
                   label @ion_lang.ionize_label_updated
                 dd ->
-                  dateArray = @page.updated._toMysql().split(' ')
-                  text dateArray[0]
-                  span '.lite', ' '+dateArray[1]
+                  if @page.updated
+                    dateArray = @page.updated._toMysql().split(' ')
+                    text dateArray[0]
+                    span '.lite', ' '+dateArray[1]
 
               # 'Link ?'
               div id:'linkContainer'
@@ -138,24 +140,27 @@
                 dt ->
                   label for: 'logical_date', 'Date'
                 dd ->
-                  logical_date = ''
-                  logical_date = @page.logical_date._toMysql() if @page.logical_date isnt ''
-                  input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
+                  if @page.logical_date
+                    logical_date = ''
+                    logical_date = @page.logical_date._toMysql() if @page.logical_date isnt ''
+                    input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   
                   label for: 'publish_on', title: 'Publish the item at this date and replace the displayed item date', 'Publish'
                 dd ->
-                  publish_on = ''
-                  publish_on = @page.publish_on._toMysql() if @page.publish_on isnt ''
-                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
+                  if @page.publish_on
+                    publish_on = ''
+                    publish_on = @page.publish_on._toMysql() if @page.publish_on isnt ''
+                    input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
                 dd ->
-                  publish_off = ''
-                  publish_off = @page.publish_off._toMysql() if @page.publish_off isnt ''
-                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
+                  if @page.publish_off
+                    publish_off = ''
+                    publish_off = @page.publish_off._toMysql() if @page.publish_off isnt ''
+                    input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # Subnavigation
             # if @page.id_page isnt ''
             #   h3 '.toggler', 'Sub Navigation'
