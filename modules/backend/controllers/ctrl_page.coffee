@@ -345,8 +345,14 @@
                   name      : page_lang.name
                   online    : page_lang.online                  
                   id_parent : page.id_parent
+                  id_menu   : page.id_menu
                   level     : "0"
                   home      : "0"
+                  menu      :
+                    id_menu   : page.id_menu
+                    name      : page_lang.name
+                    title     : page_lang.title
+                    ordering  : 100
                   'page'
                 ]
                         
