@@ -38,9 +38,9 @@ ION.append({
 	 */
 	initRequestEvent: function(item, url, data, options, mode)
 	{
-		var data = (typeOf(data) == 'null') ? {} : data;
+		data = (typeOf(data) == 'null') ? {} : data;
 		
-		var mode = (typeOf(mode) == 'null') ? 'JSON' : mode;
+		mode = (typeOf(mode) == 'null') ? 'JSON' : mode;
 
 		// Some safety before adding the event.
 		item.removeEvents('click');
@@ -50,9 +50,9 @@ ION.append({
 			e.stop();
 			
 			// Confirmation screen
-			if (typeOf(options) != 'null' && options.confirm == true)
+			if (typeOf(options) != 'null' && options.confirm === true)
 			{
-				var message = (typeOf(options.message) != 'null') ? options.message : Lang.get('ionize_confirm_element_delete'); 
+				var message = (typeOf(options.message) != 'null') ? options.message : Lang.get('ionize_confirm_element_delete');
 				
 				// Callback request
 				var callback = ION.JSON.pass([url,data]);
@@ -154,9 +154,9 @@ ION.append({
 
 	/**
 	 * Returns the HTML Request options object
-	 * 
+	 *
 	 * @usage : No direct use. Use MUI.JSON() instead.
-	 * 
+	 *
 	 * NOTE : SHOULD REPLACE THE MUI.getFormObject() FUNCTION !!!
 	 *
 	 * @param	string		URL to send the form data. With or without the base URL prefix. Will be cleaned.
@@ -183,7 +183,7 @@ ION.append({
 		url = ION.cleanUrl(url);
 
 		return {
-			url: admin_url + url, 
+			url: admin_url + url,
 			method: 'post',
 			loadMethod: 'xhr',
 			update: update,
@@ -193,7 +193,7 @@ ION.append({
 			{
 				MUI.showSpinner();
 			},
-			onFailure: function(xhr) 
+			onFailure: function(xhr)
 			{
 				MUI.hideSpinner();
 
@@ -202,7 +202,7 @@ ION.append({
 			},
 			onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript)
 			{
-				MUI.hideSpinner();			
+				MUI.hideSpinner();
 
 				onSuccess(responseTree, responseElements, responseHTML, responseJavaScript);
 			}

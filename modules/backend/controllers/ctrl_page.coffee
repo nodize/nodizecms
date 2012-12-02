@@ -326,46 +326,54 @@
             # - Insert page in the tree
             #  
 
-
-            message =  
-              message_type  : "success"
-              message       : "Page saved"
+            #
+            # Get menu name & build message
+            #
+            Menu.find({where:{id_menu:page.id_menu}})
+              .on 'success', (menu) ->                
               
-              update        : [
-                element : "mainPanel"
-                url     : 'page\/\/edit\/'+page_lang.id_page
-                title   : "Page edit"
-              ]
-              
-              callback      : 
-                fn    : "mainTree.insertElement"
-                args  : [
-                  title     : page.name
-                  id_page   : page_lang.id_page
-                  name      : page_lang.name
-                  online    : page_lang.online                  
-                  id_parent : page.id_parent
-                  id_menu   : page.id_menu
-                  level     : "0"
-                  home      : "0"
-                  menu      :
-                    id_menu   : page.id_menu
-                    name      : page_lang.name
-                    title     : page_lang.title
-                    ordering  : 100
-                  'page'
-                ]
-                        
-            
-            #
-            # Send response to client
-            #
-            req.send message
-            
-            #
-            # Inform modules that a new page has been created
-            __nodizeEvents.emit  'pageSave', 'page created'
+                message =  
+                  message_type  : "success"
+                  message       : "Page saved"
+                  
+                  update        : [
+                    element : "mainPanel"
+                    url     : 'page\/\/edit\/'+page_lang.id_page
+                    title   : "Page edit"
+                  ]
+                  
+                  callback      : 
+                    fn    : menu.name + "Tree.insertElement"
+                    args  : [
+                      title     : page.name
+                      id_page   : page_lang.id_page
+                      name      : page_lang.name
+                      online    : page_lang.online                  
+                      id_parent : page.id_parent
+                      id_menu   : page.id_menu
+                      level     : "0"
+                      home      : "0"
+                      menu      :
+                        id_menu   : page.id_menu
+                        name      : page_lang.name
+                        title     : page_lang.title
+                        ordering  : "1"
+                      'page'
+                    ]
+                            
+                
+                #
+                # Send response to client
+                #
+                req.send message
+                
+                #
+                # Inform modules that a new page has been created
+                __nodizeEvents.emit  'pageSave', 'page created'
 
+              .on 'failure', (err) ->
+                console.log 'database error ', err
+            
           
         .on 'failure', (err) ->
           console.log 'save failed : ', err

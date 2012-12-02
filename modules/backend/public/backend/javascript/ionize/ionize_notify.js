@@ -36,7 +36,7 @@ ION.Notify = new Class({
 		// new Element('p').set('text', options.message)
 		this.box = new Element('div', {'class':options.className + ' ' + options.type});
 		
-		this.box.set('slide', 
+		this.box.set('slide',
 		{
 			duration: 'short',
 			transition: 'sine:out'
@@ -68,7 +68,7 @@ ION.Notify = new Class({
 		}
 		
 		// Resize content
-		if (this.displayed == false)
+		if (this.displayed === false)
 		{
 			this.windowEl.retrieve('instance').resize({height: (this.contentEl.getSize()).y + (this.box.getSize()).y + 10});
 		}
@@ -86,7 +86,7 @@ ION.Notify = new Class({
 		}
 		
 		// Resize content
-		if (this.displayed == true)
+		if (this.displayed === true)
 		{
 			this.windowEl.retrieve('instance').resize({height: (this.contentEl.getSize()).y - (this.box.getSize()).y + 10});
 		}
@@ -103,7 +103,7 @@ ION.Notify = new Class({
 		}
 		else
 		{
-			if (Lang.get(msg) != '' ) msg = Lang.get(msg);
+			if (Lang.get(msg) !== '' ) msg = Lang.get(msg);
 			
 			this.box.set('html', msg);
 		}
