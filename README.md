@@ -92,7 +92,7 @@ mysql pageone -u root -p < themes/pageone/sql/pages.sql
 
 Now refresh your browser ! Do you see pages & articles ? Great ! 
 
-Open a new browser window and enter this URL : "http://127.0.0.1:3000", if you're a lucky dude, you're just looking at a dynamic webpage powered by Node.js & NodizeCMS !
+Open a new browser window and enter this URL : "http://127.0.0.1:3000", if you are lucky, you're just looking at a dynamic webpage powered by Node.js & NodizeCMS !
 
 License
 -------
