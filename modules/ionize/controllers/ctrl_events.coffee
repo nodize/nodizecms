@@ -11,7 +11,7 @@
     #
     .on 'articleUpdate', (params) =>
       #console.log "articleUpdate event in ctrl-> ", params.id_article
-      console.log params.article
+      #console.log params.article
       @io.sockets.emit 'live_articleUpdate', {id_article:params.article.id_article, content:params.article.content}
 
   # ---------------------------
