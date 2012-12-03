@@ -89,6 +89,7 @@
 
 
     views = {}
+    blocks = []
 
     #
     # Loading theme views
@@ -102,7 +103,19 @@
         if err
           req.send "Views definition not found"
         else
-          views = JSON.parse( data )          
+          views = JSON.parse( data )   
+
+           # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadPage()
 
     #
@@ -132,6 +145,7 @@
             ion_lang            : ion_lang[ req.params.lang ]
             page                : page
             views               : views
+            blocks              : blocks
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
 
           
@@ -153,6 +167,7 @@
     parent_page = null
     page_article = null
     views = {}
+    blocks = []
 
     #
     # Loading theme views
@@ -166,7 +181,19 @@
         if err
           req.send "Views definition not found"
         else
-          views = JSON.parse( data )          
+          views = JSON.parse( data )
+
+          # Sorting blocks
+          for key, value of views.blocks
+            item = []
+            item.file = key
+            item.name = value
+
+            blocks.push( item )
+            
+          blocks = blocks.sort (a, b) ->
+            return a.name.localeCompare(b.name)
+
           loadPage()
 
     #
@@ -266,6 +293,7 @@
             lang                : req.params.lang      
             ion_lang            : ion_lang[ req.params.lang ]
             views               : views
+            blocks              : blocks
             pixlr_target        : __nodizeSettings.get("pixlr_callback_server") + __nodizeSettings.get("pixlr_callback_url")
           
         .on 'failure', (err) ->
@@ -350,6 +378,7 @@
         article_lang.online = values['online_'+lang] or 0
         article_lang.title = values['title_'+lang]
         article_lang.subtitle = values['subtitle_'+lang]
+        article_lang.summary = values['summary_'+lang]
          
         # Save to database
         article_lang.save()
@@ -394,11 +423,14 @@
         Article_lang.find({
           where: {id_article:values.id_article, lang:lang}
         }).on 'success', (article_lang)->   
-            if article_lang      
+            if article_lang                  
+
               article_lang.content = values['content_'+lang]
               article_lang.title = values['title_'+lang]
               article_lang.subtitle = values['subtitle_'+lang]
               article_lang.online = values['online_'+lang]
+              article_lang.summary = values['summary_'+lang]              
+
               article_lang.save()
                 .on 'success', (article_lang) =>
                   
@@ -674,14 +706,50 @@
         req.send( message ) 
 
 
-    if values.copy
-      console.log "Copy link"
+    if values.copy      
       Article.link( values, callback )
     else
       Article.move( values, callback )
 
 
+
+  #
+  # ARTICLE UNLINK FROM PAGE
+  #
+  @post "/:lang/admin/article/unlink/:id_page/:id_article" : (req) ->
     
+    callback = (err, article, page_article) =>
+      if err
+        console.log "Error while unlinking article",err
+      else      
+        #
+        # Response
+        #
+        message = 
+          message_type:""
+          message:""
+          update:[]
+          callback:[          
+            
+            fn:"ION.unlinkArticleFromPageDOM"
+            args: [
+              id_page:@params.id_page
+              id_article:@params.id_article
+            ,
+              "article"
+            ]
+          ,
+            fn:"ION.notification"
+            args : [
+              "success","Article unlinked from page"
+            ]
+          ]
+
+
+        req.send( message ) 
+    
+    Article.unlink( @params, callback )
+      
   #
   # ARTICLE DELETE
   #

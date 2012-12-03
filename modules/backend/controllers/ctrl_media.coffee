@@ -152,20 +152,26 @@
     if data.headers.cookie 
       # if there is, parse the cookie
       data.cookie = parseCookie(data.headers.cookie);
-      
+           
       # note that you will need to use the same key to grab the
       # session id, as you specified in the Express setup.      
       data.sessionID = data.cookie['connect.sid']
       #console.log "Auth / Session ID : ",data.sessionID
 
-      __sessionStore.get data.sessionID, (err, session) ->        
-        if err or not session
-          console.log "Error in get session, client cookie might be expired. Check server date if this is happening when it shouldn't."
-          accept( 'Error', false )
-        else
-          #console.log "session retrieved ", session
-          data.session = session
-          accept( null, true )
+      if not data.sessionID
+        accept( null, false )
+        console.log "Websocket @[#{data.address.address}:#{data.address.port}] -> cookie expired."          
+
+      else
+        __sessionStore.get data.sessionID, (err, session) ->        
+          if err or not session
+            console.log data.address
+            console.log "Websocket @[#{data.address.address}:#{data.address.port}] -> error in get session, client cookie might be expired. Check server date if this is happening when it shouldn't."          
+            accept( 'Error', false )
+          else
+            #console.log "session retrieved ", session
+            data.session = session
+            accept( null, true )
 
 
       #console.log data.sessionID
@@ -183,7 +189,7 @@
   #
   # Server side event
   # TODO: we might wait a little bit to let session being retrieved from database
-  # for when server is restarted (connection is called before session retrieval)
+  # when server is restarted (connection is called before session retrieval)
   @io.sockets
     .on 'connection', (socket) ->
       sessionID = socket.handshake.sessionID

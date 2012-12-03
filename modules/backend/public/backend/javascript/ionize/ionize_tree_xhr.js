@@ -178,14 +178,14 @@ ION.TreeXhr = new Class({
 		
 		var flat_id = (type == 'page') ? element.id_page : element.id_page + 'x' + element.id_article;
 		var rel = (type == 'page') ? element.id_page : element.id_page + '.' + element.id_article;
-		var online = (element.online == '1') ? 'online' : 'offline'; 
+		var online = (element.online == '1') ? 'online' : 'offline';
 		
-		var title = (typeOf(element.nav_title) != 'null' && element.nav_title != '') ? element.nav_title : element.title;
-		var type_description = (typeOf(element.type_description) != 'null' && element.type_description != '') ? ' : ' + element.type_description : '';
+		var title = (typeOf(element.nav_title) !== 'null' && element.nav_title !== '') ? element.nav_title : element.title;
+		var type_description = (typeOf(element.type_description) !== 'null' && element.type_description !== '') ? ' : ' + element.type_description : '';
 
-		if (title == '') title = element.name;
+		if (title === '') title = element.name;
 		
-		var container = this.injectContainer(type, id_parent)
+		var container = this.injectContainer(type, id_parent);
 		
 		var li = new Element('li').setProperty('id', type + '_' + flat_id).addClass(online).addClass(type + flat_id).setProperty('rel', rel);
 		li.store('loaded', false);
@@ -196,7 +196,7 @@ ION.TreeXhr = new Class({
 		var iconOnline = this.icon_Model.clone().adopt(new Element('a').addClass('status').addClass(online).addClass(type + flat_id).setProperty('rel', rel));
 		action.adopt(iconOnline);
 		
-		// Title element 
+		// Title element
 		var link = this.span_Model.clone().addClass('title');
 		var a = this.title_Model.clone()
 					.addClass(online).addClass(type + flat_id).addClass('title')
@@ -245,7 +245,7 @@ ION.TreeXhr = new Class({
 		{
 			li.addClass('file').addClass(type + id);
 			
-			// Icon : unlink			
+			// Icon : unlink		
 			var iconUnlink = this.icon_Model.clone().adopt(new Element('a', {'class': 'unlink', 'rel': rel}));
 			action.adopt(iconUnlink);
 

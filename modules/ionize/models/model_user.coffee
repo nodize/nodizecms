@@ -10,7 +10,7 @@
 # http://www.opensource.org/licenses/MIT
 #
 module.exports = (sequelize, DataTypes) ->
-  sequelize.define( "users", {
+  sequelize.define "users", 
     id_user     : { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true }
     id_group    : DataTypes.INTEGER
     join_date   : DataTypes.DATE
@@ -20,4 +20,25 @@ module.exports = (sequelize, DataTypes) ->
     password    : DataTypes.STRING
     email       : DataTypes.STRING
     salt        : DataTypes.STRING    
-  })
+  ,
+    classMethods:
+      #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'users'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+#        ,
+#          version : 2
+#          code : ->
+#            migrator.addColumn( 'newField', DataTypes.STRING )
+#            migrator.removeColumn( 'field' )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )

@@ -11,7 +11,7 @@
     #
     .on 'articleUpdate', (params) =>
       #console.log "articleUpdate event in ctrl-> ", params.id_article
-      #console.log params
+      #console.log params.article
       @io.sockets.emit 'live_articleUpdate', {id_article:params.article.id_article, content:params.article.content}
 
   # ---------------------------
@@ -25,7 +25,8 @@
   @client '/nodize.js': ->       
     @connect()
    
-    @on live_articleUpdate: (params) ->      
+    @on live_articleUpdate: (params) ->  
+      #console.log "update event", params.data    
       $ = jQuery
       
       #
@@ -33,7 +34,7 @@
       #      
       $('#ion_liveArticle_'+params.data.id_article+' .ion_live_content').html( params.data.content )      
       # http://www.bitstorm.org/jquery/color-animation/
-      $('#ion_liveArticle_'+params.data.id_article+' .ion_live_content').animate({color:'#00AA00'}).animate({color:'#000000'})      
+      #$('#ion_liveArticle_'+params.data.id_article+' .ion_live_content').animate({color:'#00AA00'}).animate({color:'#000000'})      
      
       #
       # Refresh page when an article is updated

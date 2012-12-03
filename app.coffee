@@ -181,7 +181,7 @@ nodize.io.set 'log level', 1
 # Defining the port we listen on
 # Default to 3000
 #
-port = process.env.PORT or 3000
+port = process.env.VCAP_APP_PORT or process.env.PORT or 3000
 
 
 #

@@ -18,7 +18,7 @@
   #
   # Displaying article edition page
   #
-  @view backend_article: ->
+  @view backend_article: ->    
     html ->
       form '#articleForm', name: 'articleForm', method: 'post', action: "/en/admin/article/save/{@article.id_article}", ->
         input '#element', type: 'hidden', name: 'element', value: 'article'
@@ -68,8 +68,8 @@
                   dd ->                    
                     select '.customselect.select.w160', name: 'view', ->
                       option value: '', '-- Default view --'
-                      for view of @views["blocks"]
-                        option selected: ('selected' if view==@page_article.view), value: view, -> @views["blocks"][view]
+                      for block in @blocks
+                        option selected: ('selected' if block.file==@page_article.view), value: block.file, -> block.name
                       
               # 'Indexed content'
               dl '.small', ->
@@ -202,9 +202,10 @@
                       label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                     dd ->                    
                       select '.customselect.select.w160', name: 'view', ->
-                        option value: '', '-- Default view --', selected:'selected'
-                        for view of @views["blocks"]
-                          option value: view, -> @views["blocks"][view]
+                        option value: '', '-- Default view --', selected:'selected'                        
+
+                        for block in @blocks
+                          option value: block.file, -> block.name
                
             div style: 'margin: -15px 0pt 20px 72px;', ->
               p ->
@@ -297,7 +298,7 @@
                   h3 ".toggler.toggler-#{lang}", 'Summary'
                   div ".element.element-#{lang}", ->
                     div ->
-                      textarea "#summary_#{lang}.smallTinyTextarea.w600.h100", name: "summary_#{lang}", rel: lang
+                      textarea "#summary_#{lang}.smallTinyTextarea.w600.h100", name: "summary_#{lang}", rel: lang,"#{@article_by_lang[ lang ].summary}"
                       p '.clear.h15 mb15', ->
                         button "#wysiwyg_summary_#{lang}.light-button.left", type: 'button', onclick: "tinymce.execCommand(\'mceToggleEditor\',false,\'summary_#{lang}\');return false;", 'toggle editor'
 

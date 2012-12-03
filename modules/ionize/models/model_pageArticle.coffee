@@ -35,6 +35,26 @@ module.exports = (sequelize, DataTypes)->
 
     classMethods:
       #
+      # Migration management
+      #
+      migrate : ->
+
+        tableName = 'page_article'
+
+        migrations = [
+          version : 1
+          code : ->
+            "First version"
+#        ,
+#          version : 2
+#          code : ->
+#            migrator.addColumn( 'newField', DataTypes.STRING )
+#            migrator.removeColumn( 'field' )
+        ]
+
+        migrator = sequelize.getMigrator( tableName )
+        migrator.doMigrations( tableName, migrations )
+      #
       # Deleting page article
       # "data" contains a JSON array with filter to apply (=SQL WHERE)
       #

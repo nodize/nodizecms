@@ -32,7 +32,20 @@
                 dt ->
                   label @ion_lang.ionize_label_date
                 dd ->
-                  span class:'lite'
+                  if @page.created
+                    dateArray = @page.created._toMysql().split(' ')
+                    text dateArray[0]
+                    span class:'lite'
+
+              dl '.small.compact', ->
+                dt ->
+                  label @ion_lang.ionize_label_updated
+                dd ->
+                  if @page.updated
+                    dateArray = @page.updated._toMysql().split(' ')
+                    text dateArray[0]
+                    span '.lite', ' '+dateArray[1]
+
               # 'Link ?'
               div id:'linkContainer'
 
@@ -126,18 +139,25 @@
               dl '.small', ->
                 dt ->
                   label for: 'logical_date', 'Date'
-                dd ->
-                  input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: ''
+                dd ->                  
+                    logical_date = ''
+                    logical_date = @page.logical_date._toMysql() if @page.logical_date? isnt ''
+                    input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
+                  
                   label for: 'publish_on', title: 'Publish the item at this date and replace the displayed item date', 'Publish'
-                dd ->
-                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: ''
+                dd ->                  
+                  publish_on = ''
+                  publish_on = @page.publish_on._toMysql() if @page.publish_on? isnt ''
+                  input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
-                dd ->
-                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: ''
+                dd ->                 
+                  publish_off = ''
+                  publish_off = @page.publish_off._toMysql() if @page.publish_off? isnt ''
+                  input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # Subnavigation
             # if @page.id_page isnt ''
             #   h3 '.toggler', 'Sub Navigation'
@@ -342,8 +362,8 @@
                   label for: 'id_menu', -> @ion_lang.ionize_label_menu
                 dd ->
                   select '#id_menu.select', name :'id_menu', ->
-                    for menu in @menus                       
-                      option value:menu.id_menu, -> menu.title
+                    for menu in @menus                           
+                      option value:menu.id_menu, selected:"#{if menu.id_menu is parseInt( @menu_id ) then 'selected' else ''}", -> menu.title
                       
               #
               # Parents list (pages), loaded via XHR on menu selection change
