@@ -4,7 +4,7 @@ ION.append({
 
 	tinyMceSettings: function(id, mode, options)
 	{
-		var options = (typeOf(options) != 'null') ? options : {};
+		options = (typeOf(options) != 'null') ? options : {};
 
 		var width = (typeOf(options.width) != 'null') ? options.width : '100%';
 		var height = (typeOf(options.height) != 'null') ? options.height : 180;
@@ -29,7 +29,7 @@ ION.append({
 					verify_html : false,
 					relative_urls : false,
 					auto_cleanup_word : false,
-					plugins : 'inlinepopups,advimage,advlink,spellchecker,nonbreaking',
+					plugins : 'save,inlinepopups,advimage,advlink,spellchecker,nonbreaking',
 					theme_advanced_toolbar_location : 'top',
 					theme_advanced_toolbar_align : 'left',
 					theme_advanced_resizing : true,
@@ -39,10 +39,18 @@ ION.append({
 					theme_advanced_buttons2 : '',
 					theme_advanced_buttons3 : '',
 					content_css : tinyCSS,
-					file_browser_callback: 'ION.openTinyFilemanager'
+					file_browser_callback: 'ION.openTinyFilemanager',
+					save_onsavecallback:function(ed)
+					{
+						var submit = jQuery('#articleFormSubmit');
+						if (typeOf(submit) != 'null')
+							submit.click();
+						else
+							console.log( "submit button not found");
+						return false;
+					}
 				};
 				return settings;
-				break;
 
 			default:
 				// Removed plugin preelementfix
@@ -65,7 +73,7 @@ ION.append({
 					auto_cleanup_word : false,
 					cleanup_on_startup : false,
 					cleanup : false,
-					plugins : 'nodize,pdw, inlinepopups,codemirror,safari,nonbreaking,media,preview,directionality,paste,fullscreen,template,table,advimage,advlink',
+					plugins : 'save, nodize,pdw, inlinepopups,codemirror,safari,nonbreaking,media,preview,directionality,paste,fullscreen,template,table,advimage,advlink',
 					flash_menu : 'false',
 					theme_advanced_toolbar_location : 'top',
 					theme_advanced_toolbar_align : 'left',
@@ -78,11 +86,19 @@ ION.append({
 					theme_advanced_buttons2 : tinyButtons2,
 					theme_advanced_buttons3 : tinyButtons3,
 					content_css : tinyCSS,
-		            // PDW Toggle Toolbars settings
-		            pdw_toggle_on : 1,
-		            pdw_toggle_toolbars : '2,3',
+					// PDW Toggle Toolbars settings
+					pdw_toggle_on : 1,
+					pdw_toggle_toolbars : '2,3',
 					file_browser_callback: 'ION.openTinyFilemanager',
-					
+					save_onsavecallback:function(ed)
+					{
+						var submit = jQuery('#articleFormSubmit');
+						if (typeOf(submit) != 'null')
+							submit.click();
+						else
+							console.log( "submit button not found");
+						return false;
+					},
 					formats : {
 						alignleft : {selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes : 'left'},
 						aligncenter : {selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes : 'center'},
@@ -92,13 +108,12 @@ ION.append({
 				};
 
 				// If users templates, add them to the init object
-				if (getTinyTemplates != false)
+				if (getTinyTemplates !== false)
 				{
 					settings.template_templates = getTinyTemplates(site_theme_url + 'templates/');
 				}
 
 				return settings;
-				break;
 		}
 	},
 
