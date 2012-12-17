@@ -1,4 +1,7 @@
 {
+    "# Server port" : "On what port is the server listening - 3000 as default, can be overriden with PORT environment variable",
+    "server_port" : 3000,
+    
     "# Cores": "Number of cores to use, under testing, use 0 if you want to be safe (one core) or set to 'max' to use all available cores",
     "cores": 0,    
  
@@ -30,6 +33,5 @@
     "pixlr_callback_url": "/pixlr/save_callback",
 
     "# production_server": "Tag to identify in your code when you're running in production",
-    "production_server": false
-    
+    "production_server": false    
 }
