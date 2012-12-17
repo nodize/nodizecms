@@ -7,7 +7,7 @@
 #  | |\  | (_) | (_| | |/ /  __/
 #  \_| \_/\___/ \__,_|_/___\___|
 #
-#  v0.0.4
+#  v0.0.5
 #
 #  Nodize CMS by Hypee (c)2012 (www.hypee.com)
 #  Released under MIT License
@@ -181,7 +181,10 @@ nodize.io.set 'log level', 1
 # Defining the port we listen on
 # Default to 3000
 #
-port = process.env.VCAP_APP_PORT or process.env.PORT or 3000
+port =  process.env.VCAP_APP_PORT or # Used by AppFog 
+        process.env.PORT or 
+        nodizeSettings.get( "server_port" ) or # Defined in "/settings/nodize.json" of "/settings/nodize.local.json"
+        3000
 
 
 #

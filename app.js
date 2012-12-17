@@ -106,7 +106,7 @@
 
   nodize.io.set('log level', 1);
 
-  port = process.env.VCAP_APP_PORT || process.env.PORT || 3000;
+  port = process.env.VCAP_APP_PORT || process.env.PORT || nodizeSettings.get("server_port") || 3000;
 
   cluster = require('cluster');
 
