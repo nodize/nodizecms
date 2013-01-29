@@ -99,9 +99,7 @@
       category.ordering = ordering
 
       category.save()
-        .on 'success', (new_category) ->
-          console.log "category saved ", new_category.id_category
-          
+        .on 'success', (new_category) ->          
           # Sequelize needs "id" field & current primary key is "id_menu" in Ionize database
           DB.query( "UPDATE category SET id = id_category")
 
@@ -127,7 +125,6 @@
 
       category_lang.save()
         .on 'success', ->
-          console.log "category lang saved"
           requestCount--
           if requestCount is 0
             #

@@ -7,6 +7,8 @@
 # http://www.opensource.org/licenses/MIT
 #
 @include = ->
+  Settings = @Settings
+
   #
   # GENERIC FUNCTIONS
   #
@@ -992,3 +994,107 @@
               req.send message
           .on 'failure', (err) ->
               console.log "Error on adding category to article", err
+
+  #
+  # ARTICLE LINK TO
+  #
+  @post '/:lang/admin/article/get_link' : (req) =>    
+    values = req.body
+    
+    # Retrieve page_id from parameter in POST
+    findPage = ->      
+      Page_article.find( {where: {id_page:values.id_page, id_article:values.id_article} } )
+        .on 'success', (page_article) ->
+          if page_article
+            renderView( page_article )
+          else
+            req.send "pageArticle #{values.id_page}/#{values.id_article} not found"
+    
+    renderView = (page_article) ->
+      #
+      # Display the page edition view 
+      #
+      req.render "backend_getLink", 
+        layout        : no        
+        page          : page_article
+        link          : page_article.link
+        hardcode      : @helpers 
+        lang          : req.params.lang
+        ion_lang      : ion_lang[ req.params.lang ] 
+        settings      : Settings
+        parent        : 'article'        
+    #
+    # Start process
+    #
+    findPage()
+
+  #
+  # Adding a link
+  #
+  # @param post.link_rel = destination
+  # @param post.receiver_rel  
+  # @param post.link_type = "page" | ... 
+  @post '/:lang/admin/article/add_link' : (req) =>    
+    values = req.body
+
+    callback = (err, page_article) =>
+      message = 
+      message_type:""
+      message:""
+      update:[]
+      callback:[
+        fn:"ION.HTML"
+        args:[
+          "article\/\/get_link"
+        ,
+          id_page:page_article.id_page
+          id_article:page_article.id_article
+        ,
+          update:"linkContainer"
+        ]
+      ,
+        fn:"ION.notification"
+        args:[
+          "success"
+          "Link added"
+        ]
+      ]
+
+      req.send message  
+
+    #
+    # Start link addition
+    #
+    Article.addLink( values, callback )
+
+  #
+  # Removing a link 
+  #
+  # @param post.rel = id_page
+  @post '/:lang/admin/article/remove_link' : (req) =>    
+    values = req.body
+    
+    callback = (err, page_article) =>
+      if not err 
+        message = 
+        message_type:""
+        message:""
+        update:[]
+        callback:[
+          fn:"ION.HTML"
+          args:[
+            "article\/\/get_link"
+          ,
+            id_page:page_article.id_page
+            id_article:page_article.id_article
+          ,
+            update:"linkContainer"
+          ]      
+        ]
+
+        req.send message  
+
+    #
+    # Start link deletion
+    #
+    Article.removeLink( values, callback )

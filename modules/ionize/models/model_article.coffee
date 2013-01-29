@@ -96,6 +96,100 @@ module.exports = (sequelize, DataTypes)->
         
         getExistingRecord()
 
+
+      #
+      # Creating a link in an article
+      #
+      # @param data.link_rel = destination
+      # @param data.receiver_rel = Page_article we are adding the link to
+      # @param data.link_type = "page" | "article" | "external"  
+      addLink : (data, callback) ->        
+        
+        #
+        # Extracting info needed to update Page_article table
+        #
+        receiver = data.receiver_rel.split(".")
+        receiver.id_page = receiver[0]
+        receiver.id_article = receiver[1]
+        
+        #
+        # Retrieve the page we link to
+        #
+        findDestinationPage = =>
+          if data.link_type is 'page'
+            @find({where:{id_page:data.link_rel}})
+              .on 'success', (page) =>
+                createLink( page )
+              
+              .on 'failure', (err) ->
+                callback( err, null )
+          # External link
+          else 
+            createLink( null )
+
+        createLink = (pageLink) =>
+          Page_article.find({where:{id_page:receiver.id_page, id_article:receiver.id_article}})
+            .on 'success', (page_article) =>
+              page_article.link_type = data.link_type
+              
+              #
+              # If the link is an internal page
+              #
+              if page_article and data.link_type is "page"                
+                page_article.link = pageLink.name
+                page_article.link_id = pageLink.id_page
+              #
+              # if the link is external
+              #
+              else if data.link_type is "external"
+                page_article.link = data.url                
+
+              page_article.save()
+                .on 'success', (page) =>
+                  callback( null, page_article )
+                .on 'failure', (err) ->
+                  callback( err, null )
+                      
+          .on 'failure', (err) ->
+            callback( err, null )
+
+        #
+        # Start process
+        #        
+        findDestinationPage()
+
+      #
+      # Removing a link for an article
+      #
+      # @param data.rel = page
+      removeLink : (data, callback) ->                
+        
+        findPageArticle = =>
+          Page_article.find({where:{id:data.rel}})
+            .on 'success', (page_article) =>
+              deleteLink( page_article )
+            
+            .on 'failure', (err) ->
+              callback( err, null )
+
+        deleteLink = (page_article) =>
+          page_article.link_type = null
+          page_article.link = null
+          page_article.link_id = null
+
+          page_article.save()
+            .on 'success', (page_article) =>
+              callback( null, page_article )
+            .on 'failure', (err) ->
+              callback( err, null )
+                      
+          
+        #
+        # Start process
+        #
+        findPageArticle()
+    
+
       #
       # Link article to another page (and keep existing link)
       #

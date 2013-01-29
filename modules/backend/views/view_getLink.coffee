@@ -4,10 +4,10 @@
   # Pages & Articles, display links
   #
   @view backend_getLink: ->
-    if @page.link? 
+    if @link 
       dl '.small.dropArticleAsLink.dropPageAsLink', ->
         dt ->
-          label title: 'Internal or External HTTP link. Replace the default page link', 'Link to...'
+          label title: @ion_lang.ionize_help_page_link, -> @ion_lang.ionize_label_linkto
           br()
         dd ->
           ul '#linkList.sortable-container.mr20', ->
@@ -25,12 +25,13 @@
           var id_page = "#{@page.id_page}";
           var link_id = "#{@page.link_id}";
           var link_type = "#{@page.link_type}";
+          var parent_id = "#{@page.id}";
           """
 
         coffeescript ->
           $$("#linkList li .unlink").each (item) ->
             ION.initRequestEvent item, parent_type+"\/\/remove_link",
-              rel: id_page
+              rel: parent_id
             ,
               update: "linkContainer"
 
@@ -47,14 +48,13 @@
     else    
       dl '.small.dropArticleAsLink.dropPageAsLink', ->
         tag 'dt', ->
-          label for: 'link', title: 'Internal or External HTTP link. Replace the default page link', 'Link'
+          label for: 'link', title: @ion_lang.ionize_help_page_link, -> @ion_lang.ionize_label_link
           br()
-          
-        
+                  
         tag 'dd', ->
-          textarea '#link.inputtext.w140.h40.droppable', alt: 'drop a link here...'
+          textarea '#link.inputtext.w140.h40.droppable', alt: @ion_lang.ionize_label_drop_link_here
           br()
-          a id: 'add_link', 'Add link'
+          a id: 'add_link', -> @ion_lang.ionize_label_add_link
         
 
       script ->

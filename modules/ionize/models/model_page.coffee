@@ -157,10 +157,10 @@ module.exports = (sequelize, DataTypes)->
       # Creating a link for a page
       #
       # @param data.link_rel = destination
-      # @param data.receiver_rel  
-      # @param data.link_type = "page" | ... 
+      # @param data.receiver_rel = page we are adding a link to
+      # @param data.link_type = "page" | "article" | "external"  
       addLink : (data, callback) ->        
-        
+
         #
         # Retrieve the page we link to
         #
@@ -215,7 +215,7 @@ module.exports = (sequelize, DataTypes)->
       removeLink : (data, callback) ->                
         
         findPage = =>
-          @find({where:{id_page:data.rel}})
+          @find({where:{id:data.rel}})
             .on 'success', (page) =>
               deleteLink( page )
             

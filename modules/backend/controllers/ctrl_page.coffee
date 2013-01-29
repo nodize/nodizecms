@@ -34,6 +34,7 @@
       req.render "backend_getLink", 
         layout        : no        
         page          : page
+        link          : page.link
         hardcode      : @helpers 
         lang          : req.params.lang
         ion_lang      : ion_lang[ req.params.lang ] 
