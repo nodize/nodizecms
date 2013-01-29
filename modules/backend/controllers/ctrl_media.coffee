@@ -23,7 +23,7 @@
     
     ck = require 'coffeecup'
 
-    DB.query( "SELECT * FROM media, article_media WHERE article_media.id_media = media.id_media AND article_media.id_article = #{@params.id_article}", Media)
+    DB.query( "SELECT * FROM media, article_media WHERE article_media.id_media = media.id_media AND article_media.id_article = #{@params.id_article} ORDER BY article_media.ordering", Media)
       .on 'success', (medias) =>
         content = ''
 
@@ -31,7 +31,7 @@
         
 
         template = ->  
-          div '.picture.drag', id:'picture_10', ->
+          div '.picture.drag', id:"picture_#{@media.id_media}", ->
             div '.thumb', style:"width:120px;height:120px; background-image:url(/#{@media.path});", ->
             p class:"icons", ->
               a class:"icon delete right", href:"javascript:mediaManager.detachMedia('picture', '#{@media.id_media}');", title:"Unlink media"
@@ -39,7 +39,7 @@
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'editor'})", title:"Edit"
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'express'})", title:"Edit"
               a class:"icon refresh left mr5 "; href:"javascript:mediaManager.initThumbs('#{@media.id_media}');", title:"Init thumbnails"
-              a class:"icon info left help", title:"#{@media.id_media} : #{@media.file_name} ", rel:"940 x 614 px<br/>138.83ko"
+              a class:"icon info left help", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"#{@media.id_media} : #{@media.file_name} ", rel:"Image settings"
     
         for media in medias
           media_path = media.path
@@ -285,4 +285,48 @@
 
     req.send("not implemented yet")
 
+  #
+  # ORDERING MEDIAS
+  #
+  @post '/:lang/admin/media/save_ordering/article/:id_article' : (req) ->
+    values = req.body
+
+    requestCount = 0
+
+    #
+    # Call back on request finish
+    # We send success response when all requests are done
+    #
+    checkFinished = =>
+      requestCount--
       
+      if requestCount is 0
+        #
+        # Building JSON response
+        # - Notification
+        #  
+        message =  
+          message_type  : "success"
+          message       : "Medias ordered"              
+          update        : []                   
+          callback      : null
+              
+        @send message  
+
+    ordering = 1
+
+    #
+    # Doing UPDATE queries
+    #
+    for id_media in values.order.split ','
+      requestCount++
+      
+      DB.query( "UPDATE article_media SET ordering=#{ordering} WHERE id_media=#{id_media} and id_article=#{@params.id_article}")
+        .on 'success', ->
+          checkFinished()
+          
+        .on 'failure', (err) ->
+          console.log 'database error ', err
+              
+      ordering++
+  
