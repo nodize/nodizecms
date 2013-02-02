@@ -7,7 +7,7 @@
             <% end %>                       
         </ul>
 
-        <p class="footer-text">Copyright 2011 PageOne. &nbsp;&nbsp;&nbsp; Designed by <a href="http://www.styleshout.com/">Styleshout</a></p>
+        <p class="footer-text">Copyright <%= Date.create().format('{yyyy}') %> Your company. &nbsp;&nbsp;&nbsp; Designed by <a href="http://www.styleshout.com/">Styleshout</a></p>
     </div>
 
 </footer>

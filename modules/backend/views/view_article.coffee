@@ -51,8 +51,8 @@
                   text dateArray[0]
                   span '.lite', ' '+dateArray[1]
                   
-                # 'Link ?'
-                # div id:'linkContainer'
+                # Link
+                div id:'linkContainer'
 
                 # 'Modules PlaceHolder'
 
@@ -114,9 +114,9 @@
                           a class: 'page', ->
                             span class:'link-img page left mr5 main-parent'
                             text 'Examples'
-                      comment '<input type="text" id="new_parent" class="inputtext w140 italic empty nofocus droppable" alt="drop a page here..."></input>'
-              comment 'Flag \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="flag0" title="An internal marked, just to be organized.">Flag</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t\t<label class="flag flag0"><input id="flag0" name="flag" class="inputradio" type="radio"  checked="checked"  value="0" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag1"><input name="flag" class="inputradio" type="radio"  value="1" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag2"><input name="flag" class="inputradio" type="radio"  value="2" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag3"><input name="flag" class="inputradio" type="radio"  value="3" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag4"><input name="flag" class="inputradio" type="radio"  value="4" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag5"><input name="flag" class="inputradio" type="radio"  value="5" /></label>\n\n\t\t\t\t\t\t</dd>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t</dl>'
-            comment 'Advanced options \n\n\t\t\t<h3 class="toggler">Advanced options</h3>\n\n\t\t\t\n\n\t\t\t<div class="element">\n\n\n\n\n\n\t\t\t\t<!-- Tags \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t<textarea id="tags" name="tags" class="inputtext w140 h40" type="text" onkeyup="formManager.toLowerCase(this, \'tags\');"></textarea>\n\n\t\t\t\t\t</dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\t\t\t\t<!-- Existing Tags \n\n\t\t\t\t<dl class="small last">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Existing tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd></dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\n\n\t\t\t</div>'
+                      # '<input type="text" id="new_parent" class="inputtext w140 italic empty nofocus droppable" alt="drop a page here..."></input>'
+              # 'Flag \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="flag0" title="An internal marked, just to be organized.">Flag</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t\t<label class="flag flag0"><input id="flag0" name="flag" class="inputradio" type="radio"  checked="checked"  value="0" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag1"><input name="flag" class="inputradio" type="radio"  value="1" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag2"><input name="flag" class="inputradio" type="radio"  value="2" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag3"><input name="flag" class="inputradio" type="radio"  value="3" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag4"><input name="flag" class="inputradio" type="radio"  value="4" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag5"><input name="flag" class="inputradio" type="radio"  value="5" /></label>\n\n\t\t\t\t\t\t</dd>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t</dl>'
+            # 'Advanced options \n\n\t\t\t<h3 class="toggler">Advanced options</h3>\n\n\t\t\t\n\n\t\t\t<div class="element">\n\n\n\n\n\n\t\t\t\t<!-- Tags \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t<textarea id="tags" name="tags" class="inputtext w140 h40" type="text" onkeyup="formManager.toLowerCase(this, \'tags\');"></textarea>\n\n\t\t\t\t\t</dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\t\t\t\t<!-- Existing Tags \n\n\t\t\t\t<dl class="small last">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Existing tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd></dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\n\n\t\t\t</div>'
             # 'Dates'
             h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_dates
             div '.element.element-options', ->
@@ -352,6 +352,7 @@
       script ->
         """
         id_article = #{@article.id_article}
+        id_page = #{@page.id_page}
         langs = #{JSON.stringify( Static_langs)}        
         """
 
@@ -528,13 +529,13 @@
             id_article: $("id_article").value
 
 
-        # # Link to page or article or what else...
-        # if $("linkContainer")
-        #   ION.HTML admin_url + "article/get_link",
-        #     id_page: "4"
-        #     id_article: "9"
-        #   ,
-        #     update: "linkContainer"
+        # Link to an internal or external page
+        if $("linkContainer")
+          ION.HTML admin_url + "article\/\/get_link",
+            id_page: id_page
+            id_article: id_article
+          ,
+            update: "linkContainer"
 
 
         # Get Content Elements Tabs & Elements
