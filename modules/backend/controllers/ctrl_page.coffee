@@ -500,10 +500,10 @@
       page.article_order = 0
       page.article_order_direction = 0
       page.link_id = 0
-      page.pagination = values.pagination
+      page.pagination = values.pagination | -1
       page.pagination_nb = 0
-      page.id_group = values.id_group
-      page.priority = values.priority
+      page.id_group = values.id_group | -1
+      page.priority = values.priority | -1
       page.view = values.view
       page.appears = values.appears
       page.created = new Date
@@ -511,9 +511,7 @@
       page.publish_on = values.publish_on
       page.publish_off = values.publish_off
       page.logical_date = values.logical_date
-              
-
-      
+                    
       if values.id_parent == "0"
         page.level = 0        
         saveNewPage( page )        

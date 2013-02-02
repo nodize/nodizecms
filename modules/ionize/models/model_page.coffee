@@ -244,12 +244,16 @@ module.exports = (sequelize, DataTypes)->
       # Define default values on page creation
       #
       createBlank : ->
-        @name    = ""
-        @created = new Date()
-        @updated = new Date()
-        @publish_on = ''
-        @publish_off = ''
-        @logical_date = ''
+        @name           = ""
+        @created        = new Date()
+        @updated        = new Date()
+        @publish_on     = ''
+        @publish_off    = ''
+        @logical_date   = ''
+        @pagination     = -1
+        @pagination_nb  = -1
+        @id_group       = -1
+        @priority       = -1
 
 
         

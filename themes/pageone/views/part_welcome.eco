@@ -1,13 +1,24 @@
 <!-- main -->
     <section id="main">
 
-        <div class="intro-box">            
-            <%= @ion_articles type:'welcome_top', live:true, => %>                        
+        <% # Top page article, you need to have declared "welcome_top" article type %>           
+        <%= @ion_articles type:'welcome_top', live:true, => %>
+            <div class="intro-box">                         
                <h1><%= @article.title %></h1>            
                <p class="intro"><%- @article.content %></p>
+            </div>
+        <% end %>
+        
+        <% # Checking if we have content to display in the slider %>           
+        <% media_count = 0 %>
+        <%= @ion_articles type:'welcome_slider', => %>   
+            <%= @ion_medias => %>                        
+                <% media_count++ %>                
             <% end %>
-        </div>
+        <% end %>
 
+        <% # Displaying Slider  %>           
+        <% if media_count > 0 : %>
         <div class="slider-wrapper">
 
             <div id="slider" class="nivoSlider">
@@ -21,7 +32,9 @@
                 <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
             </div>
         </div>
+        <% end %>
 
+        <% # Displaying all other articles linked to the page (articles with no type defined) %>           
         <div class="row no-bottom-margin">
             <% count = 0 %>
             <%= @ion_articles live:true, => %>                                

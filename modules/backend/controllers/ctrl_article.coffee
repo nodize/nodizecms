@@ -374,13 +374,13 @@
         # Create "article_lang" object & define values
         article_lang = Article_lang.build()
         article_lang.lang = lang
-        article_lang.url = values['url_'+lang ]
+        article_lang.url = values['url_'+lang ] or ""
         article_lang.id_article = values.id_article
         article_lang.content = values['content_'+lang]
         article_lang.online = values['online_'+lang] or 0
-        article_lang.title = values['title_'+lang]
-        article_lang.subtitle = values['subtitle_'+lang]
-        article_lang.summary = values['summary_'+lang]
+        article_lang.title = values['title_'+lang]        
+        article_lang.subtitle = values['subtitle_'+lang] or ""
+        article_lang.summary = values['summary_'+lang] or ""
          
         # Save to database
         article_lang.save()
@@ -429,9 +429,9 @@
 
               article_lang.content = values['content_'+lang]
               article_lang.title = values['title_'+lang]
-              article_lang.subtitle = values['subtitle_'+lang]
+              article_lang.subtitle = values['subtitle_'+lang] or ""
               article_lang.online = values['online_'+lang]
-              article_lang.summary = values['summary_'+lang]              
+              article_lang.summary = values['summary_'+lang] or ""       
 
               article_lang.save()
                 .on 'success', (article_lang) =>
@@ -511,7 +511,7 @@
         article_lang.title = values['title_'+lang]
         article_lang.content = values['content_'+lang]
         article_lang.online = values['online_'+lang] or 0
-        article_lang.subtitle = values['subtitle_'+lang]
+        article_lang.subtitle = values['subtitle_'+lang] or ""
          
         # Save to database
         article_lang.save()
