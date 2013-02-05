@@ -3,7 +3,7 @@
 # Nodize CMS
 # https://github.com/hypee/nodize
 #
-# Copyright 2012, Hypee
+# Copyright 2012-2013, Hypee
 # http://hypee.com
 #
 # Licensed under the MIT license:
@@ -50,7 +50,7 @@
         h2 '#main-title.main.themes', @ion_lang.ionize_title_themes
         # 'Views list'
         h3 '.mt20', @ion_lang.ionize_title_views_list + ' : ' + __nodizeSettings.get("theme")
-        comment '<div class="element">'
+        # '<div class="element">'
         form '#viewsForm', name: 'viewsForm', method: 'post', action: 'save_views', ->
           div '#viewsTableContainer', ->
             # 'Views table list'
@@ -59,51 +59,60 @@
                 tr ->
                   #th axis: 'string', style: 'width:20px;'
                   th axis: 'string', -> @ion_lang.ionize_label_view_filename
-                  th axis: 'string', -> @ion_lang.ionize_label_view_folder
+                  #th axis: 'string', -> @ion_lang.ionize_label_view_folder
+                  th axis: 'string', -> "Default"
                   th @ion_lang.ionize_label_view_name
                   th @ion_lang.ionize_label_view_type
               tbody ->
-                for file in @files.sort()                  
-                  #
-                  # Extract filename without path
-                  #
-                  filename = file.split('/').pop();
-
-                  #
-                  # Define variables used in the loop
-                  #
-                  logical_name = ''
-                  view_type = ''
-
-                  tr ->
+                for file in @files.sort() 
+                  do (file) =>                 
                     #
-                    # File edition with CodeMirror
+                    # Extract filename without path
                     #
-                    #td ->
-                    #  a class: 'icon edit viewEdit', rel: filename
-                    td ->
-                      a class: 'viewEdit', rel: 'page_home', -> filename
-                    td ''
+                    filename = file.split('/').pop();
 
-                    td ->
+                    #
+                    # Define variables used in the loop
+                    #
+                    logical_name = ''
+                    view_type = ''
+
+                    #
+                    # Search current file in views definition to guess its type
+                    #
+                    if @views["pages"][filename]
+                      logical_name = @views["pages"][filename] 
+                      view_type = 'page'
+
+                    if @views["blocks"][filename]
+                      logical_name = @views["blocks"][filename] 
+                      view_type = 'block'
+                    
+                    tr ->
+
                       #
-                      # Search current file in views definition to guess its type
+                      # File edition with CodeMirror
                       #
-                      if @views["pages"][filename]
-                        logical_name = @views["pages"][filename] 
-                        view_type = 'page'
+                      #td ->
+                      #  a class: 'icon edit viewEdit', rel: filename
+                      td ->
+                        a class: 'viewEdit', rel: 'page_home', -> filename
+                      td ->
+                        if view_type is 'page'
+                          checked = if @views["page_default"] is filename then "checked" else ""
+                          input type:'radio', id: 'page_default', name: 'page_default', value: filename, checked: checked
+                        if view_type is 'block'
+                          checked = if @views["block_default"] is filename then "checked" else ""
+                          input type:'radio', id: 'block_default', name: 'block_default', value: filename, checked: checked
 
-                      if @views["blocks"][filename]
-                        logical_name = @views["blocks"][filename] 
-                        view_type = 'block'
+                      td ->                      
+                        input '.inputtext.w160', type: 'text', name: 'viewdefinition_'+filename, value: logical_name
 
-                      input '.inputtext.w160', type: 'text', name: 'viewdefinition_'+filename, value: logical_name
-
-                    td ->                    
-                      select '.select', name: 'viewtype_'+filename, ->
-                        option selected: ('selected' if view_type is 'page'), class: 'type_page', value: 'page', 'Page'                        
-                        option selected: ('selected' if view_type is 'block'), value: 'block', class: 'type_block', 'Block'
-                        option selected: ('selected' if view_type is ''), value: '', '-- No type --'
+                      td ->                    
+                        select '.select', name: 'viewtype_'+filename, ->
+                          option selected: ('selected' if view_type is 'page'), class: 'type_page', value: 'page', 'Page'                        
+                          option selected: ('selected' if view_type is 'block'), value: 'block', class: 'type_block', 'Block'
+                          option selected: ('selected' if view_type is ''), value: '', '-- No type --'
         
                 
         br()
@@ -121,15 +130,17 @@
       j$ = jQuery.noConflict() 
 
       # Using ui.select jQuery widget for selects
-      j$('document').ready ->           
-        # j$('select').selectmenu
-        #   width : 140
-        #   style : 'dropdown'
-        #   icons: [
-        #     {find: '.type_page', icon: 'ui-icon-document'},
-        #     {find: '.type_article', icon: 'ui-icon-script'},
-        #     {find: '.type_block', icon: 'ui-icon-document-b'}
-        #   ]
+      # Disabled, seems to bug item type 
+      
+      # j$('document').ready ->           
+      #   j$('select').selectmenu
+      #     width : 140
+      #     style : 'dropdown'
+      #     icons: [
+      #       {find: '.type_page', icon: 'ui-icon-document'},
+      #       {find: '.type_article', icon: 'ui-icon-script'},
+      #       {find: '.type_block', icon: 'ui-icon-document-b'}
+      #     ]
         
 
       #
