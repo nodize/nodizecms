@@ -9,6 +9,10 @@
       div ".navbar-inner", ->
         div ".container-fluid", ->
           a ".brand", href: "/", ->
+            
+            i "#icon_connected", class:'icon-ok-sign icon-white', style:"display:none"
+            i "#icon_disconnected", class:'icon-remove-sign icon-red', style:"display:none"
+
             text " Nodize"
           ul ".nav.user_menu.pull-right", ->
             # Can be used to display pending notifications 
