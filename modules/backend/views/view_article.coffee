@@ -66,9 +66,8 @@
                   dt ->
                     label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                   dd ->                    
-                    select '.customselect.select.w160', name: 'view', ->
-                      option value: '', '-- Default view --'
-                      for block in @blocks
+                    select '.customselect.select.w160', name: 'view', ->                      
+                      for block in @blocks                        
                         option selected: ('selected' if block.file==@page_article.view), value: block.file, -> block.name
                       
               # 'Indexed content'
@@ -201,11 +200,10 @@
                     dt ->
                       label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                     dd ->                    
-                      select '.customselect.select.w160', name: 'view', ->
-                        option value: '', '-- Default view --', selected:'selected'                        
-
+                      select '.customselect.select.w160', name: 'view', ->                        
                         for block in @blocks
-                          option value: block.file, -> block.name
+                          selected = if @views["block_default"] is block.file then "selected" else ""                        
+                          option value: block.file, selected : selected, -> block.name
                
             div style: 'margin: -15px 0pt 20px 72px;', ->
               p ->

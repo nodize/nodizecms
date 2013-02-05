@@ -66,6 +66,10 @@
 				# jQuery upload plugins
 				script type: 'text/javascript', src: @assetsPath+'/javascript/jquery/jquery.iframe-transport.js'
 				script type: 'text/javascript', src: @assetsPath+'/javascript/jquery/jquery.fileupload.js'
+
+				# jQuery knob plugin
+				script type: 'text/javascript', src: @assetsPath+'/javascript/jquery-knob/jquery.knob.js'
+
 							
 				# Pixlr API (http://pixlr.com/develop/api)
 				script src: @assetsPath+'/javascript/pixlr/pixlr.js'
@@ -74,6 +78,7 @@
 				script src: '/socket.io/socket.io.js'
 				script src: '/zappa/zappa.js'
 				script src: '/socket.js'
+				script src: '/backendEvents.js'
 				#script src: '/backend_dashboard.js'
 
 				# "Bootstrap framework"
@@ -113,8 +118,8 @@
 			 		# Used by mocha-init and should be used by any javascript class or method which needs to access to resources	 
 					@base_url = '/'
 					@site_theme_url = '/'					
-					@date_format = '%Y.%m.%d'
-					
+					@date_format = '%Y.%m.%d'									
+
 					# 
 					# Show help tips.
 					# Used by mocha init-content
@@ -223,6 +228,48 @@
 					@tinyButtons2 = ' undo,redo,|,pastetext,selectall,removeformat,|,media,charmap,hr,blockquote,|,template,|,justifyleft,justifycenter,justifyright,justifyfull'
 					@tinyButtons3 = 'tablecontrols, nodize'
 					@tinyBlockFormats = 'p,h2,h3,h4,h5,pre,div'
+
+
 		
 			body ->
 				div id:'desktop', class:'desktop'
+
+	@client '/backendEvents.js': ->
+		# Socket.io stuff
+		@connect()
+		
+		# Display "disconnected" icon, next to "Nodize" logo, on socket.io disconnection
+		@on disconnect: ->
+			$ = jQuery
+			
+			$('#icon_connected').hide()
+			$("#icon_disconnected").show()
+
+		# Display "connected" icon, next to "Nodize" logo
+		@on connect: ->
+			$ = jQuery
+			
+			$('#icon_connected').show()
+			$("#icon_disconnected").hide()
+
+
+		@on dashboard_info_update: (socket) ->
+			$ = jQuery
+
+			#console.log "dash update request", socket.data
+			
+			# $('#dashboard-column-test > li > div.widget-content').html( "Users "+socket.data.usercount )
+
+			$("#dashboard-knob-users")
+				.trigger('configure', { "max" : socket.data.maxuser  } )
+
+			$("#dashboard-knob-users")
+				.val( socket.data.usercount )			
+				.trigger('change')
+
+			$("#dashboard-knob-memory")
+				.trigger('configure', { "max" : socket.data.maxmemory  } )
+				
+			$("#dashboard-knob-memory")
+				.val( socket.data.memory )
+				.trigger('change')
