@@ -23,7 +23,7 @@
   @io.sockets.on 'connection', (socket) ->
     dashboard_info.usercount++
     dashboard_info.maxuser = dashboard_info.usercount if dashboard_info.usercount>dashboard_info.maxuser
-    #console.log "ctrl_dash -> connection (#{dashboard_info.usercount})" 
+    
     socket.join "backend"   
     # socket.broadcast.emit 'dashboard_info_update', dashboard_info
     io.sockets.in('backend').emit 'dashboard_info_update', dashboard_info
