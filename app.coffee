@@ -45,6 +45,10 @@ application = ->
   # Needed to get POST params & handle uploads
   @use bodyParser:{ uploadDir: __dirname+'/uploads' }
   
+  # Disabling Express native cache, you'll have to use Nodize's cache to speed up your website
+  # Required to make Jade templates work correctly
+  @disable "view cache"
+
   #@use 'debug' # Connect debug middleware, uncomment to activate
 
   # Display response time in HTTP header, uncomment to activate
