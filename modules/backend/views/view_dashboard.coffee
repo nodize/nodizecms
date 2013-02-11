@@ -85,7 +85,7 @@
                 "data-readOnly" : true
                 "data-max" : 5
                 "data-title" : 'users'
-
+              
 
               input ".knob"
                 id:"dashboard-knob-memory"

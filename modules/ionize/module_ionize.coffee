@@ -17,7 +17,7 @@
   #* LOADING VIEWS, HELPERS, CONTROLLERS
   #** 
   fs = require 'fs'
-  path = require 'path'
+  #path = require 'path'
    
   includeFolders = []
   includeFolders.push "./modules/#{_moduleName}/views/"
@@ -25,10 +25,14 @@
   includeFolders.push "./modules/#{_moduleName}/helpers/"
 
   for includeFolder in includeFolders
-    if path.existsSync includeFolder
+    if fs.existsSync includeFolder
       files = fs.readdirSync includeFolder
       @include includeFolder+file for file in files
 
+  #**********************************
+  #* HELPERS FOR JADE ENGINE
+  #**  
+  require __applicationPath+"/modules/ionize/libs/jade_helpers_filters"
   
 
   #**********************************
