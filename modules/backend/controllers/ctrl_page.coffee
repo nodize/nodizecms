@@ -305,6 +305,7 @@
       page_lang.url = values['url_'+lang]
       page_lang.id_page = id_page
       page_lang.title = values['title_'+lang]
+      page_lang.subtitle = values['subtitle_'+lang]
       page_lang.online = if Static_langs.length is 1 then page.online else values['online_'+lang]
       page_lang.link = ""
       page_lang.meta_title = values['meta_title_'+lang]
@@ -391,6 +392,7 @@
           .on 'success', (page_lang)=>
             if page_lang
               page_lang.title = values['title_'+lang]
+              page_lang.subtitle = values['subtitle_'+lang]
               page_lang.url = values['url_'+lang]
               page_lang.online = values['online_'+lang]
               page_lang.meta_title = values['meta_title_'+lang]

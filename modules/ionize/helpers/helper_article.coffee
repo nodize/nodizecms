@@ -12,7 +12,6 @@
 
 #
 # Todo :
-# - Send parameters to helpers when called from Jade
 # - Check why "from" attribute is not working with jade / restore it for Eco/Express
 
 #
@@ -27,13 +26,13 @@
   #
   jade = require "jade"
 
-  jade.filters.ion_articles = (block, options) ->        
-    try      
-      # Calling the regular helper
-      @template_engine = "jade" 
-      @ion_articles( "", block )
-    catch error
-      console.log "Template error : ", error
+  # jade.filters.ion_articles = (block, options) ->        
+  #   try      
+  #     # Calling the regular helper
+  #     @template_engine = "jade" 
+  #     @ion_articles( "", block )
+  #   catch error
+  #     console.log "Template error : ", error
     
 
   #*****
@@ -208,7 +207,7 @@
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #    
-    text "{**#{requestId}**}"     
+    text "{**#{requestId.name}**}"     
         
   
   #*****
@@ -216,27 +215,51 @@
   #* Basically calling the partial defined as "block"
   #* 
   #**
-  @helpers['ion_article'] = (args...) ->
+  @helpers['ion_article'] = (args...) ->    
+
+    # Jade engine
+    if @template_engine is "jade"        
+      tagName = 'ion_article'
+
+      #
+      # We are launching an asynchronous request,
+      # we need to register it, to be able to wait for it to be finished
+      # and insert the content in the response sent to browser 
+      #
+      requestId = @registerRequest( tagName )    
+      
+      #
+      # On finished callback
+      #
+      finished = (response) =>        
+        @requestCompleted requestId, response
+
+      render = =>      
+        # Render article view        
+        template = "include ../#{@article.view}"            
+                      
+        fn = jade.compile( template, @ )
+        htmlResponse =  fn( @ ) # Compile the view to html                
+        finished( htmlResponse )
+
+      #
+      # Doing asynchronous rendering      
+      render()
+      
+      #
+      # Inserting placeholder in the html for replacement once async request are finished
+      #
+      text "{**#{requestId.name}**}"
+
+
+
     # Using "partial" for .coffee templates
-    if partial?
+    else if partial?
       partial @article.view if @article.view
     # Using "@partial" for .eco templates
     else if @partial?
       @partial @article.view if @article.view
-
-
-  #
-  # Specific code for Jade, using filters
-  #
-  jade = require "jade"
-
-  jade.filters.ion_medias = (block, options) ->        
-    try      
-      # Calling the regular helper
-      @template_engine = "jade"         
-      @ion_medias( "", block )
-    catch error
-      console.log "Template error : ", error
+    
 
   #*****
   #* Displaying articles, @articles array has to be sent with @render
@@ -304,7 +327,7 @@
               htmlResponse +=  fn( @ ) # Compile the nested content to html
             # For Eco and CoffeeCup
             else              
-              htmlResponse += cede template # Compile the nested content to html                        
+              htmlResponse += cede template # Compile the nested content to html 
 
         finished( htmlResponse )
       
@@ -331,82 +354,9 @@
       text @page_lang.title
       
   
-   #
-  # Specific code for Jade, using filters
-  #
-  jade = require "jade"
-
-  jade.filters.ion_test = (block, options) ->        
-    try      
-      # Calling the regular helper
-      @template_engine = "jade"       
-      @ion_test( "", block )
-    catch error
-      console.log "Template error : ", error
-
-  #*****
-  #* Testing Jade compatibility
-  #* 
-  #**
-  @helpers['ion_test'] = (args...) ->
-    
-    tagName = 'ion_test'
-
-    #
-    # Parameters
-    #
-    first = 1 # First image to use 
-    last = 0 # Last image to use, 0 = all
-
-    #
-    # Parsing attributes if they do exist
-    #
-    if args.length>1
-      
-      attrs = args[0]          
-      #
-      # attributes are not used yet for this helper, "name" is just an example
-      #
-      first = if attrs?.first then attrs.first else 1
-      last = if attrs?.last then attrs.last else 0
-    
-    #
-    # We are launching an asynchronous request,
-    # we need to register it, to be able to wait for it to be finished
-    # and insert the content in the response sent to browser 
-    #
-    requestId = @registerRequest( tagName )
-    
-    #
-    # Finished callback
-    #
-    finished = (response) =>
-      @requestCompleted requestId, response
-    
-    buildResponse = =>
-      #
-      # Content that will be built and sent
-      #
-      htmlResponse = ""
-
-      template = args[args.length-1]            
-                    
-      # For Jade engine
-      if @template_engine is "jade"             
-        fn = jade.compile( template, @ )
-        htmlResponse +=  fn( @ ) # Compile the nested content to html
-      # For Eco and CoffeeCup
-      else              
-        htmlResponse += cede template # Compile the nested content to html
-        
-      finished( htmlResponse )
-    
-    process.nextTick( buildResponse )
-      
-  
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #
-    text "{**#{requestId}**}"  
+    text "{**#{requestId.name}**}"  
 
       
