@@ -63,9 +63,8 @@
       #
       # "From" parameter, to select articles from another page 
       #
-      #from = if attrs?.from then attrs.from else ""
-      # console.log "from : ", from
-
+      from = if attrs?.from then attrs.from else ""
+      
       #
       # "Type" parameter, to filter result by article type
       #      
