@@ -15,8 +15,8 @@
   #*****
   #* Displaying current user name if logged in
   #**  
-  @helpers['ion_username'] = (args...) ->
-    username = @req.session.user or ""
+  @helpers['ion_username'] = (args...) ->    
+    username = @req.session.user or ""    
     
 
   #*****

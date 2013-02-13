@@ -12,6 +12,9 @@
 #
 @include = ->
   
+  jade = require "jade"
+
+
   #*****
   #* Displaying navigation
   #* use @navigation.fieldName in nested content,
@@ -24,7 +27,6 @@
   #**  
   @helpers['ion_navigation'] = (args...) ->
     tagName = 'ion_navigation'     
-
     
     # default class when displaying current/active page
     activeClass = 'active'
@@ -76,7 +78,7 @@
     #
     # Retrieve pages
     #
-    DB.query( "SELECT page_lang.title, page_lang.url, page.home, page_lang.nav_title "+
+    DB.query( "SELECT page_lang.title, page_lang.subtitle, page_lang.url, page.home, page_lang.nav_title "+
               "FROM page_lang, page "+
               "WHERE page_lang.id_page = page.id_page AND "+
               "page_lang.lang = '#{@lang}' AND "+
@@ -100,7 +102,7 @@
           #
           # For home page, url becomes / (we hide the real url)
           #
-          page.url = "/" if page.home
+          page.url = "/" if page.home          
 
           #
           # Set variables that will be used in the rendered view
@@ -108,15 +110,27 @@
           @navigation = page
                              
           @navigation.title = @navigation.nav_title if @navigation.nav_title isnt ''
-          @navigation.class = if @navigation.id_page is @page.id_page then activeClass else ''  
+          @navigation.class = if @navigation.id_page is @page.id_page then activeClass else ''
+          #
+          # If a link is declared, we replace url by the link
+          #
+          if page.link then @navigation.url = page.link  
           
           #
           # Render nested tags, 
           # last args is the nested content to render
           #
-          if args.length>=1              
-            htmlResponse += cede args[args.length-1] # Compile the nested content to html 
-            args[args.length-1]() 
+          if args.length>=1    
+            template = args[args.length-1] 
+
+            # For Jade engine
+            if @template_engine is "jade"              
+              fn = jade.compile( template, @ )
+              htmlResponse +=  fn( @ ) # Compile the nested content to html
+            # For Eco and CoffeeCup
+            else              
+              htmlResponse += cede template # Compile the nested content to html                       
+            #args[args.length-1]() 
 
         finished( htmlResponse )
 
@@ -127,7 +141,7 @@
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #
-    text "{**#{requestId}**}"
+    text "{**#{requestId.name}**}"
 
 
   #*****
@@ -293,11 +307,17 @@
             # last args is the nested content to render
             #
             if args.length>=1
-              
+              template = args[args.length-1] 
+
               htmlResponse += item_open
-              if currentLevel<=page_level
-                htmlResponse += cede args[args.length-1] # Compile the nested content to html 
-              args[args.length-1]() 
+                                
+              # For Jade engine
+              if @template_engine is "jade"              
+                fn = jade.compile( template, @ )
+                htmlResponse +=  fn( @ ) # Compile the nested content to html
+              # For Eco and CoffeeCup
+              else              
+                htmlResponse += cede template # Compile the nested content to html
 
               
 
@@ -322,6 +342,7 @@
       DB.query( """
         SELECT 
           page_lang.title,
+          page_lang.subtitle,
           page_lang.nav_title,
           page_lang.url,
           page.level,
@@ -359,6 +380,7 @@
               currentResponse["path"]       = newPath
               currentResponse["value"]      = page.id_page
               currentResponse["title"]      = page.title
+              currentResponse["subtitle"]   = page.subtitle
               currentResponse["nav_title"]  = page.nav_title
               currentResponse["level"]      = page.level
               currentResponse["url"]        = page.url
@@ -398,6 +420,6 @@
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #
-    text "{**#{requestId}**}"
+    text "{**#{requestId.name}**}"
 
 

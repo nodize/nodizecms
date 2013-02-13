@@ -32,8 +32,8 @@
   #**********************************
   #* HELPERS FOR JADE ENGINE
   #**  
-  require __applicationPath+"/modules/ionize/libs/jade_helpers_filters"
-  
+  jade_support = require __applicationPath+"/modules/ionize/libs/jade_helpers_filters"
+  jade_support.createFilters( @helpers )
 
   #**********************************
   #* CATCH ALL & PAGES DISPLAY MANAGEMENT

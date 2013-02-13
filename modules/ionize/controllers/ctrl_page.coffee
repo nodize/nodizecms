@@ -75,19 +75,29 @@
       layout = "" # Main layout
 
       sendResponse = ->
+        
+        # 
+        # Sorting chunks by creation order
         #
-        # Rebuild the response, assembling chunks
-        #
-        for chunk in chunks
-          layout = layout.replace( '{**'+chunk.requestId+'**}', chunk.content )
+        sortChunks = (a,b) ->
+          return a.requestId.order > b.requestId.order
+
+        chunks.sort( sortChunks )
 
         #
-        # Add page to cache
+        # Rebuilding the response, assembling chunks
+        #
+        for chunk in chunks                              
+          layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
+
+        #
+        # Adding page to cache
         #
         if __nodizeSettings.get 'page_cache_enabled'         
           redisClient.set "page_cache:name:"+name, layout
           redisClient.set "page_cache:id:"+id_page, name
         req.send layout
+
 
       #
       # Registering a request (main layout and Nodize helpers)
@@ -96,7 +106,12 @@
         #console.log "registering ",requestName
         requestCounter++
         requestId++
-        requestName+'_'+requestId # Building & returning an id name
+        # requestName+'_'+requestId # Building & returning an id name
+        request = 
+          name  : requestName+'_'+requestId
+          order : requestId
+
+        return request
 
       #
       # Callback for when a Nodize helpers has finished rendering
