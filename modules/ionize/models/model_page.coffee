@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes)->
     updated           : DataTypes.DATE
     publish_on        : DataTypes.DATE
     publish_off       : DataTypes.DATE
-    logical_date      : DataTypes.DATE 
+    logical_date      : DataTypes.DATE
+    has_url           : DataTypes.INTEGER
   ,
   
     classMethods:     
@@ -62,7 +63,11 @@ module.exports = (sequelize, DataTypes)->
             migrator.addColumn( 'updated', DataTypes.DATE )
             migrator.addColumn( 'publish_on'  , DataTypes.DATE )
             migrator.addColumn( 'publish_off' , DataTypes.DATE )
-            migrator.addColumn( 'logical_date', DataTypes.DATE )            
+            migrator.addColumn( 'logical_date', DataTypes.DATE )
+        ,
+          version : 3
+          code : ->
+            migrator.addColumn( 'has_url', DataTypes.INTEGER )
         ]
 
         migrator = sequelize.getMigrator( tableName )

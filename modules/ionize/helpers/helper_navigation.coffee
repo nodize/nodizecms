@@ -352,7 +352,9 @@
           page.home,
           page.online,
           page.appears,
+          page.has_url,
           page.link
+
         FROM
           page_lang, page, menu
         WHERE
@@ -385,6 +387,7 @@
               currentResponse["nav_title"]  = page.nav_title
               currentResponse["level"]      = page.level
               currentResponse["url"]        = page.url
+              currentResponse["has_url"]    = page.has_url
               currentResponse["home"]       = page.home
               currentResponse["id_page"]    = page.id_page
               currentResponse["online"]     = page.online

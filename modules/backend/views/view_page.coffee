@@ -68,7 +68,7 @@
                 dt ->
                   label for: 'has_url', title:@ion_lang.ionize_help_has_url, -> @ion_lang.ionize_label_has_url
                 dd ->
-                  input '#has_url.inputcheckbox', name: 'has_url', type: 'checkbox', checked: 'checked', value: '1'
+                  input '#has_url.inputcheckbox', name: 'has_url', type: 'checkbox', checked: "#{if @page.has_url then 'checked' else ''}", value: '1'
              
              
               # 'Page view'             

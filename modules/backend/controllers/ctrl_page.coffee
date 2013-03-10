@@ -468,6 +468,7 @@
           page.view = values.view
           page.id_parent = values.id_parent
           page.appears = values.appears
+          page.has_url = values.has_url
           page.name = values.page_name
           page.updated = new Date            
           page.publish_on = values.publish_on
@@ -511,6 +512,7 @@
       page.priority = values.priority | -1
       page.view = values.view
       page.appears = values.appears
+      page.has_url = values.has_url
       page.created = new Date
       page.updated = new Date
       page.publish_on = values.publish_on
