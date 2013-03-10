@@ -16,7 +16,7 @@
   "dependencies": {
     "connect":"1.8.6",
     "sequelize": "1.4.1",
-    "coffee-script": "1.2.0",
+    "coffee-script": "1.6.1",
     "coffeecup": "0.3.14",
     "eco": "1.1.0-rc-3",
     "jade": "0.28.1",

@@ -87,8 +87,9 @@
         #
         # Rebuilding the response, assembling chunks
         #
-        for chunk in chunks                              
+        for chunk in chunks                         
           layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
+          
 
         #
         # Adding page to cache
@@ -96,6 +97,10 @@
         if __nodizeSettings.get 'page_cache_enabled'         
           redisClient.set "page_cache:name:"+name, layout
           redisClient.set "page_cache:id:"+id_page, name
+        
+        #
+        # Send page
+        #
         req.send layout
 
 

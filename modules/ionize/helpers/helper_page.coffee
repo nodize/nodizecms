@@ -124,7 +124,7 @@
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #
-    text "{**#{requestId}**}"     
+    text "{**#{requestId.name}**}"     
 
     
 
