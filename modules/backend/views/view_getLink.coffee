@@ -30,8 +30,9 @@
 
         coffeescript ->
           $$("#linkList li .unlink").each (item) ->
+            console.log "each ", id_page
             ION.initRequestEvent item, parent_type+"\/\/remove_link",
-              rel: parent_id
+              id_page: id_page
             ,
               update: "linkContainer"
 

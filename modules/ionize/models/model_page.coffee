@@ -211,11 +211,11 @@ module.exports = (sequelize, DataTypes)->
       #
       # Removing a link for a page
       #
-      # @param data.rel = page
+      # @param data.id_page = page
       removeLink : (data, callback) ->                
-        
+
         findPage = =>
-          @find({where:{id:data.rel}})
+          @find({where:{id_page:data.id_page}})
             .on 'success', (page) =>
               deleteLink( page )
             
