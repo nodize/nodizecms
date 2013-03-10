@@ -629,26 +629,7 @@
           # Page status
           #
           ION.initRequestEvent $("iconPageStatus"), admin_url + "page\/\/switch_online/" + $("id_page").value
-          
-          # $("id_subnav_menu").addEvent "change", ->
-          #   xhr = new Request.HTML(
-          #     url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
-          #     method: "post"
-          #     onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
-          #       $("id_subnav").empty()
-          #       if Browser.ie or (Browser.firefox and Browser.version < 4)
-          #         $("id_subnav").set "html", responseHTML
-          #         selected = $("id_subnav").getElement("option[selected=selected]")
-          #         selected.setProperty "selected", "selected"
-          #       else
-          #         $("id_subnav").adopt responseTree
-          #       (new Element("option",
-          #         value: "-1"
-          #       )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
-          #   ).send()
-  
-          # $("id_subnav_menu").fireEvent "change"
-          
+
           #
           # Reorder articles
           #

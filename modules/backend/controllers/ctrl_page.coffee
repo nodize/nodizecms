@@ -17,7 +17,7 @@
   #
   @post '/:lang/admin/page/get_link' : (req) =>    
     values = req.body
-    
+
     # Retrieve page_id from parameter in URL
     findPage = ->      
       Page.find( {where: {id_page:values.id_page} } )
@@ -29,7 +29,7 @@
     
     renderView = (page) ->
       #
-      # Display the page edition view 
+      # Display the link edition view
       #
       req.render "backend_getLink", 
         layout        : no        
@@ -91,22 +91,25 @@
     values = req.body
 
     callback = (err, page) =>
-      message = 
-      message_type:""
-      message:""
-      update:[]
-      callback:[
-        fn:"ION.HTML"
-        args:[
-          "page\/\/get_link"
-        ,
-          id_page:page.id_page
-        ,
-          update:"linkContainer"
-        ]      
-      ]
+      if err
+        console.log "Error on link removal", err
+      else
+        message =
+        message_type:""
+        message:""
+        update:[]
+        callback:[
+          fn:"ION.HTML"
+          args:[
+            "page\/\/get_link"
+          ,
+            id_page:page.id_page
+          ,
+            update:"linkContainer"
+          ]
+        ]
 
-      req.send message  
+        req.send message
 
     #
     # Start link deletion

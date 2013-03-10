@@ -78,7 +78,7 @@
     #
     # Retrieve pages
     #
-    DB.query( "SELECT page_lang.title, page_lang.subtitle, page_lang.url, page.home, page_lang.nav_title "+
+    DB.query( "SELECT page_lang.title, page_lang.subtitle, page_lang.url, page.home, page_lang.nav_title, page.link "+
               "FROM page_lang, page "+
               "WHERE page_lang.id_page = page.id_page AND "+
               "page_lang.lang = '#{@lang}' AND "+
@@ -111,6 +111,7 @@
                              
           @navigation.title = @navigation.nav_title if @navigation.nav_title isnt ''
           @navigation.class = if @navigation.id_page is @page.id_page then activeClass else ''
+
           #
           # If a link is declared, we replace url by the link
           #
