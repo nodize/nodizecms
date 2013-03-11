@@ -163,9 +163,10 @@ module.exports = (sequelize, DataTypes)->
       #
       # @param data.rel = page
       removeLink : (data, callback) ->                
-        
+        console.log data
+
         findPageArticle = =>
-          Page_article.find({where:{id:data.rel}})
+          Page_article.find({where:{id:data.id_page}})
             .on 'success', (page_article) =>
               deleteLink( page_article )
             
