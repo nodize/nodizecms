@@ -160,7 +160,7 @@ var IonizeMediaManager = new Class(
 			{
 				'url' : this.adminUrl + 'media/get_media_list/' + type + '/' + this.parent + '/' + this.idParent,
 				'method': 'get',
-				'onFailure': this.failure.bind(this),				
+				'onFailure': this.failure.bind(this),
 				'onComplete': this.completeLoadMediaList.bind(this)
 			}).send();
 		}
@@ -172,19 +172,24 @@ var IonizeMediaManager = new Class(
 	 * called after a media list loading through 'loadMediaList'
 	 *
 	 * @param object	JSON response object
-	 * 					responseJSON.type : media type. Can be 'picture', 'video', 'music', 'file'
-	 * 					responseJSON.content : 
+	 * responseJSON.type : media type. Can be 'picture', 'video', 'music', 'file'
+	 * responseJSON.content :
 	 *
 	 */
 	completeLoadMediaList: function(responseJSON, responseText)
-	{		
+	{
 		// Hides the spinner
 		MUI.hideSpinner();
-
+		var container;
 		// Receiver container
 		var cname = this.containers.get(responseJSON.type);
 		if (cname)
-			var container = $(cname);
+			container = $(cname);
+		else
+		{
+			console.log( "completeLoadMediaList in ionize_mediamanager.js -> container undefined...");
+			return;
+		}
 		
 		if (typeOf(container) != 'null')
 		{
@@ -192,12 +197,12 @@ var IonizeMediaManager = new Class(
 
 			if (responseJSON && responseJSON.content)
 			{
-				// Feed the container with responseJSON content		
+				// Feed the container with responseJSON content
 				container.set('html', responseJSON.content);
 	
 				var self = this;
 	
-				// Init the sortable 
+				// Init the sortable
 				sortableMedia = new Sortables(container, {
 					revert: true,
 					handle: '.drag',
@@ -206,11 +211,11 @@ var IonizeMediaManager = new Class(
 					opacity: 0.5,
 					onComplete: function()
 					{
-						var serialized = this.serialize(0, function(element, index) 
+						var serialized = this.serialize(0, function(element, index)
 						{
 							// Get the ID list by replacing 'type_' by '' for each item
 							// Example : Each picture item is named 'picture_ID' where 'ID' is the media ID
-							if (element.id != '')
+							if (element.id !== '')
 							{
 								return (element.id).replace(responseJSON.type + '_','');
 							}
@@ -221,7 +226,7 @@ var IonizeMediaManager = new Class(
 				});
 	
 				// Store the first ordering after picture list load
-				container.store('sortableOrder', sortableMedia.serialize(0, function (element, index) 
+				container.store('sortableOrder', sortableMedia.serialize(0, function (element, index)
 				{
 					return element.getProperty('id').replace(responseJSON.type + '_','');
 				}));
@@ -250,21 +255,21 @@ var IonizeMediaManager = new Class(
 	 * @param	string	new order as a string. coma separated
 	 *
 	 */
-	sortItemList: function(type, serialized) 
+	sortItemList: function(type, serialized)
 	{
-		var container = $(this.containers.get(type))
+		var container = $(this.containers.get(type));
 		var sortableOrder = container.retrieve('sortableOrder');
 
 		// Remove "undefined" from serialized. Undefined comes from the clone, which isn't removed before serialize.
-		var serie = new Array();
+		var serie = [];
 		serialized.each(function(item)
 		{
 			if (typeOf(item) != 'null')
 				serie.push(item);
 		});
 
-		// If current <> new ordering : Save it ! 
-		if (sortableOrder.toString() != serie.toString() ) 
+		// If current <> new ordering : Save it !
+		if (sortableOrder.toString() != serie.toString() )
 		{
 			// Store the new ordering
 			container.store('sortableOrder', serie);

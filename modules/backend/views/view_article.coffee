@@ -24,7 +24,7 @@
         input '#element', type: 'hidden', name: 'element', value: 'article'
         input '#id_article', type: 'hidden', name: 'id_article', value: @article.id_article
         input '#rel', type: 'hidden', name: 'rel', value: "#{@page.id_page}.#{@article.id_article or ''}"        
-        input type: 'hidden', name: 'created', value: @article.created._toMysql()
+        input type: 'hidden', name: 'created', value: @article.created?._toMysql()
         input type: 'hidden', name: 'author', value: ''
         input '#name', type: 'hidden', name: 'name', value: ''
         input '#main_parent', type: 'hidden', name: 'main_parent', value: @page.id_page
@@ -39,7 +39,7 @@
                 dt ->                  
                   label @ion_lang.ionize_label_created                  
                 dd ->
-                  dateArray = @article.created._toMysql().split(' ')
+                  dateArray = @article.created?._toMysql().split(' ')
                   text dateArray[0]
                   span '.lite', ' '+dateArray[1]
 
@@ -47,12 +47,12 @@
                 dt ->
                   label @ion_lang.ionize_label_updated
                 dd ->
-                  dateArray = @article.updated._toMysql().split(' ')
+                  dateArray = @article.updated?._toMysql().split(' ')
                   text dateArray[0]
                   span '.lite', ' '+dateArray[1]
                   
-                # 'Link ?'
-                # div id:'linkContainer'
+                # Link
+                div id:'linkContainer'
 
                 # 'Modules PlaceHolder'
 
@@ -66,9 +66,8 @@
                   dt ->
                     label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                   dd ->                    
-                    select '.customselect.select.w160', name: 'view', ->
-                      option value: '', '-- Default view --'
-                      for block in @blocks
+                    select '.customselect.select.w160', name: 'view', ->                      
+                      for block in @blocks                        
                         option selected: ('selected' if block.file==@page_article.view), value: block.file, -> block.name
                       
               # 'Indexed content'
@@ -114,9 +113,9 @@
                           a class: 'page', ->
                             span class:'link-img page left mr5 main-parent'
                             text 'Examples'
-                      comment '<input type="text" id="new_parent" class="inputtext w140 italic empty nofocus droppable" alt="drop a page here..."></input>'
-              comment 'Flag \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="flag0" title="An internal marked, just to be organized.">Flag</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t\t<label class="flag flag0"><input id="flag0" name="flag" class="inputradio" type="radio"  checked="checked"  value="0" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag1"><input name="flag" class="inputradio" type="radio"  value="1" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag2"><input name="flag" class="inputradio" type="radio"  value="2" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag3"><input name="flag" class="inputradio" type="radio"  value="3" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag4"><input name="flag" class="inputradio" type="radio"  value="4" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag5"><input name="flag" class="inputradio" type="radio"  value="5" /></label>\n\n\t\t\t\t\t\t</dd>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t</dl>'
-            comment 'Advanced options \n\n\t\t\t<h3 class="toggler">Advanced options</h3>\n\n\t\t\t\n\n\t\t\t<div class="element">\n\n\n\n\n\n\t\t\t\t<!-- Tags \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t<textarea id="tags" name="tags" class="inputtext w140 h40" type="text" onkeyup="formManager.toLowerCase(this, \'tags\');"></textarea>\n\n\t\t\t\t\t</dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\t\t\t\t<!-- Existing Tags \n\n\t\t\t\t<dl class="small last">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Existing tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd></dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\n\n\t\t\t</div>'
+                      # '<input type="text" id="new_parent" class="inputtext w140 italic empty nofocus droppable" alt="drop a page here..."></input>'
+              # 'Flag \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="flag0" title="An internal marked, just to be organized.">Flag</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t\t<label class="flag flag0"><input id="flag0" name="flag" class="inputradio" type="radio"  checked="checked"  value="0" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag1"><input name="flag" class="inputradio" type="radio"  value="1" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag2"><input name="flag" class="inputradio" type="radio"  value="2" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag3"><input name="flag" class="inputradio" type="radio"  value="3" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag4"><input name="flag" class="inputradio" type="radio"  value="4" /></label>\n\n\t\t\t\t\t\t\t<label class="flag flag5"><input name="flag" class="inputradio" type="radio"  value="5" /></label>\n\n\t\t\t\t\t\t</dd>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t</dl>'
+            # 'Advanced options \n\n\t\t\t<h3 class="toggler">Advanced options</h3>\n\n\t\t\t\n\n\t\t\t<div class="element">\n\n\n\n\n\n\t\t\t\t<!-- Tags \n\n\t\t\t\t<dl class="small">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd>\n\n\t\t\t\t\t\t<textarea id="tags" name="tags" class="inputtext w140 h40" type="text" onkeyup="formManager.toLowerCase(this, \'tags\');"></textarea>\n\n\t\t\t\t\t</dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\t\t\t\t<!-- Existing Tags \n\n\t\t\t\t<dl class="small last">\n\n\t\t\t\t\t<dt>\n\n\t\t\t\t\t\t<label for="template">Existing tags</label>\n\n\t\t\t\t\t</dt>\n\n\t\t\t\t\t<dd></dd>\n\n\t\t\t\t</dl>\n\n\t\t\t\t\n\n\n\n\t\t\t</div>'
             # 'Dates'
             h3 '.toggler.toggler-options', -> @ion_lang.ionize_title_dates
             div '.element.element-options', ->
@@ -125,21 +124,21 @@
                   label for: 'logical_date', -> @ion_lang.ionize_label_date
                 dd ->
                   logical_date = ''
-                  logical_date = @article.logical_date._toMysql() if @article.logical_date isnt ''
+                  logical_date = @article.logical_date?._toMysql() if @article.logical_date isnt ''
                   input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   label for: 'publish_on', -> @ion_lang.ionize_label_publish_on
                 dd ->
                   publish_on = ''
-                  publish_on = @article.publish_on._toMysql() if @article.publish_on isnt ''
+                  publish_on = @article.publish_on?._toMysql() if @article.publish_on isnt ''
                   input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', -> @ion_lang.ionize_label_publish_off
                 dd ->
                   publish_off = ''
-                  publish_off = @article.publish_off._toMysql() if @article.publish_off isnt ''
+                  publish_off = @article.publish_off?._toMysql() if @article.publish_off isnt ''
                   input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # 'Comments'
             # h3 class:'toggler', -> @ion_lang.ionize_title_comments
@@ -201,11 +200,10 @@
                     dt ->
                       label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                     dd ->                    
-                      select '.customselect.select.w160', name: 'view', ->
-                        option value: '', '-- Default view --', selected:'selected'                        
-
+                      select '.customselect.select.w160', name: 'view', ->                        
                         for block in @blocks
-                          option value: block.file, -> block.name
+                          selected = if @views["block_default"] is block.file then "selected" else ""                        
+                          option value: block.file, selected : selected, -> block.name
                
             div style: 'margin: -15px 0pt 20px 72px;', ->
               p ->
@@ -352,6 +350,7 @@
       script ->
         """
         id_article = #{@article.id_article}
+        id_page = #{@page.id_page}
         langs = #{JSON.stringify( Static_langs)}        
         """
 
@@ -528,13 +527,13 @@
             id_article: $("id_article").value
 
 
-        # # Link to page or article or what else...
-        # if $("linkContainer")
-        #   ION.HTML admin_url + "article/get_link",
-        #     id_page: "4"
-        #     id_article: "9"
-        #   ,
-        #     update: "linkContainer"
+        # Link to an internal or external page
+        if $("linkContainer")
+          ION.HTML admin_url + "article\/\/get_link",
+            id_page: id_page
+            id_article: id_article
+          ,
+            update: "linkContainer"
 
 
         # Get Content Elements Tabs & Elements

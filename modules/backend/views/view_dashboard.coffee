@@ -46,22 +46,9 @@
               proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
               tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              "
+              "            
 
-              p "
-              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              "
-
-          li ".widget.color-blue", ->
+          ###li ".widget.color-blue", ->
             div ".widget-head", ->
               h3 "widget title"
             div ".widget-content", ->
@@ -71,42 +58,99 @@
               consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
               cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
               proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          ###
 
-        ul "#dashboard-column3.dashboard-column", ->
-          li ".widget.color-green", ->
-            div ".widget-head", ->
-              h3 "widget title"
-            div ".widget-content", ->
-              p "The content..."
+        # ul "#dashboard-column3.dashboard-column", ->
+        #   li ".widget.color-green", ->
+        #     div ".widget-head", ->
+        #       h3 "widget title"
+        #     div ".widget-content", ->
+        #       p "The content..."
+          
 
+        ul "#dashboard-column-test.dashboard-column", ->
           li ".widget.color-yellow", ->
             div ".widget-head", ->
-              h3 "widget title"
+              h3 "Users & Memory used"
             div ".widget-content", ->
-              p "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+              
+              input ".knob"
+                id:"dashboard-knob-users"
+                value:"35"
+                "data-width":"80"
+                "data-fgColor":"#ffec03"
+                "data-skin":"tron"
+                "data-thickness":".2"
+                "data-displayPrevious":true
+                "data-readOnly" : true
+                "data-max" : 5
+                "data-title" : 'users'
+              
 
-        ul "#dashboard-column3.dashboard-column", ->
-          li ".widget.color-green", ->
-            div ".widget-head", ->
-              h3 "widget title"
-            div ".widget-content", ->
-              p "The content..."
+              input ".knob"
+                id:"dashboard-knob-memory"
+                value:"35"
+                "data-width":"80"
+                "data-fgColor":"#ffec03"
+                "data-skin":"tron"
+                "data-thickness":".2"
+                "data-displayPrevious":true
+                "data-readOnly" : true
+                "data-max" : 100
+                "data-title" : 'memory'
 
-          li ".widget.color-yellow", ->
-            div ".widget-head", ->
-              h3 "widget title"
-            div ".widget-content", ->
-              p "The content..."
+
 
       
       
 
       coffeescript ->
+        #
+        # Knob activation
+        #
+        $ = jQuery
+
+        $ ->
+          $(".knob").knob draw: ->
+  
+            # "tron" case
+            if @$.data("skin") is "tron"              
+              a = @angle(@cv) # Angle
+              sa = @startAngle # Previous start angle
+              sat = @startAngle # Start angle
+              ea = undefined
+              # Previous end angle
+              eat = sat + a # End angle
+              r = true
+
+              @g.lineWidth = @lineWidth
+              
+              @o.cursor and (sat = eat - 0.3) and (eat = eat + 0.3)
+              
+              if @o.displayPrevious
+                ea = @startAngle + @angle(@value)
+                @o.cursor and (sa = ea - 0.3) and (ea = ea + 0.3)
+                @g.beginPath()
+                @g.strokeStyle = @previousColor
+                @g.arc @xy, @xy, @radius - @lineWidth, sa, ea, false
+                @g.stroke()
+              
+              @g.beginPath()
+              @g.strokeStyle = (if r then @o.fgColor else @fgColor)
+              @g.arc @xy, @xy, @radius - @lineWidth, sat, eat, false
+              @g.stroke()
+              @g.lineWidth = 2
+              @g.beginPath()
+              @g.strokeStyle = @o.fgColor
+              @g.arc @xy, @xy, @radius - @lineWidth + 1 + @lineWidth * 2 / 3, 0, 2 * Math.PI, false
+              @g.stroke()
+
+              @g.fillStyle = "#FFF"
+              @g.textBaseline = "mb"
+              @g.fillText(@$.data("title"), 30, 90)
+
+              false
+
         #
         # Using JQuery to load the javascript code that is in charge to manage events (socket.io)
         #        

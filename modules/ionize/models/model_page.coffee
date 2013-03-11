@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes)->
     updated           : DataTypes.DATE
     publish_on        : DataTypes.DATE
     publish_off       : DataTypes.DATE
-    logical_date      : DataTypes.DATE 
+    logical_date      : DataTypes.DATE
+    has_url           : DataTypes.INTEGER
   ,
   
     classMethods:     
@@ -62,7 +63,11 @@ module.exports = (sequelize, DataTypes)->
             migrator.addColumn( 'updated', DataTypes.DATE )
             migrator.addColumn( 'publish_on'  , DataTypes.DATE )
             migrator.addColumn( 'publish_off' , DataTypes.DATE )
-            migrator.addColumn( 'logical_date', DataTypes.DATE )            
+            migrator.addColumn( 'logical_date', DataTypes.DATE )
+        ,
+          version : 3
+          code : ->
+            migrator.addColumn( 'has_url', DataTypes.INTEGER )
         ]
 
         migrator = sequelize.getMigrator( tableName )
@@ -157,10 +162,10 @@ module.exports = (sequelize, DataTypes)->
       # Creating a link for a page
       #
       # @param data.link_rel = destination
-      # @param data.receiver_rel  
-      # @param data.link_type = "page" | ... 
+      # @param data.receiver_rel = page we are adding a link to
+      # @param data.link_type = "page" | "article" | "external"  
       addLink : (data, callback) ->        
-        
+
         #
         # Retrieve the page we link to
         #
@@ -211,11 +216,10 @@ module.exports = (sequelize, DataTypes)->
       #
       # Removing a link for a page
       #
-      # @param data.rel = page
-      removeLink : (data, callback) ->                
-        
+      # @param data.id_page = page
+      removeLink : (data, callback) ->
         findPage = =>
-          @find({where:{id_page:data.rel}})
+          @find({where:{id_page:data.id_page}})
             .on 'success', (page) =>
               deleteLink( page )
             
@@ -244,12 +248,17 @@ module.exports = (sequelize, DataTypes)->
       # Define default values on page creation
       #
       createBlank : ->
-        @name    = ""
-        @created = new Date()
-        @updated = new Date()
-        @publish_on = ''
-        @publish_off = ''
-        @logical_date = ''
+        @name           = ""
+        @created        = new Date()
+        @updated        = new Date()
+        @publish_on     = ''
+        @publish_off    = ''
+        @logical_date   = ''
+        @pagination     = -1
+        @pagination_nb  = -1
+        @id_group       = -1
+        @priority       = -1
+        @has_url        = 1
 
 
         

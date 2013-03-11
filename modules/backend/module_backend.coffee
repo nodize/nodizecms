@@ -248,5 +248,8 @@
     .on 'test', (message)->
       console.log( "test event fired >backend> ", message )
 
+  # @io.sockets.on 'connection', (socket) ->
+  #   socket.emit 'backofficeConnected'
+
 
 

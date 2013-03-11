@@ -156,65 +156,55 @@
               div id:"usersList"
 
           # ------------------------------
-          # List of existing groups
+          # Groups
           # ------------------------------
           div ".tabcontent", ->
-            # "New group"
+            #
+            # "New group" box
+            #
             div ".tabsidecolumn", ->
               h3 @ion_lang.ionize_title_add_group
-              form "#newGroupForm", name: "newGroupForm", method: "post", action: "http://192.168.1.162/admin/groups/save", ->
+              form "#newGroupForm", name: "newGroupForm", method: "post", action: "/admin/groups/save", ->
                 # "Group name"
                 dl ".small", ->
                   dt ->
-                    label for: "slug", -> @ion_lang.ionize_label_group_name
+                    label for: "group_name", -> @ion_lang.ionize_label_group_name
                   dd ->
-                    input "#slug.inputtext.w140", name: "slug", type: "text", value: ""
-                # "Group Title"
-                dl ".small", ->
-                  dt ->
-                    label for: "group_name", -> @ion_lang.ionize_label_group_title
-                  dd ->
-                    input "#group_name.inputtext.w140", name: "group_name", type: "text", value: ""
-                # "Description"
-                dl ".small", ->
-                  dt ->
-                    label for: "description", -> @ion_lang.ionize_label_group_description
-                  dd ->
-                    input "#description.inputtext.w140", name: "description", type: "text", value: ""
+                    input "#slug.inputtext.w140", name: "group_name", type: "text", value: ""
                 # "Level"
                 dl ".small", ->
                   dt ->
                     label for: "level", -> @ion_lang.ionize_label_group_level
                   dd ->
-                    select ".select", name: "level", ->
-                      for user_group in @user_groups
-                          option value: user_group.level, -> user_group.group_name
-                      
+                    input "#slug.inputtext.w140", name: "level", type: "text", value: "100"
                 # "Submit button"
                 dl ".small", ->
                   dt "&#160;"
                   dd ->
                     input "#submit_new_group.submit", type: "submit", value: "Save"
+
+            #
             # "Groups list"
+            #
             div ".tabcolumn", ->
               table "#groupsTable.list", ->
                 thead ->
                   tr ->
                     th axis: "string", -> @ion_lang.ionize_label_id
                     th axis: "string", -> @ion_lang.ionize_label_group_name
-                    th axis: "string", -> @ion_lang.ionize_label_group_title
+                    #th axis: "string", -> @ion_lang.ionize_label_group_title
                     th axis: "string", -> @ion_lang.ionize_label_group_level
-                    th axis: "string", -> @ion_lang.ionize_label_group_description
+                    #th axis: "string", -> @ion_lang.ionize_label_group_description
                     th()
                 tbody ->
                   for user_group in @user_groups                          
-                    tr ".groups#{user_group.id_group}", ->
-                      td user_group.id_group
+                    tr ".groups#{user_group.id}", ->
+                      td user_group.id
                       td ->
-                        a "#group#{user_group.id_group}.group", rel: user_group.id_group, href: @lang+"/admin/groups/edit/"+user_group.id_group, -> user_group.slug
-                      td user_group.group_name
+                        a "#group#{user_group.id}.group", rel: user_group.id, href: @lang+"/admin/groups/edit/"+user_group.id, -> user_group.group_name
+                      #td user_group.group_name
                       td user_group.level
-                      td()
+                      # td()
                       td ->
                         a ".icon.delete", rel:user_group.id_group
                   
