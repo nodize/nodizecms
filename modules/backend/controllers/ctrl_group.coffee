@@ -23,9 +23,7 @@
     #
     user_group = User_group.build()
 
-    user_group.slug = values.slug
     user_group.group_name = values.group_name
-    user_group.description = values.description
     user_group.level = values.level
 
     #
@@ -63,7 +61,7 @@
     #
     # Find the group
     #
-    User_group.find({where:{id_group:req.params.id_group}})
+    User_group.find({where:{id:req.params.id_group}})
       .on 'success', (user_group) ->
         #
         # Then delete it
@@ -79,7 +77,7 @@
                 url:"\/"+req.params.lang+"\/admin\/users"
               ],
               callback:null
-              id:user_group.id_group
+              id:user_group.id
 
             req.send message
 
@@ -94,7 +92,7 @@
   #
   @post '/:lang/admin/groups/edit/:id_group' : (req) ->
     loadGroup = ->
-      User_group.find({where:{id_group:req.params.id_group}})
+      User_group.find({where:{id:req.params.id_group}})
         .on 'success', (user_group) ->
           renderPage( user_group )
         .on 'failure', (err) ->
@@ -124,10 +122,9 @@
           console.log 'database error ', err
         
     updateGroup = (user_group) ->
-      user_group.slug = values.slug
+
       user_group.group_name = values.group_name
       user_group.level = values.level
-      user_group.description = values.description
 
       user_group.save()
         .on 'success', (user_group) ->

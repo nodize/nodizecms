@@ -16,20 +16,14 @@
 @include = ->
 
   #
-  # Displaying users management page
+  # Displaying group edition page
   #
   @view backend_group: ->
     html ->
       form "#groupForm", name: "groupForm", action:  "/admin/groups\/\/update", ->
         # "Hidden fields"
-        input "#group_PK", name: "group_PK", type: "hidden", value: @user_group.id_group
+        input "#group_PK", name: "group_PK", type: "hidden", value: @user_group.id
         # "Group name"
-        dl ".small", ->
-          dt ->
-            label for: "slug", -> @ion_lang.ionize_label_group_name
-          dd ->
-            input "#slug.inputtext", name: "slug", type: "text", value: @user_group.slug
-        # "Group title"
         dl ".small", ->
           dt ->
             label for: "group_name", -> @ion_lang.ionize_label_group_name
@@ -41,12 +35,7 @@
             label for: "level", -> @ion_lang.ionize_label_group_level
           dd ->
             input "#level.inputtext", name: "level", type: "text", value: @user_group.level
-        # "Description"
-        dl ".small", ->
-          dt ->
-            label for: "description", -> @ion_lang.ionize_label_group_title
-          dd ->
-            textarea "#description", name: "description", -> @user_group.description
+
       div ".buttons", ->
-        button "#bSave#{@user_group.id_group}.button.yes.right.mr40", type: "button", -> @ion_lang.ionize_button_save_close
-        button "#bCancel#{@user_group.id_group}.button.no.right", type: "button", -> @ion_lang.ionize_button_cancel
+        button "#bSave#{@user_group.id}.button.yes.right.mr40", type: "button", -> @ion_lang.ionize_button_save_close
+        button "#bCancel#{@user_group.id}.button.no.right", type: "button", -> @ion_lang.ionize_button_cancel
