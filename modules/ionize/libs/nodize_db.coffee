@@ -99,7 +99,7 @@ init = ->
 
       addColumn: (name, datatype) ->
         # console.log "[#{@table}] adding column"
-        queryInterface.addColumn( @table, name, datatype )
+        queryInterface.addColumn( @table, name, {type:datatype, allowNull : true} )
           # .on 'success', ->
             # console.log "success"
           .on 'failure', (err) ->

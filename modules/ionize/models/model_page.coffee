@@ -259,6 +259,7 @@ module.exports = (sequelize, DataTypes)->
         @pagination_nb  = -1
         @id_group       = -1
         @priority       = -1
+        @has_url        = 1
 
 
         
