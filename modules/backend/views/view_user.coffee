@@ -49,7 +49,7 @@
             select ".select", name: "id_group", ->              
               
               for group in @groups
-                option value: group.id_group, selected:("selected" if @user.id_group is group.id_group), -> group.group_name
+                option value:group.id, selected:("selected" if @user.id_group is group.id), -> group.group_name
               
         # "New password"
         h3 @ion_lang.ionize_title_change_password

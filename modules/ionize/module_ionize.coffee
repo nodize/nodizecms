@@ -295,7 +295,8 @@ initDatabase = ->
   #
   createGroup = ->
     user_group = User_group.build()
-    user_group.group_name = "SuperAdmin" 
+    user_group.group_name = "SuperAdmin"
+    user_group.id_group = 1
     user_group.level = 10000
     user_group.save()
       .on "success", (user_group)->

@@ -161,7 +161,7 @@
           console.log 'database error ', err
 
     userSave = (user) ->      
-
+      console.log "User update", values
       user.username     = values.username
       user.screen_name  = values.screen_name
       user.id_group     = values.id_group
