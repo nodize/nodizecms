@@ -33,7 +33,7 @@
                   label @ion_lang.ionize_label_date
                 dd ->
                   if @page.created
-                    dateArray = @page.created._toMysql().split(' ')
+                    dateArray = @page.created?._toMysql().split(' ')
                     text dateArray[0]
                     span class:'lite'
 
@@ -42,7 +42,7 @@
                   label @ion_lang.ionize_label_updated
                 dd ->
                   if @page.updated
-                    dateArray = @page.updated._toMysql().split(' ')
+                    dateArray = @page.updated?._toMysql().split(' ')
                     text dateArray[0]
                     span '.lite', ' '+dateArray[1]
 
@@ -68,7 +68,7 @@
                 dt ->
                   label for: 'has_url', title:@ion_lang.ionize_help_has_url, -> @ion_lang.ionize_label_has_url
                 dd ->
-                  input '#has_url.inputcheckbox', name: 'has_url', type: 'checkbox', checked: 'checked', value: '1'
+                  input '#has_url.inputcheckbox', name: 'has_url', type: 'checkbox', checked: "#{if @page.has_url then 'checked' else ''}", value: '1'
              
              
               # 'Page view'             
@@ -77,8 +77,7 @@
                   dt ->
                     label for: 'view', title:@ion_lang.ionize_help_page_view, -> @ion_lang.ionize_label_view
                   dd ->
-                    select '.customselect.select.w160', name: 'view', ->
-                      option value: '', '-- Default view --'
+                    select '.customselect.select.w160', name: 'view', ->                      
                       for view of @views["pages"]
                         option selected: ('selected' if view==@page.view), value: view, -> @views["pages"][view]
                       
@@ -116,12 +115,12 @@
             # 'Parent'
 
             if @page.id_page
-              h3 '.toggler', 'Parent'
+              h3 '.toggler', -> @ion_lang.ionize_title_page_parent
               div '.element', ->
                 # 'Menu'
                 dl '.small', ->
                   dt ->
-                    label for: 'id_menu', 'Menu'
+                    label for: 'id_menu', -> @ion_lang.ionize_label_menu
                   dd ->                    
                     select '#id_menu.select', name :'id_menu', ->
                       for menu in @menus                        
@@ -129,69 +128,38 @@
                 # 'Parent'
                 dl '.small.last', ->
                   dt ->
-                    label for: 'id_parent', 'Parent'
+                    label for: 'id_parent', -> @ion_lang.ionize_label_parent
                   dd ->
                     select '#id_parent.select.w150', name: 'id_parent', ->
                       option value: '--', '--'
             # 'Dates'
-            h3 '.toggler', 'Dates'
+            h3 '.toggler', -> @ion_lang.ionize_title_dates
             div '.element', ->
               dl '.small', ->
                 dt ->
-                  label for: 'logical_date', 'Date'
+                  label for: 'logical_date', -> @ion_lang.ionize_label_date
                 dd ->                  
                     logical_date = ''
-                    logical_date = @page.logical_date._toMysql() if @page.logical_date? isnt ''
+                    logical_date = @page.logical_date?._toMysql() if @page.logical_date? isnt ''
                     input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   
-                  label for: 'publish_on', title: 'Publish the item at this date and replace the displayed item date', 'Publish'
+                  label for: 'publish_on', title: @ion_lang.ionize_help_publish_on, -> @ion_lang.ionize_label_publish_on
                 dd ->                  
                   publish_on = ''
-                  publish_on = @page.publish_on._toMysql() if @page.publish_on? isnt ''
+                  publish_on = @page.publish_on?._toMysql() if @page.publish_on? isnt ''
                   input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
-                  label for: 'publish_off', title: 'Unpublish the item at this date', 'Unpublish'
+                  label for: 'publish_off', title: @ion_lang.ionize_help_publish_off, -> @ion_lang.ionize_label_publish_off
                 dd ->                 
                   publish_off = ''
-                  publish_off = @page.publish_off._toMysql() if @page.publish_off? isnt ''
+                  publish_off = @page.publish_off?._toMysql() if @page.publish_off? isnt ''
                   input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
-            # Subnavigation
-            # if @page.id_page isnt ''
-            #   h3 '.toggler', 'Sub Navigation'
-            #   div '.element', ->
-            #     comment 'Subnav Menu'
-            #     dl '.small', ->
-            #       dt ->
-            #         label for: 'id_subnav_menu', 'Menu'
-            #       dd ->
-            #         select '#id_subnav_menu.select', name: 'id_subnav_menu', ->
-            #           option value: '1', 'Main menu'
-            #           option value: '2', 'System menu'
-            #     # ID sub navigation Page
-            #     dl '.small.last', ->
-            #       dt ->
-            #         label for: 'id_subnav', 'Page'
-            #       dd ->
-            #         select '#id_subnav.select.w150', name: 'id_subnav'
-            #     # Title
-            #     dl '.small', ->
-            #       dt ->
-            #         label title: '', 'Title'
-            #       dd ->
-            #         # Tabs
-            #         div '#subnavTitleTab.mainTabs.small gray', ->
-            #           ul '.tab-menu', ->
-            #             li ->
-            #               a 'En'
-            #           div class:'clear'
-            #         div '#subnavTitleTabContent.w160', ->
-            #           div '.tabcontent', ->
-            #             textarea '#subnav_title_en.h80', name: 'subnav_title_en', style: 'border-top:none;width:142px;'
+            
             # 'Advanced Options'
-             h3 '.toggler', 'Advanced options'
+             h3 '.toggler', -> @ion_lang.ionize_title_advanced
              div '.element', ->
             #   # 'Pagination'
             #   dl '.small', ->
@@ -274,7 +242,7 @@
             #           option value: '7', 'Banned'
             #           option value: '8', 'Deactivated'
             
-            'Operations on Page'
+            # Operations on Page
             h3 '.toggler', 'Operations'
             div '.element', ->
               # 'Copy Content'
@@ -382,7 +350,8 @@
                   select '.select.w160.customselect', name: 'view', ->
                     option value: '', '-- Default view --'
                     for view of @views["pages"]
-                      option value: view, -> @views["pages"][view]
+                      selected = if @views["page_default"] is view then "selected" else ""
+                      option value: view, selected : selected, -> @views["pages"][view]
 
               
               # 'endif'
@@ -422,8 +391,8 @@
               # 'Text block'
               for lang in Static_langs                          
                 div '.tabcontent.#{lang}', ->
-                  p '.clear.h15', ->
-                    a class: 'right icon copy copyLang', rel: lang, title: @ion_lang.ionize_label_copy_to_other_languages
+                  # p '.clear.h15', ->
+                  #   a class: 'right icon copy copyLang', rel: lang, title: @ion_lang.ionize_label_copy_to_other_languages
                   # 'title'
                   dl '.first', ->
                     dt ->
@@ -468,30 +437,7 @@
               #   ul '#fileContainer.sortable-container', ->
               #     span 'No linked file'
               # # 'Music'
-              # div '.tabcontent', ->
-              #   p '.h20', ->
-              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
-              #     button '.right.light-button music', onclick: 'javascript:mediaManager.loadMediaList(\'music\');return false;', 'Reload media list'
-              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'music\');return false;', 'Unlink all music'
-              #   ul '#musicContainer.sortable-container', ->
-              #     span 'No linked musice'
-              # # 'Videos'
-              # div '.tabcontent', ->
-              #   p '.h20', ->
-              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
-              #     button '.right.light-button video', onclick: 'javascript:mediaManager.loadMediaList(\'video\');return false;', 'Reload media list'
-              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'video\');return false;', 'Unlink all videos'
-              #   ul '#videoContainer.sortable-container', ->
-              #     span 'No linked video'
-              # # 'Pictures'
-              # div '.tabcontent', ->
-              #   p '.h20', ->
-              #     comment '<button class="fmButton right light-button plus">Add Media</button>'
-              #     button '.right.light-button pictures', onclick: 'javascript:mediaManager.loadMediaList(\'picture\');return false;', 'Reload media list'
-              #     button '.left.light-button delete', onclick: 'javascript:mediaManager.detachMediaByType(\'picture\');return false;', 'Unlink all pictures'
-              #     button '.left.light-button refresh', onclick: 'javascript:mediaManager.initThumbsForParent();return false;', 'Init all thumbs'
-              #   div '#pictureContainer.sortable-container', ->
-              #     span 'No linked image'
+             
           
           # 'Articles'
           #
@@ -683,26 +629,7 @@
           # Page status
           #
           ION.initRequestEvent $("iconPageStatus"), admin_url + "page\/\/switch_online/" + $("id_page").value
-          
-          # $("id_subnav_menu").addEvent "change", ->
-          #   xhr = new Request.HTML(
-          #     url: admin_url + "page\/get_parents_select/" + $("id_subnav_menu").value + "/0/0"
-          #     method: "post"
-          #     onSuccess: (responseTree, responseElements, responseHTML, responseJavaScript) ->
-          #       $("id_subnav").empty()
-          #       if Browser.ie or (Browser.firefox and Browser.version < 4)
-          #         $("id_subnav").set "html", responseHTML
-          #         selected = $("id_subnav").getElement("option[selected=selected]")
-          #         selected.setProperty "selected", "selected"
-          #       else
-          #         $("id_subnav").adopt responseTree
-          #       (new Element("option",
-          #         value: "-1"
-          #       )).set("text", Lang.get("ionize_label_no_sub_navigation")).inject $("id_subnav"), "top"
-          #   ).send()
-  
-          # $("id_subnav_menu").fireEvent "change"
-          
+
           #
           # Reorder articles
           #

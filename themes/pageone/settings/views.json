@@ -7,5 +7,7 @@
         "page_styles.eco": "Page Styles",
         "page_contact.eco": "Page Contact"
     },
-    "blocks": {}
+    "blocks": {},
+    "page_default": "page_default.eco",
+    "block_default": "part_head.eco"
 }

@@ -17,7 +17,7 @@
   #
   @post '/:lang/admin/page/get_link' : (req) =>    
     values = req.body
-    
+
     # Retrieve page_id from parameter in URL
     findPage = ->      
       Page.find( {where: {id_page:values.id_page} } )
@@ -29,7 +29,7 @@
     
     renderView = (page) ->
       #
-      # Display the page edition view 
+      # Display the link edition view
       #
       req.render "backend_getLink", 
         layout        : no        
@@ -91,22 +91,25 @@
     values = req.body
 
     callback = (err, page) =>
-      message = 
-      message_type:""
-      message:""
-      update:[]
-      callback:[
-        fn:"ION.HTML"
-        args:[
-          "page\/\/get_link"
-        ,
-          id_page:page.id_page
-        ,
-          update:"linkContainer"
-        ]      
-      ]
+      if err
+        console.log "Error on link removal", err
+      else
+        message =
+        message_type:""
+        message:""
+        update:[]
+        callback:[
+          fn:"ION.HTML"
+          args:[
+            "page\/\/get_link"
+          ,
+            id_page:page.id_page
+          ,
+            update:"linkContainer"
+          ]
+        ]
 
-      req.send message  
+        req.send message
 
     #
     # Start link deletion
@@ -270,6 +273,10 @@
     requestCount = 0
     
     saveNewPage = (page) ->
+      page.publish_on = null if page.publish_on is ''
+      page.publish_off = null if page.publish_off is ''
+      page.logical_date = null if page.logical_date is ''
+
       #
       # Saving PAGE
       #
@@ -305,6 +312,7 @@
       page_lang.url = values['url_'+lang]
       page_lang.id_page = id_page
       page_lang.title = values['title_'+lang]
+      page_lang.subtitle = values['subtitle_'+lang]
       page_lang.online = if Static_langs.length is 1 then page.online else values['online_'+lang]
       page_lang.link = ""
       page_lang.meta_title = values['meta_title_'+lang]
@@ -391,6 +399,7 @@
           .on 'success', (page_lang)=>
             if page_lang
               page_lang.title = values['title_'+lang]
+              page_lang.subtitle = values['subtitle_'+lang]
               page_lang.url = values['url_'+lang]
               page_lang.online = values['online_'+lang]
               page_lang.meta_title = values['meta_title_'+lang]
@@ -444,6 +453,10 @@
       DB.query( 'UPDATE page SET home=0 WHERE home=1') if values.home
 
       saveExistingPage = (page) ->
+        page.publish_on = null if page.publish_on is ''
+        page.publish_off = null if page.publish_off is ''
+        page.logical_date = null if page.logical_date is ''
+
         page.save()
           .on 'success', (page) =>
 
@@ -463,6 +476,7 @@
           page.view = values.view
           page.id_parent = values.id_parent
           page.appears = values.appears
+          page.has_url = values.has_url
           page.name = values.page_name
           page.updated = new Date            
           page.publish_on = values.publish_on
@@ -506,6 +520,7 @@
       page.priority = values.priority | -1
       page.view = values.view
       page.appears = values.appears
+      page.has_url = values.has_url
       page.created = new Date
       page.updated = new Date
       page.publish_on = values.publish_on

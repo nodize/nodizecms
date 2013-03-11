@@ -17,7 +17,7 @@
   #* LOADING VIEWS, HELPERS, CONTROLLERS
   #** 
   fs = require 'fs'
-  path = require 'path'
+  #path = require 'path'
    
   includeFolders = []
   includeFolders.push "./modules/#{_moduleName}/views/"
@@ -25,11 +25,15 @@
   includeFolders.push "./modules/#{_moduleName}/helpers/"
 
   for includeFolder in includeFolders
-    if path.existsSync includeFolder
+    if fs.existsSync includeFolder
       files = fs.readdirSync includeFolder
       @include includeFolder+file for file in files
 
-  
+  #**********************************
+  #* HELPERS FOR JADE ENGINE
+  #**  
+  jade_support = require __applicationPath+"/modules/ionize/libs/jade_helpers_filters"
+  jade_support.createFilters( @helpers )
 
   #**********************************
   #* CATCH ALL & PAGES DISPLAY MANAGEMENT
@@ -291,7 +295,8 @@ initDatabase = ->
   #
   createGroup = ->
     user_group = User_group.build()
-    user_group.group_name = "SuperAdmin" 
+    user_group.group_name = "SuperAdmin"
+    user_group.id_group = 1
     user_group.level = 10000
     user_group.save()
       .on "success", (user_group)->

@@ -17,9 +17,7 @@ module.exports = (sequelize, DataTypes)->
     view        : DataTypes.STRING        
     ordering    : DataTypes.INTEGER 
     id_type     : DataTypes.INTEGER 
-    link_type   : DataTypes.STRING        
-    link_id     : DataTypes.INTEGER 
-    link        : DataTypes.STRING        
+         
     main_parent : DataTypes.INTEGER
   ,
   
@@ -40,16 +38,18 @@ module.exports = (sequelize, DataTypes)->
       migrate : ->
 
         tableName = 'page_article'
-
+      
         migrations = [
           version : 1
           code : ->
             "First version"
-#        ,
-#          version : 2
-#          code : ->
-#            migrator.addColumn( 'newField', DataTypes.STRING )
-#            migrator.removeColumn( 'field' )
+         ,
+           version : 2
+           code : ->
+             # migrator.addColumn( 'newField', DataTypes.STRING )
+             migrator.removeColumn( 'link_type' )
+             migrator.removeColumn( 'link_id' )
+             migrator.removeColumn( 'link' )
         ]
 
         migrator = sequelize.getMigrator( tableName )

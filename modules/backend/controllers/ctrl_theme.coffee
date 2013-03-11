@@ -123,6 +123,8 @@
           ,
           "blocks" : 
             "# real file" : "# logical name"
+          "page_default" : ""
+          "block_default" : ""
           
                 
         fs.writeFile viewsParamFile, JSON.stringify( viewsParamFileTemplate, null, 4), (err) ->
@@ -146,6 +148,10 @@
 
     pages = {}
     blocks = {}
+
+    page_default = values.page_default or ""
+    block_default = values.block_default or ""
+
     filename = ''
     for value of values      
       if value.indexOf( "viewtype_" ) == 0
@@ -162,7 +168,9 @@
         pages
       ,
       "blocks" : 
-        blocks
+        blocks      
+      "page_default" : page_default
+      "block_default" : block_default
 
     # File containing views definition (page/blocks)
     viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"

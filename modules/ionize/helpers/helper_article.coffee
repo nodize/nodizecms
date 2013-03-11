@@ -3,23 +3,46 @@
 # Nodize CMS
 # https://github.com/nodize/nodizecms
 #
-# Copyright 2012, Hypee
+# Copyright 2012-2013, Hypee
 # http://hypee.com
 #
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/MIT
 #
 
-@include = ->
-  # Defining helpers (tags like, available in CoffeKup for views)
-  
+#
+# Todo :
+# - Check why "from" attribute is not working with jade / restore it for Eco/Express
+
+#
+
+@include = ->  
+  # Defining helpers, available in templates
+  # These helpers should work with Eco, CoffeeCup and Jade
+
+
+  #
+  # Specific code for Jade, using filters
+  #
+  jade = require "jade"
+
+  # jade.filters.ion_articles = (block, options) ->        
+  #   try      
+  #     # Calling the regular helper
+  #     @template_engine = "jade" 
+  #     @ion_articles( "", block )
+  #   catch error
+  #     console.log "Template error : ", error
+    
+
   #*****
   #* Displaying articles, @articles array has to be sent with @render
   #* use @articles.content... in nested views (fields from article_lang table)
   #* 
   #**
   @helpers['ion_articles'] = (args...) -> 
-    tagName = 'ion_articles'
+    tagName = 'ion_articles'    
+
     #
     # Parameters
     #
@@ -28,20 +51,20 @@
     id = '' 
     live = false
     refresh = false
-    params = {}
+    params = {}    
 
     #
     # Parsing attributes if they do exist
     #
     if args.length>1
       
-      attrs = args[0]          
+      attrs = args[0]
       
       #
       # "From" parameter, to select articles from another page 
       #
       from = if attrs?.from then attrs.from else ""
-
+      
       #
       # "Type" parameter, to filter result by article type
       #      
@@ -101,8 +124,7 @@
     if @req.session.usergroup_level > 1000
        isOnline = ""
     else
-       isOnline = "page_article.online = 1 AND "
-
+       isOnline = "page_article.online = 1 AND "    
 
     if from isnt ''
       page_search = "SELECT *, page_article.link as link, page_article.view as view FROM article, article_lang, page_article, page "+
@@ -128,10 +150,11 @@
                     whereType +
                     "ORDER BY page_article.ordering"
     
+    #console.log page_search
 
     DB.query(  page_search
               , Article)
-      .on 'success', (articles) =>
+      .on 'success', (articles) =>        
         #
         # Content that will be built and sent
         #
@@ -140,6 +163,7 @@
         articleCount = 0
 
         @params = params
+
 
         for article in articles          
           articleCount++
@@ -156,11 +180,23 @@
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
-            htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh            
-            htmlResponse += cede args[args.length-1] # Compile the nested content to html            
+            htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh  
+            
+            template = args[args.length-1]            
+                        
+            # For Jade engine
+            if @template_engine is "jade"
+              fn = jade.compile( template, @ )              
+              htmlResponse +=  fn( @ ) # Compile the nested content to html               
+            # For Eco and CoffeeCup
+            else              
+              htmlResponse += cede template # Compile the nested content to html
+
             htmlResponse += "</span>" if live
 
-        finished( htmlResponse )
+           
+
+        finished( htmlResponse )        
       
       
       .on 'failure', (err) ->
@@ -169,8 +205,8 @@
   
     #
     # Inserting placeholder in the html for replacement once async request are finished
-    #
-    text "{**#{requestId}**}"     
+    #    
+    text "{**#{requestId.name}**}"     
         
   
   #*****
@@ -178,14 +214,51 @@
   #* Basically calling the partial defined as "block"
   #* 
   #**
-  @helpers['ion_article'] = (args...) ->
+  @helpers['ion_article'] = (args...) ->    
+
+    # Jade engine
+    if @template_engine is "jade"        
+      tagName = 'ion_article'
+
+      #
+      # We are launching an asynchronous request,
+      # we need to register it, to be able to wait for it to be finished
+      # and insert the content in the response sent to browser 
+      #
+      requestId = @registerRequest( tagName )    
+      
+      #
+      # On finished callback
+      #
+      finished = (response) =>        
+        @requestCompleted requestId, response
+
+      render = =>      
+        # Render article view        
+        template = "include ../#{@article.view}"            
+                      
+        fn = jade.compile( template, @ )
+        htmlResponse =  fn( @ ) # Compile the view to html                
+        finished( htmlResponse )
+
+      #
+      # Doing asynchronous rendering      
+      render()
+      
+      #
+      # Inserting placeholder in the html for replacement once async request are finished
+      #
+      text "{**#{requestId.name}**}"
+
+
+
     # Using "partial" for .coffee templates
-    if partial?
+    else if partial?
       partial @article.view if @article.view
     # Using "@partial" for .eco templates
     else if @partial?
       @partial @article.view if @article.view
-
+    
 
   #*****
   #* Displaying articles, @articles array has to be sent with @render
@@ -210,16 +283,16 @@
       #
       # attributes are not used yet for this helper, "name" is just an example
       #
-      first = if attrs?.first then attrs.first else 1
-      last = if attrs?.last then attrs.last else 0
+      #first = if attrs?.first then attrs.first else 1
+      #last = if attrs?.last then attrs.last else 0
 
     #
     # We are launching an asynchronous request,
     # we need to register it, to be able to wait for it to be finished
     # and insert the content in the response sent to browser 
     #
-    requestId = @registerRequest( tagName )
-
+    requestId = @registerRequest( tagName )    
+    # console.log "Media aID", @article.id
     #
     # Finished callback
     #
@@ -237,16 +310,23 @@
         #
         htmlResponse = ""
 
-        imageCount = 0
+        imageCount = 0        
+
         for media in medias
           imageCount++
-          @media = media
-          #console.log @article.title
+          @media = media          
       
           # Render nested tags
-          if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)
-            htmlResponse += cede args[args.length-1] # Compile the nested content to html
-            args[args.length-1]() 
+          if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)            
+            template = args[args.length-1]            
+                        
+            # For Jade engine
+            if @template_engine is "jade"              
+              fn = jade.compile( template, @ )
+              htmlResponse +=  fn( @ ) # Compile the nested content to html
+            # For Eco and CoffeeCup
+            else              
+              htmlResponse += cede template # Compile the nested content to html 
 
         finished( htmlResponse )
       
@@ -258,9 +338,9 @@
     #
     # Inserting placeholder in the html for replacement once async request are finished
     #
-    text "{**#{requestId}**}"
+    text "{**#{requestId.name}**}"
     
-    
+
   #*****
   #* Displaying page title
   #* Returns window title if defined, else page title
@@ -272,6 +352,10 @@
     else
       text @page_lang.title
       
-    
+  
+    #
+    # Inserting placeholder in the html for replacement once async request are finished
+    #
+    text "{**#{requestId.name}**}"  
 
       
