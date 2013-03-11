@@ -343,13 +343,17 @@
       #
       # Article update
       #
-      articleUpdate = ->    
+      articleUpdate = ->
+
+
         Article.find({where:{id_article:values.id_article}})
           .on 'success', (article) ->
             article.updated = new Date            
-            article.publish_on = values.publish_on
-            article.publish_off = values.publish_off
-            article.logical_date = values.logical_date          
+            
+            article.publish_on = if values.publish_on is '' then null else values.publish_on
+            article.publish_off = if values.publish_off is '' then null else values.publish_off
+            article.logical_date = if values.logical_date is '' then null else values.logical_date
+            
             article.has_url = values.has_url
 
             article.name = values['url_'+Static_lang_default]
@@ -466,10 +470,11 @@
       article.name = values['url_' + Static_lang_default ]
       article.created = values.created
       article.updated = new Date()
-      article.publish_on = values.publish_on
-      article.publish_off = values.publish_off
-      article.logical_date = values.logical_date
 
+      article.publish_on = if values.publish_on is '' then null else values.publish_on
+      article.publish_off = if values.publish_off is '' then null else values.publish_off
+      article.logical_date = if values.logical_date is '' then null else values.logical_date
+            
       article.save()
         .on 'success', (article) ->
           createPageArticle( article, values )            

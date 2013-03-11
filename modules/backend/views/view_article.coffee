@@ -24,7 +24,7 @@
         input '#element', type: 'hidden', name: 'element', value: 'article'
         input '#id_article', type: 'hidden', name: 'id_article', value: @article.id_article
         input '#rel', type: 'hidden', name: 'rel', value: "#{@page.id_page}.#{@article.id_article or ''}"        
-        input type: 'hidden', name: 'created', value: @article.created._toMysql()
+        input type: 'hidden', name: 'created', value: @article.created?._toMysql()
         input type: 'hidden', name: 'author', value: ''
         input '#name', type: 'hidden', name: 'name', value: ''
         input '#main_parent', type: 'hidden', name: 'main_parent', value: @page.id_page
@@ -39,7 +39,7 @@
                 dt ->                  
                   label @ion_lang.ionize_label_created                  
                 dd ->
-                  dateArray = @article.created._toMysql().split(' ')
+                  dateArray = @article.created?._toMysql().split(' ')
                   text dateArray[0]
                   span '.lite', ' '+dateArray[1]
 
@@ -47,7 +47,7 @@
                 dt ->
                   label @ion_lang.ionize_label_updated
                 dd ->
-                  dateArray = @article.updated._toMysql().split(' ')
+                  dateArray = @article.updated?._toMysql().split(' ')
                   text dateArray[0]
                   span '.lite', ' '+dateArray[1]
                   
@@ -124,21 +124,21 @@
                   label for: 'logical_date', -> @ion_lang.ionize_label_date
                 dd ->
                   logical_date = ''
-                  logical_date = @article.logical_date._toMysql() if @article.logical_date isnt ''
+                  logical_date = @article.logical_date?._toMysql() if @article.logical_date isnt ''
                   input '#logical_date.inputtext.w120.date', name: 'logical_date', type: 'text', value: logical_date
               dl '.small', ->
                 dt ->
                   label for: 'publish_on', -> @ion_lang.ionize_label_publish_on
                 dd ->
                   publish_on = ''
-                  publish_on = @article.publish_on._toMysql() if @article.publish_on isnt ''
+                  publish_on = @article.publish_on?._toMysql() if @article.publish_on isnt ''
                   input '#publish_on.inputtext.w120.date', name: 'publish_on', type: 'text', value: publish_on
               dl '.small.last', ->
                 dt ->
                   label for: 'publish_off', -> @ion_lang.ionize_label_publish_off
                 dd ->
                   publish_off = ''
-                  publish_off = @article.publish_off._toMysql() if @article.publish_off isnt ''
+                  publish_off = @article.publish_off?._toMysql() if @article.publish_off isnt ''
                   input '#publish_off.inputtext.w120.date', name: 'publish_off', type: 'text', value: publish_off
             # 'Comments'
             # h3 class:'toggler', -> @ion_lang.ionize_title_comments
