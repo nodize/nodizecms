@@ -273,6 +273,10 @@
     requestCount = 0
     
     saveNewPage = (page) ->
+      page.publish_on = null if page.publish_on is ''
+      page.publish_off = null if page.publish_off is ''
+      page.logical_date = null if page.logical_date is ''
+
       #
       # Saving PAGE
       #
@@ -449,6 +453,10 @@
       DB.query( 'UPDATE page SET home=0 WHERE home=1') if values.home
 
       saveExistingPage = (page) ->
+        page.publish_on = null if page.publish_on is ''
+        page.publish_off = null if page.publish_off is ''
+        page.logical_date = null if page.logical_date is ''
+
         page.save()
           .on 'success', (page) =>
 
