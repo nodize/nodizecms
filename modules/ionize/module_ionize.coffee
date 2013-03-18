@@ -12,6 +12,8 @@
 @include = ->
   _moduleName = "ionize"
 
+  z = require('zappajs')
+  console.log z.app
 
   #**********************************
   #* LOADING VIEWS, HELPERS, CONTROLLERS
