@@ -40,7 +40,7 @@
       #
       if lang is Static_lang_default
         name = "/"+segments.join("/")        
-        req.redirect( name )
+        res.redirect( name )
         return
         
       name = segments[0]

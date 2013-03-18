@@ -12,9 +12,6 @@
 @include = ->
   _moduleName = "ionize"
 
-  z = require('zappajs')
-  console.log z.app
-
   #**********************************
   #* LOADING VIEWS, HELPERS, CONTROLLERS
   #** 
@@ -42,15 +39,17 @@
   #**  
   
   # Managing all other cases (problem w/ zappa/zappa.js which is intercepted)
-  @get '*': (req, res) =>
+  @all '*': (req, res) =>
     name = req.params[0]
 
     #
-    # We don't intercept request for zappa.js client lib
+    # We don't intercept request for zappa.js client libs
     #
-    if name=="/zappa/Zappa.js"
+    if name in ["/zappa/zappa.js", "/zappa/Zappa.js", "/zappa/Zappa-simple.js", "/zappa/jquery.js" ] or name.indexOf("/zappa/socket/") is 0
+      #console.log "passthru ->", name
       req.next()
-      return 
+      return
+
 
     #
     # Looking for a matching page in Ionize database (if no extension is specified)
@@ -80,7 +79,7 @@
         #
         # Do the redirection
         #       
-        req.redirect( name )
+        res.redirect( name )
       else
         res.send("you are requesting #{req.params[0]} (file extension:#{ext})", 404)
 

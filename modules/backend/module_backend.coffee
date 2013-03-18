@@ -35,7 +35,7 @@
   # LOGIN/PASSWORD POST
   # Checking if user can log in
   #
-  @post "/:lang/admin/login" : (req) -> 
+  @post "/:lang/admin/login" : (req, res) ->
     values = req.body
 
     #
@@ -66,18 +66,18 @@
                   req.session.usergroup_name = user_group.group_name 
                   req.session.usergroup_level = user_group.level
 
-                req.redirect "/#{req.params.lang}/admin"          
+                res.redirect "/#{req.params.lang}/admin"
               .on 'failure', (err) ->
                 console.log 'database error ', err
             
 
             
           else 
-            req.redirect "/#{req.params.lang}/admin/login"
+            res.redirect "/#{req.params.lang}/admin/login"
 
         .on 'failure', (err) ->
           console.log 'database error ', err
-          req.redirect "/#{req.params.lang}/admin/login"      
+          res.redirect "/#{req.params.lang}/admin/login"
 
     validateUser()  
 

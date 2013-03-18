@@ -139,23 +139,27 @@
   #
   @get routes
     
-  parseCookie = require('connect').utils.parseCookie  
-
+  #parseCookie = require('connect').utils.parseCookie
+  parseCookie = require('connect').utils.parseSignedCookies
+  cookie = require("cookie")
 
   #
   # Socket.io & express working together
   # http://www.danielbaulig.de/socket-ioexpress/
   # Session is stored in socket.handshake.session
   #
-  @io.set 'authorization', (data, accept) ->    
+  # TODO : Move that in a better place !
+  @io.set 'authorization', (data, accept) ->
     # check if there's a cookie header
-    if data.headers.cookie 
-      # if there is, parse the cookie
-      data.cookie = parseCookie(data.headers.cookie);
-           
+    if data.headers.cookie
+
+      # if there is a cookie, then parse it
+      data.cookie = parseCookie(cookie.parse(data.headers.cookie), __sessionSecret);
+
       # note that you will need to use the same key to grab the
       # session id, as you specified in the Express setup.      
       data.sessionID = data.cookie['connect.sid']
+
       #console.log "Auth / Session ID : ",data.sessionID
 
       if not data.sessionID
@@ -165,7 +169,8 @@
       else
         __sessionStore.get data.sessionID, (err, session) ->        
           if err or not session
-            console.log data.address
+            #console.log "session, ", session
+            #console.log data.address
             console.log "Websocket @[#{data.address.address}:#{data.address.port}] -> error in get session, client cookie might be expired. Check server date if this is happening when it shouldn't."          
             accept( 'Error', false )
           else
@@ -192,6 +197,7 @@
   # when server is restarted (connection is called before session retrieval)
   @io.sockets
     .on 'connection', (socket) ->
+      # console.log "On connection"
       sessionID = socket.handshake.sessionID
       
       __sessionStore.get sessionID, (err, session) ->        
@@ -207,7 +213,7 @@
   @on connection: (socket_client) ->
     #console.log "connection"
     
-    global.broadcast = socket_client.emit
+    #global.broadcast = socket_client.emit
     
     #
     # We should do a selective broadcast to backoffice users
