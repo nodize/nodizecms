@@ -207,7 +207,7 @@
   # MENU ADD NEW
   #
   #
-  @post "/:lang/admin/menu/save" : (req) ->
+  @post "/:lang/admin/menu/save" : (req, res) ->
     values = req.body
 
     menu = Menu.build()
@@ -249,7 +249,7 @@
             callback      : 
               null
 
-          req.send message
+          res.send message
         .on 'failure', (err) ->
           console.log "menu save error ", err
 
