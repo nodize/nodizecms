@@ -51,8 +51,8 @@
   #
   # ARTICLES LIST + TYPES SETTINGS + CATEGORIES SETTINGS
   #
-  @get "/:lang/admin/article/list_articles" : (req) =>
-    req.render 'backend_articleList', 
+  @get "/:lang/admin/article/list_articles" : (req,res) =>
+    res.render 'backend_articleList',
       hardcode    : @helpers
       layout      : no 
       lang        : req.params.lang
@@ -62,8 +62,8 @@
   #
   # ARTICLES LIST TOOLBOX
   #
-  @get "/:lang/admin/desktop/get/toolboxes/articles_toolbox" : (req) =>
-    req.render 'backend_articleListToolbox', 
+  @get "/:lang/admin/desktop/get/toolboxes/articles_toolbox" : (req, res) =>
+    res.render 'backend_articleListToolbox',
       hardcode    : @helpers
       layout      : no 
       lang        : req.params.lang
@@ -74,7 +74,7 @@
   #
   # ARTICLE create new
   #
-  @get '/:lang/admin/article/create/:id_page' : (req) ->    
+  @get '/:lang/admin/article/create/:id_page' : (req,res) ->
     #
     # Creating a blank article
     #
@@ -103,7 +103,7 @@
       fs = require 'fs'
       fs.readFile viewsParamFile, (err, data) ->
         if err
-          req.send "Views definition not found"
+          res.send "Views definition not found"
         else
           views = JSON.parse( data )   
 
@@ -138,7 +138,7 @@
     loadCategories = (page) ->
       Category.findAll( {order:'name'})
         .on 'success', (categories) ->
-          req.render "backend_article", 
+          res.render "backend_article",
             layout              : no             
             article             : article            
             article_by_lang     : article_by_lang
@@ -159,7 +159,7 @@
   #
   # ARTICLE EDIT
   #
-  @get "/:lang/admin/article/edit/:ids" : (req) ->
+  @get "/:lang/admin/article/edit/:ids" : (req, res) ->
     #
     # Retrieve page_id & article_id from parameters in URL
     #
@@ -181,7 +181,7 @@
       fs = require 'fs'
       fs.readFile viewsParamFile, (err, data) ->
         if err
-          req.send "Views definition not found"
+          res.send "Views definition not found"
         else
           views = JSON.parse( data )
 
@@ -259,7 +259,7 @@
           if article_langs
             loadArticleCategories( article, article_by_lang )
           else
-            req.send "article #{id_article} not found"
+            res.send "article #{id_article} not found"
 
     #
     # Load categories linked to article
@@ -284,7 +284,7 @@
       Category.findAll( {order:'name'})
         .on 'success', (categories) ->
           
-          req.render "backend_article", 
+          res.render "backend_article",
             layout              : no 
             page                : parent_page
             page_article        : page_article
@@ -309,7 +309,7 @@
   #
   # ARTICLE SAVE
   #
-  @post '/:lang/admin/article_save' : (req) ->
+  @post '/:lang/admin/article_save' : (req, res) ->
     values = req.body    
 
     requestCount = 0
@@ -408,14 +408,14 @@
                 ]
                 id: article_lang.id
             
-              req.send message
+              res.send message
               #
               # Inform modules that a new page has been created
               __nodizeEvents.emit  'articleCreate', 
                 article : article_lang
                 parent : values.main_parent
               
-            # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
+            # res.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
           .on 'failure', (err) ->
             console.log 'fail : ', err
 
@@ -450,14 +450,14 @@
                     '],'+
                     '"id":"'+article_lang.id+'"'+'}'
                   
-                    req.send message
+                    res.send message
                     #
                     # Inform modules that a new page has been created
-                    __nodizeEvents.emit 'articleUpdate'
+                    __nodizeEvents.emit 'articleUpdate',
                       article:article_lang
                       parent:values.main_parent
                   
-                  # req.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
+              # res.send '{"message_type":"","message":"","update":[],"callback":[{"fn":"ION.updateElement","args":{"element":"mainPanel","url":"article\\\/'+'edit\/'+values.rel+'"}},{"fn":"ION.notification","args":["success","Article saved"]},{"fn":"ION.updateArticleContext","args":[[{"logical_date":"0000-00-00 00:00:00","lang":"en","url":"welcome-article-url","title":"Welcome to Ionize","subtitle":"","meta_title":"","summary":"","content":"For more information about building a website with Ionize, you can:\\n\\nDownload &amp; read the Documentation\\nVisit the Community Forum\\n\\nHave fun !","meta_keywords":"","meta_description":"","online":"1","id_page":"2","view":"","ordering":"2","id_type":"","link_type":"","link_id":"","link":"","main_parent":"1","type_flag":""}]]}],"id":"'+article_lang.id+'"}'
                 .on 'failure', (err) ->
                   console.log 'fail : ', err
             else
@@ -480,7 +480,7 @@
           createPageArticle( article, values )            
         .on 'failure', (err) ->
           console.log 'article save failed : ', err
-          req.send "Save failed"
+          res.send "Save failed"
            
       #
       # Creating linked page_article record
@@ -502,7 +502,7 @@
               createArticleLang( lang, page_article, article, values )
           .on 'failure', (err) ->
             console.log "page_article adding failed : ", err
-            req.send "Page_article save failed"
+            res.send "Page_article save failed"
          
       #
       # Creating article_lang record
@@ -572,7 +572,7 @@
                 ]
                 id : article_lang.id                              
               
-              req.send message
+              res.send message
 
               #
               # Inform modules that a new page has been created
@@ -586,23 +586,23 @@
   #
   # ARTICLE CHANGE ONLINE STATUS 
   #
-  @backend_articleSwitchOnline = (req) ->
-    #req.send "Yooo "+req.params.page_id+" --> "+req.params.article_id
+  @backend_articleSwitchOnline = (req, res) ->
+    #res.send "Yooo "+req.params.page_id+" --> "+req.params.article_id
     
     #
     # retrieving the page_article online value
     #
     Page_article.find( {where: {id_article:req.params.id_article, id_page:req.params.id_page } })
       .on 'success', (page_article) ->
-        articleUpdate( req, page_article )
+        articleUpdate( res, page_article )
       .on 'failure', (err) ->
         console.log 'failure ', err
-        req.send "failure ", err
+        res.send "failure ", err
       
     #
     # Switching online status
     #  
-    articleUpdate = ( req, page_article ) ->
+    articleUpdate = ( res, page_article ) ->
       if page_article.online==0
         page_article.online = 1
       else
@@ -610,7 +610,7 @@
         
       page_article.save()
         .on 'success', (page_article) ->
-          req.send '{"message_type":"success","message":"Operation OK","update":[],'+
+          res.send '{"message_type":"success","message":"Operation OK","update":[],'+
             '"callback":[{"fn":"ION.switchOnlineStatus","args":{"status":'+page_article.online+
             ',"selector":".article'+page_article.id_page+'x'+page_article.id_article+'"}}]}'
 
@@ -627,7 +627,7 @@
   #
   # ARTICLE MOVE / LINK
   #
-  @post "/:lang/admin/article/link_to_page" : (req) ->
+  @post "/:lang/admin/article/link_to_page" : (req, res) ->
     values = req.body 
 
     callback = (err, article, page_article) =>
@@ -710,7 +710,7 @@
             ]
 
 
-        req.send( message ) 
+        res.send( message )
 
 
     if values.copy      
@@ -723,7 +723,7 @@
   #
   # ARTICLE UNLINK FROM PAGE
   #
-  @post "/:lang/admin/article/unlink/:id_page/:id_article" : (req) ->
+  @post "/:lang/admin/article/unlink/:id_page/:id_article" : (req, res) ->
     
     callback = (err, article, page_article) =>
       if err
@@ -753,14 +753,14 @@
           ]
 
 
-        req.send( message ) 
+        res.send( message )
     
     Article.unlink( @params, callback )
       
   #
   # ARTICLE DELETE
   #
-  @backend_articleDelete = (req) ->
+  @backend_articleDelete = (req, res) ->
     request = 0
     
     checkDone = ->
@@ -784,7 +784,7 @@
             ]            
           ]
 
-        req.send message            
+        res.send message
 
     #
     # Remove article from Page_article
@@ -861,7 +861,7 @@
   #
   # ARTICLE ORDERING
   #
-  @post '/:lang/admin/article/save_ordering/page/:id_page' : (req) ->
+  @post '/:lang/admin/article/save_ordering/page/:id_page' : (req, res) ->
     values = req.body
     
     #
@@ -887,7 +887,7 @@
               ]              
               callback      : null
 
-            req.send message
+            res.send message
 
         .on 'failure', (err) ->
           message =  
@@ -897,7 +897,7 @@
               ]              
               callback      : null
                         
-          req.send message          
+          res.send message
     
       index++
 
@@ -905,7 +905,7 @@
   # SAVE ARTICLE CONTEXT 
   # Saving type
   #
-  @post '/:lang/admin/article/save_context' : (req) ->
+  @post '/:lang/admin/article/save_context' : (req, res) ->
     values = req.body
     
     Page_article.find({where:{id_page:values.id_page, id_article:values.id_article}})
@@ -925,10 +925,10 @@
               ]              
               callback      : null
 
-            req.send message            
+            res.send message
           .on "failure", (err) ->
             console.log "Error while updating context ", err
-            req.send "nok"
+            res.send "nok"
                 
       .on 'failure', (err) ->
         console.log 'database error ', err
@@ -936,7 +936,7 @@
   #
   # SAVE ARTICLE CATEGORIES
   #
-  @post '/:lang/admin/article/update_categories' : (req) ->
+  @post '/:lang/admin/article/update_categories' : (req, res) ->
     values = req.body
     
     requestCount = 0
@@ -996,14 +996,14 @@
                   args:["success","Article saved"]
                 ]
 
-              req.send message
+              res.send message
           .on 'failure', (err) ->
               console.log "Error on adding category to article", err
 
   #
   # ARTICLE LINK TO
   #
-  @post '/:lang/admin/article/get_link' : (req) =>    
+  @post '/:lang/admin/article/get_link' : (req, res) =>
     values = req.body
     
     # Retrieve page_id from parameter in POST
@@ -1013,13 +1013,13 @@
           if page_article
             renderView( page_article )
           else
-            req.send "pageArticle #{values.id_page}/#{values.id_article} not found"
+            res.send "pageArticle #{values.id_page}/#{values.id_article} not found"
     
     renderView = (page_article) ->
       #
       # Display the page edition view 
       #
-      req.render "backend_getLink", 
+      res.render "backend_getLink",
         layout        : no        
         page          : page_article
         link          : page_article.link
@@ -1039,7 +1039,7 @@
   # @param post.link_rel = destination
   # @param post.receiver_rel  
   # @param post.link_type = "page" | ... 
-  @post '/:lang/admin/article/add_link' : (req) =>    
+  @post '/:lang/admin/article/add_link' : (req, res) =>
     values = req.body
 
     callback = (err, page_article) =>
@@ -1065,7 +1065,7 @@
         ]
       ]
 
-      req.send message  
+      res.send message
 
     #
     # Start link addition
@@ -1076,7 +1076,7 @@
   # Removing a link 
   #
   # @param post.rel = id_page
-  @post '/:lang/admin/article/remove_link' : (req) =>    
+  @post '/:lang/admin/article/remove_link' : (req, res) =>
     values = req.body
     
     callback = (err, page_article) =>
@@ -1097,7 +1097,7 @@
           ]      
         ]
 
-        req.send message  
+        res.send message
 
     #
     # Start link deletion

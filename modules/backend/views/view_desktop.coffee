@@ -75,9 +75,9 @@
 				script src: @assetsPath+'/javascript/pixlr/pixlr.js'
 
 				# Zappa.js
-				script src: '/socket.io/socket.io.js'
-				script src: '/zappa/zappa.js'
-				script src: '/socket.js'
+				#script src: '/socket.io/socket.io.js'
+				script src: '/zappa/Zappa.js'
+				#script src: '/socket.js'
 				script src: '/backendEvents.js'
 				#script src: '/backend_dashboard.js'
 

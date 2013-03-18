@@ -71,6 +71,7 @@ application = ->
   @use 'staticCache'
   @use 'static': __dirname + "/themes/" + __nodizeTheme + "/public"
 
+  @use 'partials'
 
   @use 'cookieParser'
   @use 'cookieDecoder'

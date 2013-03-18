@@ -23,8 +23,8 @@
 
 
   # Access to admin page with lang specified
-  @get "/:lang/admin/login" : (req) ->        
-    req.render 'backend_login', 
+  @get "/:lang/admin/login" : (req) ->
+    @render 'backend_login',
       hardcode    : @helpers
       layout      : no 
       lang        : req.params.lang
@@ -117,11 +117,11 @@
     else
       @redirect "/"+__default_lang+"/admin/login"  
 
-  @get "/:lang?/backend*" : (req) ->
+  @get "/:lang?/backend*" : (req,res) ->
     if req.session and req.session.authenticated is true
       @next()
     else
-      req.send('nope', 502)
+      res.send('nope', 502)
       
 
   @post "/:lang/admin*" : (req) ->        
@@ -139,9 +139,9 @@
 
   
   # Access to admin page with lang specified
-  @get "/:lang?/admin" : (req) =>
+  @get "/:lang?/admin" : (req,res) =>
     lang = req.params.lang or 'en'
-    req.render 'backend_desktop', 
+    res.render 'backend_desktop',
       hardcode    : @helpers
       layout      : no 
       lang        : lang
@@ -178,9 +178,8 @@
   #
   # INTERFACE header
   #  
-  @get "/:lang/admin/desktop/get_header" : (req) =>
-    #req.render "backend_desktopHeader", 
-    req.render "backend_desktopNavBar", 
+  @get "/:lang/admin/desktop/get_header" : (req,res) =>
+    res.render "backend_desktopNavBar",
       hardcode  : @helpers 
       lang      : req.params.lang      
       ion_lang  : ion_lang[ req.params.lang ]

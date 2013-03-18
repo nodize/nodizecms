@@ -17,7 +17,7 @@
   #* DEFAULT HANDLER, DISPLAYING PAGE FROM DATABASE
   #*
   #**
-  @ionize_displayPage = (req, helpers, name, args) ->
+  @ionize_displayPage = (req, res, helpers, name, args) ->
     #console.log req.request.headers["accept-language"]
     
     #console.log req.params
@@ -52,8 +52,9 @@
     startTime = Date.now()
     #
     # Requesting home page if url = "/"    
-    #    
-    if req.request.url is '/'      
+    #
+
+    if req.url is '/'
       condition = {home : 1, lang:lang }
     else
       condition = {url : name, lang:lang }
@@ -101,7 +102,7 @@
         #
         # Send page
         #
-        req.send layout
+        res.send layout
 
 
       #
@@ -180,7 +181,7 @@
               if page_lang
                 findPage( page_lang )            
               else
-                req.send "page #{name} not found", 404
+                res.send "page #{name} not found", 404
 
         
 
@@ -213,7 +214,7 @@
               registerRequest "main"
 
 
-              req.render 'page_default',
+              res.render 'page_default',
                 hardcode  : helpers              
                 page      : page
                 page_lang : page_lang              
@@ -285,7 +286,7 @@
           #
           # Render the page
           #
-          req.render page.view,
+          res.render page.view,
             data
           ,
             (err,list) ->
@@ -307,7 +308,7 @@
           console.log err
         else if page isnt null
           #console.log "we got a cached page"
-          req.send page
+          res.send page
           return
         else
           startPageRendering()
