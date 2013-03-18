@@ -16,7 +16,7 @@
       min = now.getMinutes()
       sec = now.getSeconds()
 
-      j$( "#intro .widget-content").text( hour+":"+min+":"+sec+" "+event.data.message)
+      j$( "#intrxo .widget-content").text( hour+":"+min+":"+sec+" "+event.data.message)
 
   #
   # Displaying dashboard

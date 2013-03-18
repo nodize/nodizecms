@@ -21,6 +21,7 @@
   util = require('util')
 
   @io.sockets.on 'connection', (socket) ->
+
     dashboard_info.usercount++
     dashboard_info.maxuser = dashboard_info.usercount if dashboard_info.usercount>dashboard_info.maxuser
     

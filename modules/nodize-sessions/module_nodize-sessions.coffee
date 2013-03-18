@@ -4,7 +4,7 @@
 # Nodize CMS
 # https://github.com/hypee/nodize
 #
-# Copyright 2012, Hypee
+# Copyright 2012-2013, Hypee
 # http://hypee.com
 #
 # Licensed under the MIT license:
@@ -17,6 +17,7 @@
 
 @include = ->
   _moduleName = "nodize-sessions"
+  #console.log _moduleName, "loaded"
 
   Store = @express.session.Store
 
@@ -36,10 +37,11 @@
     #
     initialize = (callback) ->
       unless global.initialized
+        global.initialized = true
         sequelize.sync(force: @forceSync)
         .on "success", ->          
           console.log "Sequelize session store initialized."
-          global.initialized = true
+          #global.initialized = true
           callback()
         .on "failure", (error) ->
           console.log "Failed to initialize sequelize session store:"
@@ -89,7 +91,9 @@
     get : (sid, fn) ->
       initialize (error) =>
         return fn(error, null)  if error
-                
+
+        #console.log "module_nodize-sessions | get session ", sid
+
         @Session.find(where: { sid: sid } )
           .on "success", (record) ->
             # With SQLite, " are replaced with \" 
@@ -103,6 +107,7 @@
             fn error, null
 
     set : (sid, session, fn) ->
+      #console.log "Setting session ", sid
       initialize (error) =>
         return fn and fn(error)  if error
         
