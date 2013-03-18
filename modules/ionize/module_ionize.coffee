@@ -12,6 +12,8 @@
 @include = ->
   _moduleName = "ionize"
 
+  z = require('zappajs')
+  console.log z.app
 
   #**********************************
   #* LOADING VIEWS, HELPERS, CONTROLLERS
@@ -40,13 +42,13 @@
   #**  
   
   # Managing all other cases (problem w/ zappa/zappa.js which is intercepted)
-  @get '*': (req) =>
+  @get '*': (req, res) =>
     name = req.params[0]
 
     #
     # We don't intercept request for zappa.js client lib
     #
-    if name=="/zappa/zappa.js"
+    if name=="/zappa/Zappa.js"
       req.next()
       return 
 
@@ -57,7 +59,7 @@
 
     if ext == ""
       name=name.replace( "/", "" )
-      @ionize_displayPage( req, @helpers, name )
+      @ionize_displayPage( req, res, @helpers, name )
     else
       #
       # Extracting lang from URI
@@ -80,7 +82,7 @@
         #       
         req.redirect( name )
       else
-        req.send("you are requesting #{req.params[0]} (file extension:#{ext})", 404)
+        res.send("you are requesting #{req.params[0]} (file extension:#{ext})", 404)
 
       
 

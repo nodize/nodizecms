@@ -15,7 +15,7 @@
   #
   # PAGE LINKS
   #
-  @post '/:lang/admin/page/get_link' : (req) =>    
+  @post '/:lang/admin/page/get_link' : (req, res) =>
     values = req.body
 
     # Retrieve page_id from parameter in URL
@@ -25,13 +25,13 @@
           if page
             renderView( page )
           else
-            req.send "page #{page_id} not found"
+            res.send "page #{page_id} not found"
     
     renderView = (page) ->
       #
       # Display the link edition view
       #
-      req.render "backend_getLink", 
+      res.render "backend_getLink",
         layout        : no        
         page          : page
         link          : page.link
@@ -51,7 +51,7 @@
   # @param post.link_rel = destination
   # @param post.receiver_rel  
   # @param post.link_type = "page" | ... 
-  @post '/:lang/admin/page/add_link' : (req) =>    
+  @post '/:lang/admin/page/add_link' : (req, res) =>
     values = req.body
 
     callback = (err, page) =>
@@ -76,7 +76,7 @@
         ]
       ]
 
-      req.send message  
+      res.send message
 
     #
     # Start link addition
@@ -87,7 +87,7 @@
   # Removing a link
   #
   # @param post.rel = id_page
-  @post '/:lang/admin/page/remove_link' : (req) =>    
+  @post '/:lang/admin/page/remove_link' : (req, res) =>
     values = req.body
 
     callback = (err, page) =>
@@ -109,7 +109,7 @@
           ]
         ]
 
-        req.send message
+        res.send message
 
     #
     # Start link deletion
@@ -119,7 +119,7 @@
   #
   # EDITING a page
   #
-  @get "/:lang/admin/page/edit/:ids" : (req) ->
+  @get "/:lang/admin/page/edit/:ids" : (req, res) ->
     # File containing views definition (page/blocks)
     viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"
 
@@ -134,7 +134,7 @@
       fs = require 'fs'
       fs.readFile viewsParamFile, (err, data) ->
         if err
-          req.send "Views definition not found"
+          res.send "Views definition not found"
         else
           views = JSON.parse( data )
           findPage()
@@ -146,7 +146,7 @@
           if page
             findPageLang( page )
           else
-            req.send "page #{page_id} not found"
+            res.send "page #{page_id} not found"
                       
     findPageLang = (page)->      
       # Search page_lang & render
@@ -170,7 +170,7 @@
             renderView( views, page, page_by_lang )
 
           else
-            req.send "page_lang #{page_id} not found"
+            res.send "page_lang #{page_id} not found"
 
     renderView = (views, page, page_by_lang) ->
       #
@@ -181,7 +181,7 @@
           #
           # Display the page edition view 
           #
-          req.render "backend_page", 
+          res.render "backend_page",
               layout        : no 
               page_id       : page_id
               page          : page
@@ -201,7 +201,7 @@
   #
   # CREATING a page
   #
-  @get "/:lang/admin/page/create/:id" : (req) =>
+  @get "/:lang/admin/page/create/:id" : (req, res) =>
     # Menu in which we want to create a page
     menu_id = req.params.id
 
@@ -231,7 +231,7 @@
       fs = require 'fs'
       fs.readFile viewsParamFile, (err, data) ->
         if err
-          req.send "Views definition not found"
+          res.send "Views definition not found"
         else
           views = JSON.parse( data )
           renderView( views )
@@ -245,7 +245,7 @@
           #
           # Display the page edition view 
           #
-          req.render "backend_page", 
+          res.render "backend_page",
             layout        : no
             menu_id       : menu_id
             page          : page
@@ -268,7 +268,7 @@
   #
   # SAVING a page
   #  
-  @post '/:lang/admin/page/save' : (req) =>    
+  @post '/:lang/admin/page/save' : (req, res) =>
     values = req.body
     requestCount = 0
     
@@ -300,7 +300,7 @@
 
         .on 'failure', (err) ->
           console.log 'PAGE save failed : ', err
-          req.send "Save failed"
+          res.send "Save failed"
 
     #
     # Creating page_lang record
@@ -374,7 +374,7 @@
                 #
                 # Send response to client
                 #
-                req.send message
+                res.send message
                 
                 #
                 # Inform modules that a new page has been created
@@ -428,7 +428,7 @@
                       id: page_lang.id_page
                   
                     
-                    req.send message
+                    res.send message
                   
                     # 
                     # Inform modules that a page has been modified
@@ -556,7 +556,7 @@
   #
   # PAGES LIST, PARENT SELECTION for page/article  
   #
-  @post '/:lang/admin/page/get_parents_select/:id_menu/:id_current/:id_parent' : (req) ->
+  @post '/:lang/admin/page/get_parents_select/:id_menu/:id_current/:id_parent' : (req, res) ->
     #
     # Retrieve pages in menu 
     #    
@@ -590,7 +590,7 @@
         #
         # Send response
         #
-        req.send response    
+        res.send response
     
     #
     # Launch the first request
@@ -601,7 +601,7 @@
   #
   # PAGE ORDERING
   #
-  @post '/:lang/admin/page/save_ordering' : (req) =>
+  @post '/:lang/admin/page/save_ordering' : (req, res) =>
     values = req.body
     
     id_pages = values.order.split( "," )
@@ -624,7 +624,7 @@
               ]              
               callback      : null
 
-            req.send message
+            res.send message
 
         .on 'failure', (err) ->
           message =  
@@ -634,14 +634,14 @@
               ]              
               callback      : null
                         
-          req.send message          
+          res.send message
     
       index++
 
   #
   # GET ARTICLES LINKED TO THE PAGE
   #
-  @post '/:lang/admin/article/get_list' : (req) ->
+  @post '/:lang/admin/article/get_list' : (req, res) ->
     # File containing views definition (page/blocks)
     viewsParamFile = __applicationPath+'/themes/'+__nodizeTheme+"/settings/views.json"
 
@@ -657,7 +657,7 @@
       fs = require 'fs'
       fs.readFile viewsParamFile, (err, data) ->
         if err
-          req.send "Views definition not found"
+          res.send "Views definition not found"
         else
           views = JSON.parse( data )
           
@@ -682,7 +682,7 @@
             types = article_types
             findPage()
           else
-            req.send "types not found"
+            res.send "types not found"
         .on 'failure', (err) ->
           console.log "database error ", err
 
@@ -694,7 +694,7 @@
           if page
             findPageArticles( page )
           else
-            req.send "page #{id_page} not found"
+            res.send "page #{id_page} not found"
         .on 'failure', (err) ->
           console.log "database error ", err
                       
@@ -713,7 +713,7 @@
       """, Article )      
         .on 'success', (articles)->        
           if articles
-            req.render "backend_pageArticleList", 
+            res.render "backend_pageArticleList",
               layout    : no 
               page      : page
               articles  : articles
@@ -724,7 +724,7 @@
               blocks    : blocks
               types     : types
           else
-            req.send "articles on page #{page_id} not found"
+            res.send "articles on page #{page_id} not found"
         .on 'failure', (err) ->
           console.log "database error ", err
 
@@ -734,7 +734,7 @@
   #
   # PAGE SWiTCHING ONLINE STATUS
   #
-  @post '/:lang/admin/page/switch_online/:id_page' : (req) ->
+  @post '/:lang/admin/page/switch_online/:id_page' : (req, res) ->
     data = {id_page:@params.id_page}
     Page.switch_online data, (err,page) ->
       unless err
@@ -749,7 +749,7 @@
               selector:".page"+page.id_page
           ]
 
-        req.send( message )
+        res.send( message )
 
 
   #
@@ -757,7 +757,7 @@
   #
   # TODO: Also remove page medias (see in model)
   #
-  @post '/:lang/admin/page/delete/:id_page' : (req) ->
+  @post '/:lang/admin/page/delete/:id_page' : (req, res) ->
     Page.delete {id_page:@params.id_page}, (err) ->
       unless err  
         message = 
@@ -776,7 +776,7 @@
               url:"dashboard"
           ]
 
-        req.send message
+        res.send message
 
 
   #

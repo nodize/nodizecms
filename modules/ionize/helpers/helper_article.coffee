@@ -235,7 +235,7 @@
 
       render = =>      
         # Render article view        
-        template = "include ../#{@article.view}"            
+        template = "include #{@article.view}"
                       
         fn = jade.compile( template, @ )
         htmlResponse =  fn( @ ) # Compile the view to html                
