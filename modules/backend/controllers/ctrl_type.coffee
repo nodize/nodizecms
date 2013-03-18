@@ -84,7 +84,7 @@
   #
   # UPDATE A TYPE
   #
-  @post "/:lang/admin/article_type/update" : (req) ->
+  @post "/:lang/admin/article_type/update" : (req, res) ->
     values = req.body
 
     Article_type.find({where:{id_type:values.id_type}})
@@ -126,7 +126,7 @@
 
             id: article_type.id_type
 
-          req.send message
+          res.send message
         .on 'failure', (err) ->
           console.log "articleType save error ", err
     
@@ -134,7 +134,7 @@
   #
   # ADD A TYPE
   #
-  @post "/:lang/admin/article_type/save" : (req) ->
+  @post "/:lang/admin/article_type/save" : (req, res) ->
     values = req.body    
 
     articleType = Article_type.build()
@@ -176,7 +176,7 @@
 
             id: new_articleType.id_type
 
-          req.send message
+          res.send message
         .on 'failure', (err) ->
           console.log "articleType save error ", err
 

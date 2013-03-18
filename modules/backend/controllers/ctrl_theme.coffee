@@ -204,7 +204,7 @@
   #
   # SAVE THEME SELECTION
   #      
-  @post '/:lang/admin/setting/save_themes' : (req) ->
+  @post '/:lang/admin/setting/save_themes' : (req, res) ->
     #
     # If a local file exists we use it, else we fallback on the regular settings file
     #
@@ -234,7 +234,7 @@
           "update":[]
           "callback":null
 
-        req.send message
+        res.send message
 
         
         saveThemeSettings = ->

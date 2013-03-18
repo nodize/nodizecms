@@ -84,7 +84,7 @@
   #
   # ADD A CATEGORY
   #
-  @post "/:lang/admin/category/save" : (req) ->
+  @post "/:lang/admin/category/save" : (req, res) ->
     values = req.body    
 
     category = Category.build()
@@ -146,7 +146,7 @@
 
               id: id_category
 
-            req.send message
+            res.send message
 
         .on 'failure', (err) ->
           console.log "Category_lang save error", err
@@ -162,7 +162,7 @@
   #
   # UPDATE A CATEGORY
   #
-  @post "/:lang/admin/category/update" : (req) ->
+  @post "/:lang/admin/category/update" : (req, res) ->
     values = req.body    
 
     requestCount = 0
@@ -198,7 +198,7 @@
 
                   id: id_category
 
-                req.send message
+                res.send message
 
 
             .on 'failure', (err) ->

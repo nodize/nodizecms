@@ -16,7 +16,7 @@
   #
   # Creating a new group
   #
-  @post '/:lang/admin/groups/save' : (req) ->
+  @post '/:lang/admin/groups/save' : (req, res) ->
     values = req.body
     #
     # Building new record
@@ -46,7 +46,7 @@
               ]
               callback:null
 
-            req.send message
+            res.send message
 
           .on "failure", (err) ->
             console.log "Database error on group save :", err  
@@ -57,7 +57,7 @@
   #
   # Deleting a group
   #
-  @post '/:lang/admin/groups/delete/:id_group' : (req) ->
+  @post '/:lang/admin/groups/delete/:id_group' : (req, res) ->
     #
     # Find the group
     #
@@ -79,7 +79,7 @@
               callback:null
               id:user_group.id
 
-            req.send message
+            res.send message
 
           .on 'failure', (err) ->
             console.log 'database error ', err
@@ -111,7 +111,7 @@
   #
   # Updating group record
   #
-  @post '/:lang/admin/groups/update' : (req) ->
+  @post '/:lang/admin/groups/update' : (req, res) ->
     values = req.body
 
     loadGroup = ->
@@ -139,7 +139,7 @@
             callback:null
             id:user_group.id_group
 
-          req.send message
+          res.send message
 
         .on 'failure', (err) ->
           console.log 'database error ', err

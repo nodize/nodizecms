@@ -64,7 +64,7 @@
   #
   # Unlinking file from article
   #
-  @post '/:lang/admin/media/detach_media/:type/article/:id_article/:id_media' : (req) ->
+  @post '/:lang/admin/media/detach_media/:type/article/:id_article/:id_media' : (req, res) ->
     Media.find({where:{id_media:@params.id_media}})
       .on 'success', (media) ->        
         media.destroy()
@@ -129,7 +129,7 @@
               console.log 'File saved.'
               broadcast testEvent: {message:'file received'}
 
-    req.send "ok"
+    res.send "ok"
 
     
     #@io.sockets.send 'testEvent'
@@ -277,7 +277,7 @@
   #
   # Link existing FILE to ARTICLE
   # 
-  @post '/:lang/admin/media/add_media/picture/article/:id_article' : (req) ->
+  @post '/:lang/admin/media/add_media/picture/article/:id_article' : (req, res) ->
     associateMediaToArticle = ( media ) =>
       article_media = Article_media.build()
       article_media.id_article = @params.id_article
@@ -289,7 +289,7 @@
         .on 'failure', (err) ->
           console.log "Error on associate ", err
 
-    req.send("not implemented yet")
+    res.send("not implemented yet")
 
   #
   # ORDERING MEDIAS
