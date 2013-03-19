@@ -37,7 +37,7 @@
   #**********************************
   #* CATCH ALL & PAGES DISPLAY MANAGEMENT
   #**  
-  
+
   # Managing all other cases (problem w/ zappa/zappa.js which is intercepted)
   @all '*': (req, res) =>
     name = req.params[0]
@@ -64,7 +64,7 @@
       # Extracting lang from URI
       #
       segments = name.split('/')
-            
+
       #
       # Redirect to / path for resources if lang is specified
       # (/en/css/styles.css is redirected to /css/styles.css)
@@ -75,15 +75,22 @@
         # Remove lang segment
         #
         segments.splice( 1, 1 )
-        name = segments.join("/") 
+        name = segments.join("/")
         #
         # Do the redirection
-        #       
+        #
         res.redirect( name )
       else
         res.send("you are requesting #{req.params[0]} (file extension:#{ext})", 404)
 
       
+  nodizeErrorHandler = (err, req, res, next) ->
+    res.send( 500, "Nodize error <hr/>"+err )
+    console.log "Nodize error \r\n", err.stack
+
+  @configure
+    development: => @use nodizeErrorHandler
+    production: => @use 'errorHandler'
 
 #**********************************
 #* GENERIC FUNCTIONS

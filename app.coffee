@@ -36,21 +36,16 @@ else
 
 nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 
-#
-# Starting profiler if enabled in settings
-#
-require("nodetime").profile() if nodizeSettings.get("nodetime_profiler")
-
-#application = ->
 nodize = ->
-  #@use "zappa"
+
+
 
   # Needed to get POST params & handle uploads
   @use bodyParser:{ uploadDir: __dirname+'/uploads' }
   
   # Disabling Express native cache, you'll have to use Nodize's cache to speed up your website
   # Required to make Jade templates work correctly
-  @disable "view cache"
+  #@disable "view cache"
 
   #@use 'debug' # Connect debug middleware, uncomment to activate
 
@@ -62,6 +57,10 @@ nodize = ->
   #
   #nodize.io.set 'log level', 1
   @io.set 'log level', 1
+
+  @use 'partials':
+    coffee: @zappa.adapter 'coffeecup'
+    jade: @zappa.adapter 'jade'
 
   #
   # Storing application path & theme path for later use in modules
@@ -77,7 +76,7 @@ nodize = ->
   # Allow to request static content from /public folder of current theme
   @use 'static': __dirname + "/themes/" + __nodizeTheme + "/public"
 
-  @use 'partials'
+  #@use 'partials'
 
   @use 'cookieParser'
   @use 'cookieDecoder'
@@ -177,7 +176,7 @@ nodize = ->
   # Retrieving helpers defined in modules, making them available to views
   helpers = @helpers
 
-  
+
 
 
 

@@ -88,9 +88,9 @@
         #
         # Rebuilding the response, assembling chunks
         #
-        for chunk in chunks                         
+        for chunk in chunks
           layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
-          
+
 
         #
         # Adding page to cache
@@ -127,7 +127,7 @@
         chunks.push { requestId : requestId, content : response }
 
         if requestCounter is 0
-          
+
           #broadcast testEvent: {message:'Page '+name+' served in '+startTime-Date.now()}
           #broadcast testEvent: {message:'Page ['+(name or '/')+'] served in '+(Date.now()-startTime)+' ms'}
           sendResponse()
