@@ -8,9 +8,15 @@
     redisClient = redis.createClient()
 
   #
+  # Partials management
+  #
+  partialModule = require '../libs/partials'
+  partialModule.register( 'coffee', 'coffeecup' )
+
+  #
   # Needed for CoffeKup's helpers compatibility with Eco template engine
   #
-  global.text = (value) -> value
+  global.textxxxx = (value) -> value
   global.cede = (content) -> content()
 
   #*****
@@ -90,7 +96,6 @@
         #
         for chunk in chunks
           layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
-
 
         #
         # Adding page to cache
@@ -256,14 +261,17 @@
             page.title = page_lang.meta_title
           else
             page.title = page_lang.title          
-          
+
+
+
           data =
-            hardcode  : helpers              
+            hardcode  : helpers
             page      : page
             page_lang : page_lang
-            lang      : lang             
+            lang      : lang
             layout    : no
             req       : req
+            res       : res
             registerRequest : registerRequest
             requestCompleted : requestCompleted
             settings  : __nodizeSettings.stores.nodize.store
@@ -280,9 +288,20 @@
           #   <p> <%- @article.content %> </p>
           # 
           for helper of helpers
-            do (helper) ->
+            do (helper) =>
               data[helper] = (args...) -> @hardcode[helper].apply(this, args)
-          
+              #data[helper] = -> @hardcode[helper].apply @, arguments
+              #data.hardcode[helper] = -> @hardcode[helper].apply @, arguments
+              #data.hardcode[helper] = (args...) -> @hardcode[helper].apply(this, args)
+
+          # Allows `partial 'foo'` instead of `text @partial 'foo'`.
+          data.hardcode.partial = -> text @partial.apply @, arguments
+
+
+          #console.log "ctrl_page | ", partialModule.partial
+
+          data['partial'] = (args...) -> partialModule.partial.apply(this, args)
+
           #
           # Render the page
           #
