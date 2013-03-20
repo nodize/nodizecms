@@ -14,9 +14,9 @@
   partialModule.register( 'coffee', 'coffeecup' )
 
   #
-  # Needed for CoffeKup's helpers compatibility with Eco template engine
+  # Needed for CoffeKup's helpers compatibility with Eco/Jade template engine
   #
-  global.textxxxx = (value) -> value
+  global.text = (value) -> value
   global.cede = (content) -> content()
 
   #*****
