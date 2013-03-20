@@ -10,11 +10,6 @@
 # http://www.opensource.org/licenses/MIT
 #
 
-#
-# Todo :
-# - Check why "from" attribute is not working with jade / restore it for Eco/Express
-
-#
 
 @include = ->  
   # Defining helpers, available in templates

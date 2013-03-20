@@ -25,6 +25,7 @@ io = require 'socket.io'
 nodizeSettings = require 'nconf'
 global.__nodizeSettings = nodizeSettings
 
+
 #
 # If a local file exists we use it,
 # else we fallback on the regular settings file
@@ -45,7 +46,7 @@ nodize = ->
   
   # Disabling Express native cache, you'll have to use Nodize's cache to speed up your website
   # Required to make Jade templates work correctly
-  #@disable "view cache"
+  @disable "view cache"
 
   #@use 'debug' # Connect debug middleware, uncomment to activate
 
@@ -58,9 +59,13 @@ nodize = ->
   #nodize.io.set 'log level', 1
   @io.set 'log level', 1
 
-  @use 'partials':
+  #@use 'partials'
+
+
+  #@use @myPartials
+  ###@use 'partials':
     coffee: @zappa.adapter 'coffeecup'
-    jade: @zappa.adapter 'jade'
+    jade: @zappa.adapter 'jade'###
 
   #
   # Storing application path & theme path for later use in modules
