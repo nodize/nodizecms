@@ -205,21 +205,18 @@
       layout    : no
 
 
-  # Display "article edition" page (same action than previous, onReload callback, Ionize Javascript seems to remove a "/")
-  @get "/:lang/admin/articleedit/:ids" : =>
-    @backend_editArticle req
 
   #
   # ARTICLE, changing "online" state
   #
-  @post "/:lang/admin/articleswitch_online/:id_page/:id_article" : (req) =>
-    @backend_articleSwitchOnline( req )
+  @post "/:lang/admin/articleswitch_online/:id_page/:id_article" : (req, res) =>
+    @backend_articleSwitchOnline( req, res )
 
   #
   # ARTICLE, deletion
   #
-  @post "/:lang/admin/article/delete/:id_article" : (req) =>
-    @backend_articleDelete( req )
+  @post "/:lang/admin/article/delete/:id_article" : (req, res) =>
+    @backend_articleDelete( req, res )
 
     
   #**********************************
