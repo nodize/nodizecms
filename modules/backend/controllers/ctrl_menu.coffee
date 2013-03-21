@@ -234,7 +234,7 @@
           # - Redirect main panel to menu edit            
           # - Insert menu in tree
           #  
-          message =  
+          message =                                    y
             message_type  : "success"
             message       : "Menu saved"
             
