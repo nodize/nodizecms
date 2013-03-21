@@ -69,23 +69,31 @@ init = ->
       }
     )
 
-    
-
     #
     # TableVersion definition
     #
     TableVersion = sequelize.define 'tableVersion',
       name       : Sequelize.STRING
       version    : Sequelize.INTEGER 
+
     #
     # Create tableVersion if doesn't exists
     #
-    sequelize.sync() 
+    sequelize.sync()
+      .error ->
+        console.log "nodize_db | Sync error"
+      .success ->
+        # Action to run once the "tableVersion" has been created
+        initializeTables( sequelize )
+
+
+        
+        
     sequelize.TableVersion = TableVersion
-    
+
     #
     # Migrations management
-    #    
+    #
 
     # Retrieving object to make low level database calls for migrations
     queryInterface = sequelize.getMigrator().queryInterface
@@ -116,7 +124,7 @@ init = ->
       doMigrations: (tableName, migrations ) ->
         @table = tableName
         #
-        # Search for table version 
+        # Search for table version
         #
         sequelize.TableVersion.find( { where:{'name':tableName} } )
           .on "success", (tableVersion) ->
@@ -124,11 +132,11 @@ init = ->
             # Last element of "migrations" array has to be the last version
             #
             lastVersion = migrations[ migrations.length-1 ].version
-            
-            if tableVersion              
+
+            if tableVersion
               #
               # We have a version for this table, we check if migration are needed
-              #  
+              #
               for migration in migrations
                 if lastVersion >= migration.version > tableVersion.version
                   console.log "[#{tableName}] applying upgrade to version #{migration.version}"
@@ -147,14 +155,14 @@ init = ->
 
             else
               #
-              # No version found for this table, we expect to have the last version (just created) 
+              # No version found for this table, we expect to have the last version (just created)
               #
               tableVersion = TableVersion.build()
               tableVersion.name = tableName
               tableVersion.version = lastVersion
               tableVersion.save()
                 .on 'success', (tableVersion) ->
-                  console.log "version created for", tableVersion.name
+                  console.log "Table '#{tableVersion.name}' created, @version #{tableVersion.version}"
                 .on 'failure', (err) ->
                   console.log "Database error", err
 
@@ -162,7 +170,7 @@ init = ->
           .on "failure", (err) ->
             console.log "fail", err
 
-        
+
 
     sequelize.migrator = new Migrator
 
@@ -170,13 +178,243 @@ init = ->
       migrator = new Migrator( tableName )
 
 
+initializeTables = (db) ->
+  global.DB = db
+
+  #
+  # Retrieve models
+  #
+  Article           = db.import( __dirname + "/../models/model_article" )
+  Article_lang      = db.import( __dirname + "/../models/model_articleLang" )
+  Article_media     = db.import( __dirname + "/../models/model_articleMedia" )
+  Article_type      = db.import( __dirname + "/../models/model_articleType" )
+  Article_category  = db.import( __dirname + "/../models/model_articleCategory" )
+  Category          = db.import( __dirname + "/../models/model_category" )
+  Category_lang     = db.import( __dirname + "/../models/model_categoryLang" )
+  Lang              = db.import( __dirname + "/../models/model_lang" )
+  Menu              = db.import( __dirname + "/../models/model_menu" )
+  Media             = db.import( __dirname + "/../models/model_media" )
+  Page              = db.import( __dirname + "/../models/model_page" )
+  Page_article      = db.import( __dirname + "/../models/model_pageArticle" )
+  Page_lang         = db.import( __dirname + "/../models/model_pageLang" )
+  User              = db.import( __dirname + "/../models/model_user" )
+  User_group        = db.import( __dirname + "/../models/model_userGroup" )
+
+
+  #
+  # Run migrations
+  #
+  Article.migrate()
+  Article_category.migrate()
+  Article_lang.migrate()
+  Article_media.migrate()
+  Article_type.migrate()
+  Category.migrate()
+  Category_lang.migrate()
+  Lang.migrate()
+  Media.migrate()
+  Menu.migrate()
+  Page.migrate()
+  Page_article.migrate()
+  Page_lang.migrate()
+  User.migrate()
+  User_group.migrate()
+
+  #
+  # Associations, not used right now
+  # Seems to need an "id" field to work
+  #
+  Page.hasMany( Page_lang, {as:"Langs", foreignKey: 'id_page'} )
+  User.hasOne( User_group, {as:"Group", foreignKey: 'id_group'} )
+
+  #
+  # Remapping id fields, for compatibility w/ Ionize (www.ionizecms.com) database,
+  # we might break compatibily in later version to have cleaner DB structure
+  #
+  DB.query( "UPDATE page SET id = id_page" )
+  DB.query( "UPDATE menu SET id = id_menu")
+  #DB.query( "UPDATE article_lang SET id = id_article" )
+
+
+
+  #
+  # Give a global access to these DB objects
+  #
+  global.Article            = Article
+  global.Article_lang       = Article_lang
+  global.Article_media      = Article_media
+  global.Article_type       = Article_type
+  global.Article_category   = Article_category
+  global.Category           = Category
+  global.Category_lang      = Category_lang
+  global.Lang               = Lang
+  global.Menu               = Menu
+  global.Media              = Media
+  global.Page               = Page
+  global.Page_lang          = Page_lang
+  global.Page_article       = Page_article
+  global.User               = User
+  global.User_group         = User_group
+
+  #
+  # Keeping a in-memory static array of langs,
+  # for simplicity & speed
+  #
+  updateStaticLangs = ->
+    Lang.findAll({order:'ordering'})
+      .on 'success', (langs) ->
+        global.Static_lang_default = lang.lang for lang in langs when lang.def is 1
+        global.Static_langs = (lang.lang for lang in langs)
+        global.Static_langs_records = langs
+      .on 'failure', (err) ->
+        console.log 'database error ', err
+        global.Static_langs = 'en'
+        global.Static_langs_records = ['en']
+        global.Static_lang_default = 'en'
+
+  #
+  # Creating a basic structure if the database is empty
+  #
+  initDatabase = ->
+
+
+    #
+    # Generating a simple random password
+    #
+    randomString = ->
+      #chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
+      chars = "0123456789AB"
+      string_length = 5;
+      randomString = '';
+      for i in [1..string_length]
+        rnum = Math.floor(Math.random() * chars.length)
+        randomString += chars.substring(rnum,rnum+1)
+
+      return randomString
+
+    #
+    # Create SuperAdmin group
+    #
+    createGroup = ->
+      user_group = User_group.build()
+      user_group.group_name = "SuperAdmin"
+      user_group.id_group = 1
+      user_group.level = 10000
+      user_group.save()
+        .on "success", (user_group)->
+          console.log "SuperAdmin group created"
+          createAdmin( user_group )
+        .on "failure", (err) ->
+          console.log "Error on group creation", err
+
+    #
+    # Creating admin user
+    #
+    createAdmin = (group) ->
+      crypto = require "crypto"
+      hmac = crypto.createHmac("sha1", __sessionSecret)
+      password = randomString()
+      hash = hmac.update password
+
+      crypted = hash.digest(encoding="base64")
+
+      user = User.build()
+      user.username = "admin"
+      user.password = crypted
+      user.id_group = group.id_group
+
+      user.save()
+        .on "success", ->
+          console.log "Default user created, login = admin, password =", password
+          createLang()
+        .on "failure", (err) ->
+          console.log "Error on database initialization :", err
+
+    #
+    # Creating lang
+    #
+    createLang =->
+      lang = Lang.build()
+      lang.lang = "en"
+      lang.name = "English"
+      lang.online = 1
+      lang.def = 1
+      lang.ordering = 1
+
+      lang.save()
+        .on "success", ->
+          console.log "Default lang created"
+          updateStaticLangs()
+          createMenu()
+
+    #
+    # Creating menus
+    #
+    createMenu = ->
+      menu = Menu.build()
+      menu.title = "Main Menu"
+      menu.name = "main"
+      menu.ordering = 1
+
+      menu.save()
+        .on "success", (menu) ->
+          menu.id_menu = menu.id
+          menu.save()
+            .on 'success', ->
+              console.log "Default menu created"
+
+      menu = Menu.build()
+      menu.title = "System"
+      menu.name = "system"
+      menu.ordering = 2
+
+      menu.save()
+        .on "success", (menu) ->
+          menu.id_menu = menu.id
+          menu.save()
+
+    #
+    # Start process
+    #
+    createGroup()
+
+
+
+
+
+
+  #
+  # Creating tables that doesn't exist in database
+  #
+  DB.sync()
+    .on "success", ->
+      User.count()
+        .on "success", (count)->
+          #
+          # Create default base records
+          #
+          if count is 0
+            initDatabase()
+
+          #
+          # Normal boot
+          #
+          else
+            updateStaticLangs()
+
+    .on "failure", (err) ->
+      console.log "Database synchronisation error :", err
+
+
+
 
 init()
-
 
 
 #console.log sequelize.getMigrator().queryInterface
 
 module.exports = sequelize
 exports.config = config
+exports.boot = "BooYTa"
+
 
