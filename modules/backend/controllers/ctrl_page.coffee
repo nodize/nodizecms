@@ -181,7 +181,7 @@
           #
           # Display the page edition view 
           #
-          res.render "backend_page",
+          res.render "view_backend_page",
               layout        : no 
               page_id       : page_id
               page          : page
@@ -245,7 +245,7 @@
           #
           # Display the page edition view 
           #
-          res.render "backend_page",
+          res.render "view_backend_page",
             layout        : no
             menu_id       : menu_id
             page          : page

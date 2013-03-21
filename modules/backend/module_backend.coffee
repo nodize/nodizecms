@@ -9,9 +9,7 @@
 
   @Settings = {}
   @Settings['assetsPath'] =  _moduleAssetsPath
-  
 
-  console.log( "Module ", _moduleName, " loaded" )
 
   @use 'static': __dirname + "/public" # Allow to request static content from /public folder of the module
   
@@ -231,7 +229,7 @@
   path = require 'path'
    
   includeFolders = []
-  includeFolders.push "./modules/#{_moduleName}/views/"
+  includeFolders.push "./modules/#{_moduleName}/inline_views/"
   includeFolders.push "./modules/#{_moduleName}/controllers/"
   includeFolders.push "./modules/#{_moduleName}/helpers/"
 
@@ -239,6 +237,13 @@
     if path.existsSync includeFolder
       files = fs.readdirSync includeFolder
       @include includeFolder+file for file in files
+
+  #
+  # Adding the backend "views" folder as valid view folder
+  #
+  views = @app.get "views"
+  views.push "./modules/#{_moduleName}/views/"
+
 
   #
   # Events test
