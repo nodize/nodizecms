@@ -26,6 +26,7 @@ nodizeSettings = require 'nconf'
 global.__nodizeSettings = nodizeSettings
 
 
+
 #
 # If a local file exists we use it,
 # else we fallback on the regular settings file
@@ -39,7 +40,7 @@ nodizeSettings.add( 'nodize', {type: 'file', file:nodizeSettingsFile } )
 
 nodize = ->
 
-
+  require "./modules/ionize/libs/express_multiple_views"
 
   # Needed to get POST params & handle uploads
   @use bodyParser:{ uploadDir: __dirname+'/uploads' }
@@ -112,7 +113,7 @@ nodize = ->
   #
   # Defining views folder, in current theme
   #
-  @set 'views' : __dirname + "/themes/" + __nodizeTheme + "/views"
+  @set 'views' : [ __dirname + "/themes/" + __nodizeTheme + "/views" ]
 
   #
   # Activating jade engine
