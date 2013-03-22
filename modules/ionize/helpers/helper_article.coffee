@@ -278,8 +278,8 @@
       #
       # attributes are not used yet for this helper, "name" is just an example
       #
-      #first = if attrs?.first then attrs.first else 1
-      #last = if attrs?.last then attrs.last else 0
+      first = if attrs?.first then attrs.first else 1
+      last = if attrs?.last then attrs.last else 0
 
     #
     # We are launching an asynchronous request,

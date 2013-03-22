@@ -88,9 +88,9 @@
         # Sorting chunks by creation order
         #
         sortChunks = (a,b) ->
-          return a.requestId.order > b.requestId.order
+          return a.requestId.order < b.requestId.order
 
-        chunks.sort( sortChunks )
+        #chunks.sort( sortChunks )
 
         #
         # Rebuilding the response, assembling chunks
@@ -118,10 +118,12 @@
         #console.log "registering ",requestName
         requestCounter++
         requestId++
-        # requestName+'_'+requestId # Building & returning an id name
+
+        # Building & returning an id name
         request = 
           name  : requestName+'_'+requestId
           order : requestId
+
 
         return request
 
