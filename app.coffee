@@ -238,12 +238,15 @@ if cluster.isMaster
     # Fork workers.
     for i in [1..numCPUs]
       cluster.number = i
+      console.log "app | Forking on CPU", i
+
       cluster.fork()
       
       cluster.on 'death', ->
         console.log 'worker ' + worker.pid + ' died'
   else
     #nodize.app.listen( port )
+    
     require( "zappajs")( nodize, port )
 
 else
@@ -258,7 +261,7 @@ else
 # THROW INITIALIZATION EVENT
 #
 #
-__nodizeEvents.emit  'initialization', 'application ready'
+# __nodizeEvents.emit  'initialization', 'application ready'
 
 
 
