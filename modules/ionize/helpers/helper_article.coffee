@@ -347,10 +347,6 @@
     else
       text @page_lang.title
       
-  
-    #
-    # Inserting placeholder in the html for replacement once async request are finished
-    #
-    text "{**#{requestId.name}**}"  
+
 
       
