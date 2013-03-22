@@ -116,9 +116,9 @@ nodize = ->
   @set 'views' : [ __dirname + "/themes/" + __nodizeTheme + "/views" ]
 
   #
-  # Activating jade engine
+  # Express 3.x compatibility with "old" template engines
   #
-  # @register jade: @zappa.adapter 'jade' # Uncomment to use jade engine
+  @app.engine "eco", require("consolidate").eco
 
   #
   # Event engine
@@ -259,6 +259,8 @@ else
 #
 #
 __nodizeEvents.emit  'initialization', 'application ready'
+
+
 
 
 

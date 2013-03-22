@@ -12,6 +12,7 @@
   #
   partialModule = require '../libs/partials'
   partialModule.register( 'coffee', 'coffeecup' )
+  partialModule.register( '.eco', 'eco' )
 
   #
   # Needed for CoffeKup's helpers compatibility with Eco/Jade template engine

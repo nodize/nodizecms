@@ -5,6 +5,7 @@ resolve = path.resolve
 dirname = path.dirname
 extname = path.extname
 basename = path.basename
+registeredExts = []
 
 ###
 Express 3.x Layout & Partial support.
@@ -49,6 +50,8 @@ register = (ext, render) ->
     register[ext] = render.render
   else
     register[ext] = render
+
+  registeredExts.push( ext ) unless registeredExts.indexOf( ext )>-1
 
 
 
@@ -100,38 +103,69 @@ Lookup:
 @return {String}
 @api private
 ###
-lookup = (root, view, ext) ->
+lookup_oneRoot = (root, view, ext) ->
   name = resolveObjectName(view)
+
+  attempts = []
 
   # Try _ prefix ex: ./views/_<name>.jade
   # taking precedence over the direct path
-  view = resolve(root, "_" + name + ext)
-  return view  if exists(view)
+#  view = resolve(root, "_" + name + ext)
+#  attempts.push view
+#  return view  if exists(view)
 
   # Try index ex: ./views/user/index.jade
   view = resolve(root, name, "index" + ext)
+  attempts.push view
   return view  if exists(view)
 
   # Try ../<name>/index ex: ../user/index.jade
   # when calling partial('user') within the same dir
   view = resolve(root, "..", name, "index" + ext)
+  attempts.push view
   return view  if exists(view)
 
   # Try root ex: <root>/user.jade
   view = resolve(root, name + ext)
+  attempts.push view
   return view  if exists(view)
-  console.log "returning null"
+
   null
 
+lookup = (root, view, exts) ->
 
+  #
+  # Supporting multiple view folders patch
+  #
+  if (root instanceof Array)
+    for currentRoot in root
+      for ext in exts
+        _view = lookup_oneRoot( currentRoot, view, ext )
+      return _view if _view
+
+    console.log "partials | view #{name} not found"
+    return null
+
+  #
+  # Single view folder
+  #
+  for ext in exts
+    return lookup_oneRoot( root, view, ext )
 
 partial = (view, options) ->
   root = @res.app.get("views") or process.cwd() + "/views"
-  ext = extname(view) or "." + (@res.app.get("view engine") or "ejs")
+
+  ext = []
+  ext.push( extname(view) or "." + (@res.app.get("view engine") or "ejs") )
+  for extIndex in registeredExts
+    ext.push extIndex unless ext.indexOf(extIndex)>-1
+
+
+
   file = lookup(root, view, ext)
   source = fs.readFileSync(file, "utf8")
 
-  result = renderer(ext)(source, @)
+  result = renderer(extname(file))(source, @)
 
   return result
 
