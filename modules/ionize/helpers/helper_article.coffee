@@ -309,7 +309,9 @@
 
         for media in medias
           imageCount++
-          @media = media          
+          @media = media
+          @media.index = imageCount
+          @media.count = medias.length
       
           # Render nested tags
           if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)            
