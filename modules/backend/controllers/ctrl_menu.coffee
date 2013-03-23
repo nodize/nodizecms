@@ -166,7 +166,7 @@
   #
   # MENU DELETE
   #
-  @post "/:lang/admin/menu/delete/:id_menu" : ->
+  @post "/:lang/admin/menu/delete/:id_menu" : (req, res) ->
     Menu.find({where:{id_menu:@params.id_menu}})
       .on 'success', (menu) =>
         menu.destroy()
@@ -193,7 +193,7 @@
               id  : @params.id_menu
             # / Message
             
-            @send message  
+            res.send message
 
           .on 'failure', (err) ->
             console.log 'database error ', err
@@ -234,7 +234,7 @@
           # - Redirect main panel to menu edit            
           # - Insert menu in tree
           #  
-          message =                                    y
+          message =
             message_type  : "success"
             message       : "Menu saved"
             
