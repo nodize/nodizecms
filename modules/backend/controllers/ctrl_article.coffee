@@ -138,7 +138,7 @@
     loadCategories = (page) ->
       Category.findAll( {order:'name'})
         .on 'success', (categories) ->
-          res.render "backend_article",
+          res.render "view_backend_article",
             layout              : no             
             article             : article            
             article_by_lang     : article_by_lang
@@ -284,7 +284,7 @@
       Category.findAll( {order:'name'})
         .on 'success', (categories) ->
           
-          res.render "backend_article",
+          res.render "view_backend_article",
             layout              : no 
             page                : parent_page
             page_article        : page_article

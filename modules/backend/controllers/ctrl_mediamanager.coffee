@@ -54,7 +54,7 @@
     # mode (direct)
     #
     
-    console.log values
+    # console.log values
 
     fileDirectory =  values.directory.replace( basePath, '' )
     ck = require 'coffeecup'
@@ -266,8 +266,9 @@
 
       #console.log "this_dir path", basePath+values.directory
       #console.log "this_dir name", (if values.directory is "" then "/" else path.basename( values.directory ))
-      console.log "this_dir path", values.directory
-      console.log "this_dir name", path.basename( values.directory )
+      #console.log "this_dir path", values.directory
+      #console.log "this_dir name", path.basename( values.directory )
+
       response = 
         status:1
         root:"files\/"
