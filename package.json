@@ -1,6 +1,6 @@
 {
   "name": "nodize",
-  "version": "0.0.5",  
+  "version": "0.1.0",
   "description": "Nodize is a CMS (Content Management System) for Node.js, written in CoffeeScript. ",
   "author": "Hypee & Partikule <contact@nodize.com>",
   "homepage": "http://nodize.com",
