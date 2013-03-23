@@ -261,7 +261,7 @@ html ->
                     button "#wysiwyg_summary_#{lang}.light-button.left", type: 'button', onclick: "tinymce.execCommand(\'mceToggleEditor\',false,\'summary_#{lang}\');return false;", 'toggle editor'
 
 
-         y # # 'Files'
+          # # 'Files'
           # div '.tabcontent', ->
           #   p '.h20', ->
           #     button '.right.light-button files', onclick: 'javascript:mediaManager.loadMediaList(\'file\');return false;', 'Reload media list'
