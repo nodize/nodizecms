@@ -9,7 +9,7 @@
                         <div class="thumb">
                             <% title = @article.title # Saving title as @article value will continue to change while we are in @ion_medias (nodejs async fun !) %>
                             <%= @ion_medias first:2, => %>
-                                <a class="lightbox" href="<%= @media.path %>" title="<%= title %>" >
+                            <a class="lightbox" href="<%= @media.path %>" title="<%= title %>" >
                             <% end %>
                             <%= @ion_medias last:1, => %>
                             <img src="<%= @media.path %>" alt="" /> </a>

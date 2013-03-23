@@ -8,7 +8,14 @@
     redisClient = redis.createClient()
 
   #
-  # Needed for CoffeKup's helpers compatibility with Eco template engine
+  # Partials management
+  #
+  partialModule = require '../libs/partials'
+  partialModule.register( 'coffee', 'coffeecup' )
+  partialModule.register( '.eco', 'eco' )
+
+  #
+  # Needed for CoffeKup's helpers compatibility with Eco/Jade template engine
   #
   global.text = (value) -> value
   global.cede = (content) -> content()
@@ -17,7 +24,7 @@
   #* DEFAULT HANDLER, DISPLAYING PAGE FROM DATABASE
   #*
   #**
-  @ionize_displayPage = (req, helpers, name, args) ->
+  @ionize_displayPage = (req, res, helpers, name, args) ->
     #console.log req.request.headers["accept-language"]
     
     #console.log req.params
@@ -40,7 +47,7 @@
       #
       if lang is Static_lang_default
         name = "/"+segments.join("/")        
-        req.redirect( name )
+        res.redirect( name )
         return
         
       name = segments[0]
@@ -52,8 +59,9 @@
     startTime = Date.now()
     #
     # Requesting home page if url = "/"    
-    #    
-    if req.request.url is '/'      
+    #
+
+    if req.url is '/'
       condition = {home : 1, lang:lang }
     else
       condition = {url : name, lang:lang }
@@ -80,16 +88,15 @@
         # Sorting chunks by creation order
         #
         sortChunks = (a,b) ->
-          return a.requestId.order > b.requestId.order
+          return a.requestId.order < b.requestId.order
 
-        chunks.sort( sortChunks )
+        #chunks.sort( sortChunks )
 
         #
         # Rebuilding the response, assembling chunks
         #
-        for chunk in chunks                         
+        for chunk in chunks
           layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
-          
 
         #
         # Adding page to cache
@@ -101,7 +108,7 @@
         #
         # Send page
         #
-        req.send layout
+        res.send layout
 
 
       #
@@ -111,10 +118,12 @@
         #console.log "registering ",requestName
         requestCounter++
         requestId++
-        # requestName+'_'+requestId # Building & returning an id name
+
+        # Building & returning an id name
         request = 
           name  : requestName+'_'+requestId
           order : requestId
+
 
         return request
 
@@ -126,7 +135,7 @@
         chunks.push { requestId : requestId, content : response }
 
         if requestCounter is 0
-          
+
           #broadcast testEvent: {message:'Page '+name+' served in '+startTime-Date.now()}
           #broadcast testEvent: {message:'Page ['+(name or '/')+'] served in '+(Date.now()-startTime)+' ms'}
           sendResponse()
@@ -180,7 +189,7 @@
               if page_lang
                 findPage( page_lang )            
               else
-                req.send "page #{name} not found", 404
+                res.send "page #{name} not found", 404
 
         
 
@@ -213,7 +222,7 @@
               registerRequest "main"
 
 
-              req.render 'page_default',
+              res.render 'page_default',
                 hardcode  : helpers              
                 page      : page
                 page_lang : page_lang              
@@ -255,14 +264,17 @@
             page.title = page_lang.meta_title
           else
             page.title = page_lang.title          
-          
+
+
+
           data =
-            hardcode  : helpers              
+            hardcode  : helpers
             page      : page
             page_lang : page_lang
-            lang      : lang             
+            lang      : lang
             layout    : no
             req       : req
+            res       : res
             registerRequest : registerRequest
             requestCompleted : requestCompleted
             settings  : __nodizeSettings.stores.nodize.store
@@ -279,13 +291,24 @@
           #   <p> <%- @article.content %> </p>
           # 
           for helper of helpers
-            do (helper) ->
+            do (helper) =>
               data[helper] = (args...) -> @hardcode[helper].apply(this, args)
-          
+              #data[helper] = -> @hardcode[helper].apply @, arguments
+              #data.hardcode[helper] = -> @hardcode[helper].apply @, arguments
+              #data.hardcode[helper] = (args...) -> @hardcode[helper].apply(this, args)
+
+          # Allows `partial 'foo'` instead of `text @partial 'foo'`.
+          data.hardcode.partial = -> text @partial.apply @, arguments
+
+
+          #console.log "ctrl_page | ", partialModule.partial
+
+          data['partial'] = (args...) -> partialModule.partial.apply(this, args)
+
           #
           # Render the page
           #
-          req.render page.view,
+          res.render page.view,
             data
           ,
             (err,list) ->
@@ -307,7 +330,7 @@
           console.log err
         else if page isnt null
           #console.log "we got a cached page"
-          req.send page
+          res.send page
           return
         else
           startPageRendering()

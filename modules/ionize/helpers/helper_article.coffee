@@ -10,11 +10,6 @@
 # http://www.opensource.org/licenses/MIT
 #
 
-#
-# Todo :
-# - Check why "from" attribute is not working with jade / restore it for Eco/Express
-
-#
 
 @include = ->  
   # Defining helpers, available in templates
@@ -235,7 +230,7 @@
 
       render = =>      
         # Render article view        
-        template = "include ../#{@article.view}"            
+        template = "include #{@article.view}"
                       
         fn = jade.compile( template, @ )
         htmlResponse =  fn( @ ) # Compile the view to html                
@@ -283,8 +278,8 @@
       #
       # attributes are not used yet for this helper, "name" is just an example
       #
-      #first = if attrs?.first then attrs.first else 1
-      #last = if attrs?.last then attrs.last else 0
+      first = if attrs?.first then attrs.first else 1
+      last = if attrs?.last then attrs.last else 0
 
     #
     # We are launching an asynchronous request,
@@ -314,7 +309,9 @@
 
         for media in medias
           imageCount++
-          @media = media          
+          @media = media
+          @media.index = imageCount
+          @media.count = medias.length
       
           # Render nested tags
           if args.length>=1 and imageCount>=first and (imageCount<=last or last is 0)            
@@ -352,10 +349,6 @@
     else
       text @page_lang.title
       
-  
-    #
-    # Inserting placeholder in the html for replacement once async request are finished
-    #
-    text "{**#{requestId.name}**}"  
+
 
       

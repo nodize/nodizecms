@@ -11,10 +11,10 @@
   #
   # CONTENT TREE (Menus, pages, articles)
   #
-  @get "/:lang/admin/tree" : (req) =>
+  @get "/:lang/admin/tree" : (req, res) =>
     Menu.findAll({order:'ordering'})
       .on 'success', (menus) ->
-        req.render "backend_tree",
+        res.render "backend_tree",
           hardcode  : @helpers
           lang      : req.params.lang      
           ion_lang  : ion_lang[ req.params.lang ]
@@ -28,7 +28,7 @@
   # PAGES TREE
   #
     # Retrieval of one leaf of the page/article tree
-  @post "/:lang/admin/tree/get" : (req) =>
+  @post "/:lang/admin/tree/get" : (req, res) =>
     current_lang = if req.params.lang then req.params.lang else Static_lang_default
     # Retrieving POST datas
     values = req.body
@@ -75,7 +75,7 @@
         if pageDone and articleDone
           articleDone = false
           pageDone = false
-          req.send( {"pages":pageResultArray, "articles":[] } )
+          res.send( {"pages":pageResultArray, "articles":[] } )
 
       .on 'failure', (err) ->
         console.log( "error" + err )
@@ -130,7 +130,7 @@
         if pageDone and articleDone
           articleDone = false
           pageDone = false          
-          req.send( {"pages":pageResultArray, "articles":articleResultArray } )
+          res.send( {"pages":pageResultArray, "articles":articleResultArray } )
 
       .on 'failure', (err) ->
         console.log( "error" + err )
