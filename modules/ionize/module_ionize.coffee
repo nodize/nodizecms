@@ -184,7 +184,7 @@ String::getMonth = ->
 #
 # Connecting to the database & creating models
 #
-require __applicationPath+"/modules/ionize/libs/nodize_db"
+nodize_db = require __applicationPath+"/modules/ionize/libs/nodize_db"
 
 
 
@@ -199,10 +199,3 @@ __nodizeEvents
   .on 'pageSave', (message)->
     #console.log( "PageSave event in mod_ionize -> ", message )
     return
-    
-
-  #
-  # Langs have been modified, we rebuild the static array
-  #
-  .on 'langsUpdate', (message) ->    
-    updateStaticLangs()

@@ -378,7 +378,24 @@ initializeTables = (db) ->
     #
     createGroup()
 
+  # ---------------------------
+  # EVENTS
+  #
+  __nodizeEvents
+    #
+    # Page has been updated, we could store pages in a static JSON array
+    # TODO: should probably be in backend module
+    #
+    .on 'pageSave', (message)->
+      #console.log( "PageSave event in mod_ionize -> ", message )
+      return
 
+
+    #
+    # Langs have been modified, we rebuild the static array
+    #
+    .on 'langsUpdate', (message) ->
+      updateStaticLangs()
 
 
 
