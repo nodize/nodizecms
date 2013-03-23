@@ -9,9 +9,7 @@
 
   @Settings = {}
   @Settings['assetsPath'] =  _moduleAssetsPath
-  
 
-  console.log( "Module ", _moduleName, " loaded" )
 
   @use 'static': __dirname + "/public" # Allow to request static content from /public folder of the module
   
@@ -23,8 +21,8 @@
 
 
   # Access to admin page with lang specified
-  @get "/:lang/admin/login" : (req) ->        
-    req.render 'backend_login', 
+  @get "/:lang/admin/login" : (req) ->
+    @render 'backend_login',
       hardcode    : @helpers
       layout      : no 
       lang        : req.params.lang
@@ -35,7 +33,7 @@
   # LOGIN/PASSWORD POST
   # Checking if user can log in
   #
-  @post "/:lang/admin/login" : (req) -> 
+  @post "/:lang/admin/login" : (req, res) ->
     values = req.body
 
     #
@@ -66,18 +64,18 @@
                   req.session.usergroup_name = user_group.group_name 
                   req.session.usergroup_level = user_group.level
 
-                req.redirect "/#{req.params.lang}/admin"          
+                res.redirect "/#{req.params.lang}/admin"
               .on 'failure', (err) ->
                 console.log 'database error ', err
             
 
             
           else 
-            req.redirect "/#{req.params.lang}/admin/login"
+            res.redirect "/#{req.params.lang}/admin/login"
 
         .on 'failure', (err) ->
           console.log 'database error ', err
-          req.redirect "/#{req.params.lang}/admin/login"      
+          res.redirect "/#{req.params.lang}/admin/login"
 
     validateUser()  
 
@@ -117,11 +115,11 @@
     else
       @redirect "/"+__default_lang+"/admin/login"  
 
-  @get "/:lang?/backend*" : (req) ->
+  @get "/:lang?/backend*" : (req,res) ->
     if req.session and req.session.authenticated is true
       @next()
     else
-      req.send('nope', 502)
+      res.send('nope', 502)
       
 
   @post "/:lang/admin*" : (req) ->        
@@ -139,9 +137,9 @@
 
   
   # Access to admin page with lang specified
-  @get "/:lang?/admin" : (req) =>
+  @get "/:lang?/admin" : (req,res) =>
     lang = req.params.lang or 'en'
-    req.render 'backend_desktop', 
+    res.render 'backend_desktop',
       hardcode    : @helpers
       layout      : no 
       lang        : lang
@@ -178,9 +176,8 @@
   #
   # INTERFACE header
   #  
-  @get "/:lang/admin/desktop/get_header" : (req) =>
-    #req.render "backend_desktopHeader", 
-    req.render "backend_desktopNavBar", 
+  @get "/:lang/admin/desktop/get_header" : (req,res) =>
+    res.render "backend_desktopNavBar",
       hardcode  : @helpers 
       lang      : req.params.lang      
       ion_lang  : ion_lang[ req.params.lang ]
@@ -208,21 +205,18 @@
       layout    : no
 
 
-  # Display "article edition" page (same action than previous, onReload callback, Ionize Javascript seems to remove a "/")
-  @get "/:lang/admin/articleedit/:ids" : =>
-    @backend_editArticle req
 
   #
   # ARTICLE, changing "online" state
   #
-  @post "/:lang/admin/articleswitch_online/:id_page/:id_article" : (req) =>
-    @backend_articleSwitchOnline( req )
+  @post "/:lang/admin/articleswitch_online/:id_page/:id_article" : (req, res) =>
+    @backend_articleSwitchOnline( req, res )
 
   #
   # ARTICLE, deletion
   #
-  @post "/:lang/admin/article/delete/:id_article" : (req) =>
-    @backend_articleDelete( req )
+  @post "/:lang/admin/article/delete/:id_article" : (req, res) =>
+    @backend_articleDelete( req, res )
 
     
   #**********************************
@@ -232,7 +226,7 @@
   path = require 'path'
    
   includeFolders = []
-  includeFolders.push "./modules/#{_moduleName}/views/"
+  includeFolders.push "./modules/#{_moduleName}/inline_views/"
   includeFolders.push "./modules/#{_moduleName}/controllers/"
   includeFolders.push "./modules/#{_moduleName}/helpers/"
 
@@ -240,6 +234,13 @@
     if path.existsSync includeFolder
       files = fs.readdirSync includeFolder
       @include includeFolder+file for file in files
+
+  #
+  # Adding the backend "views" folder as valid view folder
+  #
+  views = @app.get "views"
+  views.push "./modules/#{_moduleName}/views/"
+
 
   #
   # Events test

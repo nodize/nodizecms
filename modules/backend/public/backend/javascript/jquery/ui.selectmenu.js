@@ -23,7 +23,6 @@ $.widget("ui.selectmenu", {
 		//create menu button wrapper
 		this.newelement = $('<a class="'+ this.widgetBaseClass +' ui-widget ui-state-default ui-corner-all" id="'+this.ids[0]+'" role="button" href="#" aria-haspopup="true" aria-owns="'+this.ids[1]+'"></a>')
 			.insertAfter(this.element);
-		
 		//transfer tabindex
 		var tabindex = this.element.attr('tabindex');
 		if(tabindex){ this.newelement.attr('tabindex', tabindex); }
