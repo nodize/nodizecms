@@ -27,8 +27,6 @@
   @ionize_displayPage = (req, res, helpers, name, args) ->
     #console.log req.request.headers["accept-language"]
     
-    #console.log req.params
-    
     #
     # Extracting lang from URI, or use default
     #
@@ -54,7 +52,8 @@
       req.params[0] = name
     else
       lang = Static_lang_default
-    
+
+    req.session.lang = lang
 
     startTime = Date.now()
     #

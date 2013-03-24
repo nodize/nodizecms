@@ -31,6 +31,9 @@ module.exports = (sequelize, DataTypes)->
         @publish_on = ''
         @publish_off = ''
         @logical_date = ''
+
+
+
   
     classMethods:
 
@@ -239,7 +242,43 @@ module.exports = (sequelize, DataTypes)->
               callback( "Record not found", null, null )    
 
           .on 'failure', (err) ->
-            callback( err, null, null )              
+            callback( err, null, null )
+
+      #
+      # Retrieves an article
+      #
+      get : (data, callback) ->
+        #
+        # Retrieve article
+        #
+        findArticle = (data) ->
+          Article.find({where:{id_article:data.id_article}})
+            .on 'success', (article) ->
+              findArticleLang( article )
+            .on 'failure', (err) ->
+              console.log 'database error ', err
+              callback( err, null )
+
+
+        #
+        # Retrieve langs
+        #
+        findArticleLang = (article) ->
+          # Search article & render page
+          Article_lang.findAll( {where: {id_article:data.id_article, lang:data.lang} } )
+            .on 'success', (article_langs) ->
+              if article_langs.length > 0
+                callback( null, article_langs[0] )
+
+
+
+        if data.id_article
+          findArticle(data)
+        else
+          err = "Article id not provided " + data.id_article
+          callback( err, null )
+
+
           
         
 
