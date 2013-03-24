@@ -145,7 +145,15 @@
                     whereType +
                     "ORDER BY page_article.ordering"
     
-    #console.log page_search
+
+    compile = (engine, template) ->
+      # For Jade engine
+      if engine is "jade"
+        fn = jade.compile( template, @ )
+        return fn( @ ) # Compile the nested content to html
+      # For Eco and CoffeeCup
+      else
+        return cede template # Compile the nested content to html
 
     DB.query(  page_search
               , Article)
@@ -159,6 +167,20 @@
 
         @params = params
 
+        template = args[args.length-1]
+
+        #
+        # Inserting template, used by real time updates
+        #
+        @article = Article.build()
+        @article.createBlank()
+        @article.index = 0
+        @article.isFirst = false
+        @article.isLast = false
+        htmlResponse += "<script type='text/template' id='article'>"
+        htmlResponse += compile @template_engine, template
+        htmlResponse += "</script>"
+
 
         for article in articles          
           articleCount++
@@ -167,27 +189,17 @@
 
           @article.index = articleCount
           @article.isFirst = if articleCount is 1 then true else false          
-          @article.isLast = if articleCount is articles.length then true else false
+          @article.isLast = (articleCount is articles.length)
 
-          if live
-            @article.content = "<div class='ion_live_content'>" + @article.content + "</div>"
-        
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_liveArticle_#{@article.id_article}'>" if live
             htmlResponse += "<span id='ion_refreshArticle_#{@article.id_article}'>" if refresh  
             
-            template = args[args.length-1]            
-                        
-            # For Jade engine
-            if @template_engine is "jade"
-              fn = jade.compile( template, @ )              
-              htmlResponse +=  fn( @ ) # Compile the nested content to html               
-            # For Eco and CoffeeCup
-            else              
-              htmlResponse += cede template # Compile the nested content to html
+            htmlResponse += compile @template_engine, template
 
             htmlResponse += "</span>" if live
+
 
            
 

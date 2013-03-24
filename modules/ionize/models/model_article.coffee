@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes)->
         @publish_on = ''
         @publish_off = ''
         @logical_date = ''
+        @content = ''
 
 
 

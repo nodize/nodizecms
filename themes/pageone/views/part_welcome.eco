@@ -4,8 +4,8 @@
         <% # Top page article, you need to have declared "welcome_top" article type %>           
         <%= @ion_articles type:'welcome_top', live:true, => %>
             <div class="intro-box">                         
-               <h1><%= @article.title %></h1>            
-               <p class="intro"><%- @article.content %></p>
+               <h1 data-bind="article.title"><%= @article.title %></h1>
+               <span class="intro" data-bind="article.content"><%- @article.content %></span>
             </div>
         <% end %>
 

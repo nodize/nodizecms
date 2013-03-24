@@ -1,5 +1,19 @@
 @include = ->
 
+
+  # ---------------------------
+  # NODE.JS SERVER SIDE EVENTS
+  #
+  __nodizeEvents
+    #
+    # Page has been updated
+    #
+    .on 'articleUpdate', (params) =>
+      @io.sockets.emit 'live_articleUpdateAvailable', {id_article:params.article.id_article}
+
+  # ---------------------------
+  # SOCKET.IO SERVER SIDE EVENTS
+  #
   @io.sockets.on 'connection', (socket) ->
 
     socket.on 'live_getArticle', (data) ->
@@ -11,21 +25,10 @@
         Article.get data, (err, article) ->
           unless err
             socket.emit 'live_articleUpdate', {article : article}
+            console.log "ctrl_events | article", article
+
           else
             console.log "ctrl_events | article not found"
-            
-
-  # ---------------------------
-  # SERVER SIDE EVENTS
-  #
-  __nodizeEvents
-    #
-    # Page has been updated, we could store pages in a static JSON array
-    #
-    .on 'articleUpdate', (params) =>
-      @io.sockets.emit 'live_articleUpdateAvailable', {id_article:params.article.id_article}
-
-
 
   # ---------------------------
   # CLIENT SIDE EVENTS
@@ -68,10 +71,9 @@
       $ = jQuery
 
       #
-      # Live update of article content
+      # Live update of article values
       #
-      $('#ion_liveArticle_'+@data.article.id_article+' .ion_live_content').html( @data.article.content )
+      for key, value of @data.article
+        $("#ion_liveArticle_#{@data.article.id_article} [data-bind='article.#{key}']").html( value )
 
-      # http://www.bitstorm.org/jquery/color-animation/
-      #$('#ion_liveArticle_'+@data.id_article+' .ion_live_content').animate({color:'#00AA00'}).animate({color:'#000000'})
 

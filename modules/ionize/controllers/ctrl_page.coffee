@@ -84,17 +84,22 @@
       sendResponse = ->
         
         # 
-        # Sorting chunks by creation order
+        # Sorting chunks by creation order, needed for async templates engines (ie Jade)
         #
         sortChunks = (a,b) ->
-          return a.requestId.order < b.requestId.order
+          return a.requestId.order - b.requestId.order
 
-        #chunks.sort( sortChunks )
+
+        chunks.sort( sortChunks )
+
+        #console.log chunks
 
         #
         # Rebuilding the response, assembling chunks
         #
         for chunk in chunks
+          #console.log "ctrl_page | chunck", chunk.requestId.name
+
           layout = layout.replace( '{**'+chunk.requestId.name+'**}', chunk.content )
 
         #
@@ -114,7 +119,7 @@
       # Registering a request (main layout and Nodize helpers)
       #
       registerRequest =  (requestName) ->
-        #console.log "registering ",requestName
+
         requestCounter++
         requestId++
 
@@ -123,6 +128,7 @@
           name  : requestName+'_'+requestId
           order : requestId
 
+        #console.log "ctrl_page | registering ",request.name
 
         return request
 

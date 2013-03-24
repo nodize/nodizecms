@@ -69,7 +69,7 @@
       # Redirect to / path for resources if lang is specified
       # (/en/css/styles.css is redirected to /css/styles.css)
       #
-      if segments[1] in Static_langs
+      if segments[1] in Static_langs?
         lang = segments[1]
         #
         # Remove lang segment
