@@ -172,14 +172,14 @@
         #
         # Inserting template, used by real time updates
         #
-        @article = Article.build()
-        @article.createBlank()
-        @article.index = 0
-        @article.isFirst = false
-        @article.isLast = false
-        htmlResponse += "<script type='text/template' id='article'>"
-        htmlResponse += compile @template_engine, template
-        htmlResponse += "</script>"
+#        @article = Article.build()
+#        @article.createBlank()
+#        @article.index = 0
+#        @article.isFirst = false
+#        @article.isLast = false
+#        htmlResponse += "<script type='text/template' id='article'>"
+#        htmlResponse += compile @template_engine, template
+#        htmlResponse += "</script>"
 
 
         for article in articles          
