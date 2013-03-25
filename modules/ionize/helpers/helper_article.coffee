@@ -145,8 +145,10 @@
                     whereType +
                     "ORDER BY page_article.ordering"
     
-
-    compile = (engine, template) ->
+    #
+    # Template compilation, depending on engine
+    #
+    compile = (engine, template) =>
       # For Jade engine
       if engine is "jade"
         fn = jade.compile( template, @ )
