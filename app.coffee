@@ -125,7 +125,13 @@ nodize = ->
   #
   EventEmitter = require( "events" ).EventEmitter
   global.__nodizeEvents = new EventEmitter()
-  
+
+
+  #
+  # Express session available in Socket.io
+  #
+  @include "./modules/ionize/libs/session_socketio_express.coffee"
+
   #
   # Defining helpers container
   #
