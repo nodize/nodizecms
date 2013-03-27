@@ -15,6 +15,7 @@
   "main": "app.coffee",
   "dependencies": {
     "connect":"2.7.3",
+    "consolidate":"0.8.0",
     "cookie":"0.0.5",
     "sequelize": "1.4.1",
     "coffee-script": "1.6.1",
