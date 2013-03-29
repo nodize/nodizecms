@@ -38,8 +38,6 @@
   #* CATCH ALL & PAGES DISPLAY MANAGEMENT
   #**  
 
-  console.log "module_ionize | catchall rule set"
-
   # Managing all other cases
   @all '*': (req, res) =>
 
