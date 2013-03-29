@@ -7,6 +7,8 @@ extname = path.extname
 basename = path.basename
 registeredExts = []
 
+zappa_fs = null
+
 ###
 Express 3.x Layout & Partial support.
 
@@ -104,31 +106,31 @@ Lookup:
 @api private
 ###
 lookup_oneRoot = (root, view, ext) ->
+
   name = resolveObjectName(view)
 
-  attempts = []
 
   # Try _ prefix ex: ./views/_<name>.jade
   # taking precedence over the direct path
 #  view = resolve(root, "_" + name + ext)
-#  attempts.push view
 #  return view  if exists(view)
 
   # Try index ex: ./views/user/index.jade
-  view = resolve(root, name, "index" + ext)
-  attempts.push view
-  return view  if exists(view)
+  #view = resolve(root, name, "index" + ext)
+  #return view  if exists(view)
 
   # Try ../<name>/index ex: ../user/index.jade
   # when calling partial('user') within the same dir
-  view = resolve(root, "..", name, "index" + ext)
-  attempts.push view
-  return view  if exists(view)
+  #view = resolve(root, "..", name, "index" + ext)
+  #return view  if exists(view)
+
 
   # Try root ex: <root>/user.jade
   view = resolve(root, name + ext)
-  attempts.push view
+  #console.log "partials |*** found", view if exists(view)
   return view  if exists(view)
+
+  #console.log "partials | not found", view
 
   null
 
@@ -141,9 +143,9 @@ lookup = (root, view, exts) ->
     for currentRoot in root
       for ext in exts
         _view = lookup_oneRoot( currentRoot, view, ext )
-      return _view if _view
+        return _view if _view
 
-    console.log "partials | view #{name} not found"
+    console.log "partials | view '#{view}' not found"
     return null
 
   #
@@ -156,19 +158,35 @@ partial = (view, options) ->
   root = @res.app.get("views") or process.cwd() + "/views"
 
   ext = []
-  ext.push( extname(view) or "." + (@res.app.get("view engine") or "ejs") )
+  ext.push( extname(view) or "." + (@res.app.get("view engine") or "coffee") )
   for extIndex in registeredExts
     ext.push extIndex unless ext.indexOf(extIndex)>-1
 
 
+  # Search in Zappa's inline views
+  if zappa_fs?[ view ]
+    viewExt = extname(view) or @res.app.get("view engine") or "coffee"
+    result = renderer(viewExt)(zappa_fs[ view ], @)
+  else
+    file = lookup(root, view, ext)
+    if file
+      source = fs.readFileSync(file, "utf8")
 
-  file = lookup(root, view, ext)
-  source = fs.readFileSync(file, "utf8")
-
-  result = renderer(extname(file))(source, @)
+      result = renderer(extname(file))(source, @)
+    else
+      result = "Partial view '#{view}' not found"
 
   return result
+
+#
+# Defining context, used to access to Zappa inline views
+#
+setInlineViews = (_inlineViews) ->
+  zappa_fs = _inlineViews
+
+
 
 
 module.exports.partial = partial
 module.exports.register = register
+module.exports.setInlineViews = setInlineViews

@@ -10,9 +10,10 @@
   @Settings = {}
   @Settings['assetsPath'] =  _moduleAssetsPath
 
+  # Allow to request static content from /public folder of the module
+  @use 'static': __dirname + "/public"
 
-  @use 'static': __dirname + "/public" # Allow to request static content from /public folder of the module
-  
+
   #**********************************
   #* ROUTES
   #* 

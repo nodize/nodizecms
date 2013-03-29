@@ -38,8 +38,13 @@
   #* CATCH ALL & PAGES DISPLAY MANAGEMENT
   #**  
 
-  # Managing all other cases (problem w/ zappa/zappa.js which is intercepted)
+  # Managing all other cases
   @all '*': (req, res) =>
+
+    @catch_all( req, res )
+
+
+  @catch_all = ( req, res ) =>
     name = req.params[0]
 
     #
@@ -83,7 +88,9 @@
       else
         res.send("you are requesting #{req.params[0]} (file extension:#{ext})", 404)
 
-      
+  #
+  # Error management
+  #
   nodizeErrorHandler = (err, req, res, next) ->
     res.send( 500, "Nodize error <hr/>"+err )
     console.log "Nodize error \r\n", err.stack

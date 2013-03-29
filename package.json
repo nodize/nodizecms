@@ -25,7 +25,7 @@
     "nconf": "0.5.1",
     "imageinfo":"1.0.4",
     "validator":"0.4.5",
-    "zappajs":"0.4.19",
+    "zappajs":"git://github.com/nodize/zappajs",
     "zappajs-partials":"0.0.7",
     "redis":"0.8.2",
     "connect-redis":"1.4.5",

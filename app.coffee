@@ -136,13 +136,20 @@ nodize = ->
   # Defining helpers container
   #
   @helpers = {}
-  
+
+  #
+  # Express routes removal, used by lazy loading
+  #
+  @include "./modules/ionize/libs/express_route_unmount.coffee"
+
+  # Backend, lazy loading (not ready yet)
+  #@include "./modules/backend/loader_backend.coffee"
+
   # Including backend/administration module
-  @include './modules/backend/module_backend.coffee'
+  @include "./modules/backend/module_backend.coffee"
 
   # Including theme/site modules
   _moduleName = "ionize"
-
 
   #
   # LOADING VIEWS, HELPERS, CONTROLLERS from THEME'S MODULES
@@ -152,7 +159,9 @@ nodize = ->
 
   themeModuleDir = './themes/'+__nodizeTheme+'/modules'
 
-  if path.existsSync themeModuleDir
+  existsSync = fs.existsSync or path.existsSync
+
+  if existsSync themeModuleDir
     modules = fs.readdirSync themeModuleDir
 
     #
@@ -164,12 +173,26 @@ nodize = ->
     for _moduleName in modules
       console.log "Loading module (#{_moduleName})"
       includeFolders = []
-      includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
+
+      #
+      # If module has an "inline_views" folder, we guess "views" is used for regular view files
+      #
+      if existsSync themeModuleDir+"/"+_moduleName+"/inline_views/"
+        includeFolders.push themeModuleDir+"/"+_moduleName+"/inline_views/"
+        #
+        # Adding the module's "views" folder as valid view folder
+        #
+        views = @app.get "views"
+        views.push themeModuleDir+"/"+_moduleName+"/views/"
+
+      else
+        includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
+
       includeFolders.push themeModuleDir+"/"+_moduleName+"/controllers/"
       includeFolders.push themeModuleDir+"/"+_moduleName+"/helpers/"
 
       for includeFolder in includeFolders
-        if path.existsSync includeFolder
+        if existsSync includeFolder
           files = fs.readdirSync includeFolder
           @include includeFolder+file for file in files
 
