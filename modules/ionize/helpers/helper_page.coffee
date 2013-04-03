@@ -12,7 +12,12 @@
 
 @include = ->
   # Defining helpers (like ionize tags, available in CoffeKup for views)
-  
+
+  #
+  # Specific code for Jade, using filters
+  #
+  jade = require "jade"
+
   #*****
   #* Displaying pages, @pages array has to be sent with @render
   #* use @pages.title... in nested views (fields from page + page_lang tables)
@@ -22,6 +27,7 @@
     tagName = 'ion_pages'
     live = false
     scope = ''
+
 
     #
     # What page are we retrieving other pages from ?
@@ -67,6 +73,17 @@
     finished = (response) =>
       @requestCompleted requestId, response
 
+    #
+    # Template compilation, depending on engine
+    #
+    compile = (engine, template) =>
+      # For Jade engine
+      if engine is "jade"
+        fn = jade.compile( template, @ )
+        return fn( @ ) # Compile the nested content to html
+      # For Eco and CoffeeCup
+      else
+        return cede template # Compile the nested content to html
 
     #
     # When connected with rights >= editors, offline pages are also displayed
@@ -107,11 +124,13 @@
           @page.url = @page.link if @page.link
 
           @page.date = if @page.logical_date isnt '' then @page.logical_date else @page.updated
-          
+
+          template = args[args.length-1]
+
           # Render nested tags
           if args.length>=1
             htmlResponse += "<span id='ion_livePage_#{@page.id_page}'>" if live
-            htmlResponse += cede args[args.length-1] # Compile the nested content to html            
+            htmlResponse += compile @template_engine, template
             htmlResponse += "</span>" if live
 
         finished( htmlResponse )

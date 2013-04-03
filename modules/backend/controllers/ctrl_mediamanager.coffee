@@ -44,7 +44,7 @@
   # Returning files & folders DETAIL
   # TODO: manage token
   #
-  @post '/:lang?/admin/media/filemanager/detail' : (req) ->
+  @post '/:lang?/admin/media/filemanager/detail' : (req, res) ->
     values = req.body
     # Params :
     # uploadTokken
@@ -54,7 +54,7 @@
     # mode (direct)
     #
     
-    console.log values
+    # console.log values
 
     fileDirectory =  values.directory.replace( basePath, '' )
     ck = require 'coffeecup'
@@ -114,7 +114,7 @@
         icon:"\/backend\/javascript\/mootools-filemanager\/Assets\/Images\/Icons\/jpg.png"
         metadata:null
 
-      req.send response      
+      res.send response
 
 
     #
@@ -148,7 +148,7 @@
   #
   # Returning files & folders list
   #
-  @post '/:lang?/admin/media/filemanager/view' : (req) ->
+  @post '/:lang?/admin/media/filemanager/view' : (req,res) ->
     values = req.body
     #
     # Get file list (folder "files" in /themes)
@@ -266,8 +266,9 @@
 
       #console.log "this_dir path", basePath+values.directory
       #console.log "this_dir name", (if values.directory is "" then "/" else path.basename( values.directory ))
-      console.log "this_dir path", values.directory
-      console.log "this_dir name", path.basename( values.directory )
+      #console.log "this_dir path", values.directory
+      #console.log "this_dir name", path.basename( values.directory )
+
       response = 
         status:1
         root:"files\/"
@@ -285,15 +286,15 @@
         files:files_json
       
 
-      req.send response
+      res.send response
 
 
   #
   # Creating folder  
   #
-  @post '/:lang?/admin/media/filemanager/create' : (req) ->
+  @post '/:lang?/admin/media/filemanager/create' : (req, res) ->
     values = req.body
-    console.log values
+    # console.log values
     fs = require 'fs'
 
     fs.mkdir values.directory+'\/'+values.file, 0o0777, (err) ->
@@ -324,5 +325,5 @@
           files:[]
 
 
-      req.send response
+      res.send response
     

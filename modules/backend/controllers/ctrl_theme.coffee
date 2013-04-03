@@ -204,12 +204,16 @@
   #
   # SAVE THEME SELECTION
   #      
-  @post '/:lang/admin/setting/save_themes' : (req) ->
+  @post '/:lang/admin/setting/save_themes' : (req, res) ->
     #
     # If a local file exists we use it, else we fallback on the regular settings file
     #
     path = require 'path'
-    if path.existsSync( 'settings/nodize.local.json')
+    fs = require 'fs'
+
+    existsSync = fs.existsSync or path.existsSync
+
+    if existsSync( 'settings/nodize.local.json')
       nodizeSettingsFile = __applicationPath+'/settings/nodize.local.json' 
     else
       nodizeSettingsFile = __applicationPath+'/settings/nodize.json' 
@@ -234,7 +238,7 @@
           "update":[]
           "callback":null
 
-        req.send message
+        res.send message
 
         
         saveThemeSettings = ->

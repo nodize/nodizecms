@@ -16,16 +16,20 @@ jade    = require "jade"
 # Adding helpers compatibility to Jade templates,
 # Creating a new filter for each existing helpers 
 #
-createFilters = (helpers) ->  
+createFilters = (helpers) ->
+
   for helper_name,helper_function of helpers
     do (helper_name,helper_function) ->      
-      jade.filters[ helper_name ] = (block, options) ->        
+      jade.filters[ helper_name ] = (block, options) ->
+
         try      
           # Calling the regular helper
           @template_engine = "jade"           
           helper_function.call( @, options, block )
         catch error
           console.log "Template error [#{helper_name}]: ", error
+          console.log "jade_helpers_filters | stack", error.stack
+
       
 
 init = ->  

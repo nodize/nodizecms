@@ -67,7 +67,7 @@
   #
   # CREATE a new USER
   #
-  @post '/:lang/admin/users/save' : (req) ->
+  @post '/:lang/admin/users/save' : (req, res) ->
     values = req.body
 
     checkPassword = =>
@@ -117,7 +117,7 @@
                 ]
                 callback:null
 
-              req.send message
+              res.send message
 
             .on 'failure', (err) ->
               console.log 'database error on user creation', err
@@ -135,7 +135,7 @@
   #
   # UPDATE USER
   #
-  @post '/:lang/admin/users/update' : (req) ->
+  @post '/:lang/admin/users/update' : (req, res) ->
     values = req.body
 
     checkPassword = =>
@@ -190,7 +190,7 @@
                 ]
                 callback:null
 
-              req.send message
+              res.send message
 
             .on 'failure', (err) ->
               console.log 'database error on user update', err
@@ -247,7 +247,7 @@
   #
   # DELETE an USER
   #
-  @post '/:lang/admin/users/delete/:id_user' : (req) ->
+  @post '/:lang/admin/users/delete/:id_user' : (req, resy) ->
     
     findUser = =>
       User.find({where:{id_user:@params.id_user}})
@@ -270,7 +270,7 @@
             callback:null
             id:user.id_user
 
-          req.send message
+          res.send message
           
         .on 'failure', (err) ->
           console.log 'database error ', err      

@@ -7,8 +7,7 @@
 <!-- content-wrap -->
 <div class="content-wrap">
     
-    <%- @partial "part_about" %> 
-
+    <%- @partial "part_about" %>
 
 </div>
 
