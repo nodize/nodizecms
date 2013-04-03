@@ -14,13 +14,15 @@
 enable_multiple_view_folders = ->
   # Monkey-patch express to accept multiple paths for looking up views.
   View = require("../../../node_modules/zappajs/node_modules/express/lib/view")
+
   lookup_proxy = View::lookup;
 
   View::lookup = (viewName) ->
 
     if (@root instanceof Array)
       for i in [0..@root.length]
-        context = {root: @root[i]}
+        root = @root[i] or '' # Can be undefined, would break on "path.join" with Node.js >= 0.10
+        context = {root: root}
         match = lookup_proxy.call(context, viewName)
         return match if (match)
 

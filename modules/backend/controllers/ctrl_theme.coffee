@@ -209,7 +209,11 @@
     # If a local file exists we use it, else we fallback on the regular settings file
     #
     path = require 'path'
-    if path.existsSync( 'settings/nodize.local.json')
+    fs = require 'fs'
+
+    existsSync = fs.existsSync or path.existsSync
+
+    if existsSync( 'settings/nodize.local.json')
       nodizeSettingsFile = __applicationPath+'/settings/nodize.local.json' 
     else
       nodizeSettingsFile = __applicationPath+'/settings/nodize.json' 

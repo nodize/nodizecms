@@ -26,12 +26,12 @@ nodizeSettings = require 'nconf'
 global.__nodizeSettings = nodizeSettings
 
 
-
+existsSync = fs.existsSync or path.existsSync
 #
 # If a local file exists we use it,
 # else we fallback on the regular settings file
 #
-if path.existsSync( 'settings/nodize.local.json')
+if existsSync( 'settings/nodize.local.json')
   nodizeSettingsFile = 'settings/nodize.local.json'
 else
   nodizeSettingsFile = 'settings/nodize.json'
@@ -159,7 +159,7 @@ nodize = ->
 
   themeModuleDir = './themes/'+__nodizeTheme+'/modules'
 
-  existsSync = fs.existsSync or path.existsSync
+
 
   if existsSync themeModuleDir
     modules = fs.readdirSync themeModuleDir
