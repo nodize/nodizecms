@@ -17,12 +17,13 @@
     "connect":"2.7.3",
     "consolidate":"0.8.0",
     "cookie":"0.0.5",
-    "sequelize": "1.4.1",
+    "sequelize": "1.6.0",
+    "mysql":"2.0.0-alpha7",
     "coffee-script": "1.6.1",
     "coffeecup": "0.3.19",
     "eco": "1.1.0-rc-3",
     "jade": "0.28.1",
-    "nconf": "0.5.1",
+    "nconf": "0.6.7",
     "imageinfo":"1.0.4",
     "validator":"0.4.5",
     "zappajs":"git://github.com/nodize/zappajs",
@@ -35,7 +36,7 @@
   },
   "devDependencies":
   {
-    "mocha"  : "1.0.0"
+    "mocha"  : "1.8.2"
   },
   "scripts":{
     "test":"mocha"
