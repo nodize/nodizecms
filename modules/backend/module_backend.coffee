@@ -231,8 +231,10 @@
   includeFolders.push "./modules/#{_moduleName}/controllers/"
   includeFolders.push "./modules/#{_moduleName}/helpers/"
 
+  existsSync = fs.existsSync or path.existsSync
+
   for includeFolder in includeFolders
-    if path.existsSync includeFolder
+    if existsSync includeFolder
       files = fs.readdirSync includeFolder
       @include includeFolder+file for file in files
 
