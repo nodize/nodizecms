@@ -25,7 +25,6 @@
         Article.get data, (err, article) ->
           unless err
             socket.emit 'live_articleUpdate', {article : article}
-            console.log "ctrl_events | article", article
 
           else
             console.log "ctrl_events | article not found"
