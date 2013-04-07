@@ -523,10 +523,13 @@
       page.has_url = values.has_url
       page.created = new Date
       page.updated = new Date
-      page.publish_on = values.publish_on
+      page.publish_on = values.publish_on or ""
       page.publish_off = values.publish_off
       page.logical_date = values.logical_date
-                    
+
+      #console.log "ctrl_page | new page", page
+
+
       if values.id_parent == "0"
         page.level = 0        
         saveNewPage( page )        
