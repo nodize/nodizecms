@@ -225,6 +225,7 @@
   #** 
   fs = require 'fs'
   path = require 'path'
+  existsSync = fs.existsSync or path.existsSync
    
   includeFolders = []
   includeFolders.push "./modules/#{_moduleName}/inline_views/"
@@ -244,13 +245,21 @@
   views = @app.get "views"
   views.push "./modules/#{_moduleName}/views/"
 
+  #
+  # Creating the /uploads directory if needed
+  #
+  uploadFolder = __applicationPath + "/uploads"
+  unless existsSync uploadFolder
+    fs.mkdir uploadFolder, (err) ->
+      console.log "module_backend | Error on upload creation", err if err
+
 
   #
   # Events test
   #
-  __nodizeEvents
-    .on 'test', (message)->
-      console.log( "test event fired >backend> ", message )
+#  __nodizeEvents
+#    .on 'test', (message)->
+#      console.log( "test event fired >backend> ", message )
 
   # @io.sockets.on 'connection', (socket) ->
   #   socket.emit 'backofficeConnected'

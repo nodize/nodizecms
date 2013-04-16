@@ -38,8 +38,8 @@
               #a class:"icon edit left mr5 ", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"Edit"
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'editor'})", title:"Edit"
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'express'})", title:"Edit"
-              a class:"icon refresh left mr5 "; href:"javascript:mediaManager.initThumbs('#{@media.id_media}');", title:"Init thumbnails"
-              a class:"icon info left help", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"#{@media.id_media} : #{@media.file_name} ", rel:"Image settings"
+              #a class:"icon refresh left mr5 "; href:"javascript:mediaManager.initThumbs('#{@media.id_media}');", title:"Init thumbnails"
+              #a class:"icon info left help", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"#{@media.id_media} : #{@media.file_name} ", rel:"Image settings"
     
         for media in medias
           media_path = media.path
@@ -135,7 +135,7 @@
     #@io.sockets.send 'testEvent'
 
   #
-  # Use routes we just defined
+  # Make avalaible the routes we just defined
   #
   @get routes
 
@@ -155,18 +155,14 @@
   #
   # File UPLOAD to ARTICLE
   #
-  # TODO: Check if we need to unlink files from /upload directory
-  @post '/:lang/admin/media/add_file/article/:id_article' : (req) ->
+  @post '/:lang?/admin/media/add_file/article/:id_article' : (req) ->
 
-    #console.log req
     fs = require 'fs' 
     util = require 'util'
-    #console.log req.request.files
-    if req.request.files
-      #console.log req.request.files.files
-      
-      for file in req.request.files.files
-        # file = req.request.files.myfiles
+
+    if req.files
+
+      for file in req.files.files
 
         #
         # file.path, file.size, file.type (image/png)
@@ -189,11 +185,19 @@
 
             media.save()
               .on 'success', (media) ->
-                console.log "media added to database ", media.id_media
                 associateMediaToArticle( media )
               .on 'failure', (err) ->
                 console.log "Error while saving media to DB", err
-          
+
+            #
+            # Removing temp file
+            #
+            fs.unlink file.path
+
+
+    #
+    # Link the file to the article
+    #
     associateMediaToArticle = ( media ) =>
       article_media = Article_media.build()
       article_media.id_article = @params.id_article
@@ -201,7 +205,7 @@
 
       article_media.save()
         .on 'success', (article_media) =>          
-          @send '{"name":"loading.gif","type":"image/gif","size":3897}'
+          @send '{"name":"loading.gif","type":"image/gif","size":3897}'# TODO: Send correct file type / file size
         .on 'failure', (err) ->
           console.log "Error on associate ", err
 
