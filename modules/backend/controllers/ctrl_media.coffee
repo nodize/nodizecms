@@ -38,8 +38,8 @@
               #a class:"icon edit left mr5 ", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"Edit"
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'editor'})", title:"Edit"
               a class:"icon edit left mr5 ", href:"javascript:pixlr.overlay.show({image:'#{@server_address}/#{@media.path}', title:'#{@media.file_name}', service:'express'})", title:"Edit"
-              a class:"icon refresh left mr5 "; href:"javascript:mediaManager.initThumbs('#{@media.id_media}');", title:"Init thumbnails"
-              a class:"icon info left help", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"#{@media.id_media} : #{@media.file_name} ", rel:"Image settings"
+              #a class:"icon refresh left mr5 "; href:"javascript:mediaManager.initThumbs('#{@media.id_media}');", title:"Init thumbnails"
+              #a class:"icon info left help", href:"javascript:ION.formWindow('picture#{@media.id_media}', 'mediaForm#{@media.id_media}', '#{@media.file_name}', '#{@media.base_path}', {width:520,height:430,resize:true});", title:"#{@media.id_media} : #{@media.file_name} ", rel:"Image settings"
     
         for media in medias
           media_path = media.path
@@ -64,7 +64,7 @@
   #
   # Unlinking file from article
   #
-  @post '/:lang/admin/media/detach_media/:type/article/:id_article/:id_media' : (req) ->
+  @post '/:lang/admin/media/detach_media/:type/article/:id_article/:id_media' : (req, res) ->
     Media.find({where:{id_media:@params.id_media}})
       .on 'success', (media) ->        
         media.destroy()
@@ -129,85 +129,22 @@
               console.log 'File saved.'
               broadcast testEvent: {message:'file received'}
 
-    req.send "ok"
+    res.send "ok"
 
     
     #@io.sockets.send 'testEvent'
 
   #
-  # Use routes we just define
+  # Make avalaible the routes we just defined
   #
   @get routes
-    
-  parseCookie = require('connect').utils.parseCookie  
 
-
-  #
-  # Socket.io & express working together
-  # http://www.danielbaulig.de/socket-ioexpress/
-  # Session is stored in socket.handshake.session
-  #
-  @io.set 'authorization', (data, accept) ->    
-    # check if there's a cookie header
-    if data.headers.cookie 
-      # if there is, parse the cookie
-      data.cookie = parseCookie(data.headers.cookie);
-           
-      # note that you will need to use the same key to grab the
-      # session id, as you specified in the Express setup.      
-      data.sessionID = data.cookie['connect.sid']
-      #console.log "Auth / Session ID : ",data.sessionID
-
-      if not data.sessionID
-        accept( null, false )
-        console.log "Websocket @[#{data.address.address}:#{data.address.port}] -> cookie expired."          
-
-      else
-        __sessionStore.get data.sessionID, (err, session) ->        
-          if err or not session
-            console.log data.address
-            console.log "Websocket @[#{data.address.address}:#{data.address.port}] -> error in get session, client cookie might be expired. Check server date if this is happening when it shouldn't."          
-            accept( 'Error', false )
-          else
-            #console.log "session retrieved ", session
-            data.session = session
-            accept( null, true )
-
-
-      #console.log data.sessionID
-    else 
-       # if there isn't, turn down the connection with a message
-       # and leave the function.
-       console.log "rejecting socket"
-       return accept('No cookie transmitted.', false)
-    
-    # accept the incoming connection
-    accept(null, true)
-
-
-
-  #
-  # Server side event
-  # TODO: we might wait a little bit to let session being retrieved from database
-  # when server is restarted (connection is called before session retrieval)
-  @io.sockets
-    .on 'connection', (socket) ->
-      sessionID = socket.handshake.sessionID
-      
-      __sessionStore.get sessionID, (err, session) ->        
-        if err or not session
-          console.log "error in get session"        
-        else
-          socket.handshake.session = session
-          # console.log "On connection session : ",socket.handshake.session
-        
-      
 
 
   @on connection: (socket_client) ->
     #console.log "connection"
     
-    global.broadcast = socket_client.emit
+    #global.broadcast = socket_client.emit
     
     #
     # We should do a selective broadcast to backoffice users
@@ -218,18 +155,14 @@
   #
   # File UPLOAD to ARTICLE
   #
-  # TODO: Check if we need to unlink files from /upload directory
-  @post '/:lang/admin/media/add_file/article/:id_article' : (req) ->
+  @post '/:lang?/admin/media/add_file/article/:id_article' : (req) ->
 
-    #console.log req
     fs = require 'fs' 
     util = require 'util'
-    #console.log req.request.files
-    if req.request.files
-      #console.log req.request.files.files
-      
-      for file in req.request.files.files
-        # file = req.request.files.myfiles
+
+    if req.files
+
+      for file in req.files.files
 
         #
         # file.path, file.size, file.type (image/png)
@@ -252,11 +185,19 @@
 
             media.save()
               .on 'success', (media) ->
-                console.log "media added to database ", media.id_media
                 associateMediaToArticle( media )
               .on 'failure', (err) ->
                 console.log "Error while saving media to DB", err
-          
+
+            #
+            # Removing temp file
+            #
+            fs.unlink file.path
+
+
+    #
+    # Link the file to the article
+    #
     associateMediaToArticle = ( media ) =>
       article_media = Article_media.build()
       article_media.id_article = @params.id_article
@@ -264,14 +205,14 @@
 
       article_media.save()
         .on 'success', (article_media) =>          
-          @send '{"name":"loading.gif","type":"image/gif","size":3897}'
+          @send '{"name":"loading.gif","type":"image/gif","size":3897}'# TODO: Send correct file type / file size
         .on 'failure', (err) ->
           console.log "Error on associate ", err
 
   #
   # Link existing FILE to ARTICLE
   # 
-  @post '/:lang/admin/media/add_media/picture/article/:id_article' : (req) ->
+  @post '/:lang/admin/media/add_media/picture/article/:id_article' : (req, res) ->
     associateMediaToArticle = ( media ) =>
       article_media = Article_media.build()
       article_media.id_article = @params.id_article
@@ -283,7 +224,7 @@
         .on 'failure', (err) ->
           console.log "Error on associate ", err
 
-    req.send("not implemented yet")
+    res.send("not implemented yet")
 
   #
   # ORDERING MEDIAS

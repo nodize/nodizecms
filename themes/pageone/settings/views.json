@@ -9,5 +9,5 @@
     },
     "blocks": {},
     "page_default": "page_default.eco",
-    "block_default": "part_head.eco"
+    "block_default": ""
 }

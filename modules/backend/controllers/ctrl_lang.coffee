@@ -13,7 +13,7 @@
   @get "/:lang/admin/lang" : ->    
     Lang.findAll({order:'ordering'})
       .on 'success', (langs) =>
-        @render "backend_langSettings", 
+        @render "view_backend_langSettings",
           layout    : no
           hardcode  : @helpers 
           lang      : @params.lang # Current lang

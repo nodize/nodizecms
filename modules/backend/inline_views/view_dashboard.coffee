@@ -16,7 +16,7 @@
       min = now.getMinutes()
       sec = now.getSeconds()
 
-      j$( "#intro .widget-content").text( hour+":"+min+":"+sec+" "+event.data.message)
+      j$( "#intrxo .widget-content").text( hour+":"+min+":"+sec+" "+event.data.message)
 
   #
   # Displaying dashboard
@@ -74,7 +74,7 @@
               h3 "Users & Memory used"
             div ".widget-content", ->
               
-              input ".knob"
+              input ".knob",
                 id:"dashboard-knob-users"
                 value:"35"
                 "data-width":"80"
@@ -87,7 +87,7 @@
                 "data-title" : 'users'
               
 
-              input ".knob"
+              input ".knob",
                 id:"dashboard-knob-memory"
                 value:"35"
                 "data-width":"80"

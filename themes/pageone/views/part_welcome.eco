@@ -4,35 +4,32 @@
         <% # Top page article, you need to have declared "welcome_top" article type %>           
         <%= @ion_articles type:'welcome_top', live:true, => %>
             <div class="intro-box">                         
-               <h1><%= @article.title %></h1>            
-               <p class="intro"><%- @article.content %></p>
+               <h1 data-bind="article.title"><%= @article.title %></h1>
+               <span class="intro" data-bind="article.content"><%- @article.content %></span>
             </div>
         <% end %>
-        
-        <% # Checking if we have content to display in the slider %>           
-        <% media_count = 0 %>
-        <%= @ion_articles type:'welcome_slider', => %>   
-            <%= @ion_medias => %>                        
-                <% media_count++ %>                
+
+        <% # Displaying Slider  %>
+
+        <% # !! Due to asynchronous nature of helpers, the slider code must be embedded within the "ion_medias" helper %>
+
+        <%= @ion_articles type:'welcome_slider', => %>
+            <%= @ion_medias => %>
+                <% if @media.index is 1 : %>
+                <div class="slider-wrapper">
+                    <div id="slider" class="nivoSlider">
+                <% end %>
+                        <img src="<%= @media.path%>" width="383" height="198" alt="" title="#htmlcaption"/>
+                <% if @media.index is @media.count : %>
+                    </div>
+                    <div id="htmlcaption" class="nivo-html-caption">
+                        <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
+                    </div>
+                </div>
+                <% end %>
             <% end %>
         <% end %>
 
-        <% # Displaying Slider  %>           
-        <% if media_count > 0 : %>
-        <div class="slider-wrapper">
-
-            <div id="slider" class="nivoSlider">
-                <%= @ion_articles type:'welcome_slider', => %>   
-                    <%= @ion_medias => %>                        
-                        <img src="<%= @media.path%>" width="383" height="198" alt="" title="#htmlcaption"/>
-                    <% end %>
-                <% end %>
-            </div>
-            <div id="htmlcaption" class="nivo-html-caption">
-                <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
-            </div>
-        </div>
-        <% end %>
 
         <% # Displaying all other articles linked to the page (articles with no type defined) %>           
         <div class="row no-bottom-margin">
