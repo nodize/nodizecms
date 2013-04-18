@@ -174,20 +174,16 @@ nodize = ->
       console.log "Loading module (#{_moduleName})"
       includeFolders = []
 
+
       #
-      # If module has an "inline_views" folder, we guess "views" is used for regular view files
+      # Adding the module's "views" folder as valid view folder
       #
-      if existsSync themeModuleDir+"/"+_moduleName+"/inline_views/"
-        includeFolders.push themeModuleDir+"/"+_moduleName+"/inline_views/"
-        #
-        # Adding the module's "views" folder as valid view folder
-        #
+      if existsSync themeModuleDir+"/"+_moduleName+"/views/"
         views = @app.get "views"
         views.push themeModuleDir+"/"+_moduleName+"/views/"
 
-      else
-        includeFolders.push themeModuleDir+"/"+_moduleName+"/views/"
 
+      includeFolders.push themeModuleDir+"/"+_moduleName+"/inline_views/"
       includeFolders.push themeModuleDir+"/"+_moduleName+"/controllers/"
       includeFolders.push themeModuleDir+"/"+_moduleName+"/helpers/"
 
