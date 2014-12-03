@@ -76,7 +76,7 @@ Default lang created
 Default menu created
 ```
 
-Now you can access to the admistration module, open you browser on "http://127.0.0.1:3000/admin" (replace 127.0.0.1 by your server IP/URL if it's not running on the localhost).
+Now you can access to the administration module, open you browser on "http://127.0.0.1:3000/admin" (replace 127.0.0.1 by your server IP/URL if it's not running on the localhost).
 
 If you're still there and that everything went fine, you should have a nice but empty backend.
 
